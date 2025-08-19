@@ -6,16 +6,16 @@ import PreFooter from "@/components/application/landing-page/pre-footer";
 import StartShipping from "@/components/application/landing-page/start-shipping";
 
 export default function Home() {
-  return (
-    <main className="flex flex-col min-h-[100dvh]">
-      <Navbar />
-      <section className="flex flex-col min-h-[100dvh]">
-        <Hero />
-      </section>
-      <StartShipping />
-      <Control />
-      <PreFooter />
-      <Footer />
-    </main>
-  );
+    return (
+        <main className="flex flex-col min-h-[100dvh]">
+            <Navbar />
+            <section className="flex flex-col min-h-[100dvh]">
+                <Hero />
+            </section>
+            <StartShipping />
+            <Control />
+            <PreFooter />
+            <Footer />
+        </main>
+    );
 }
