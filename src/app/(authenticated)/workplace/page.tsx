@@ -157,9 +157,9 @@ const Workplace = () => {
                             enabled={item.enabled}
                             env={
                                 item.environment as
-                                    | "production"
-                                    | "staging"
-                                    | "development"
+                                | "production"
+                                | "staging"
+                                | "development"
                             }
                             evaluations={item.evaluations}
                             lastModified={item.created}
@@ -167,10 +167,10 @@ const Workplace = () => {
                             rolloutPercentage={item.rolloutPercentage}
                             user={
                                 item.targeting as
-                                    | "beta"
-                                    | "internal"
-                                    | "all"
-                                    | "premium"
+                                | "beta"
+                                | "internal"
+                                | "all"
+                                | "premium"
                             }
                             roundTop={index === 0}
                             roundBottom={index === flags.length - 1}
@@ -203,8 +203,8 @@ const Workplace = () => {
                     <QuickAction />
                 </div>
 
-                <div className="w-full rounded-2xl bg-primary-foreground p-3 lg:p-5 border">
-                    <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance flex justify-start items-center mb-4">
+                <div className="w-full rounded-2xl bg-primary-foreground p-5 border">
+                    <h1 className="scroll-m-20 text-center lg:text-left text-4xl font-extrabold tracking-tight text-balance mb-8">
                         Recent Activity
                     </h1>
                     <div className="flex flex-col justify-start items-center w-full gap-2 max-h-[60dvh] overflow-y-auto">
