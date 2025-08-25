@@ -50,10 +50,12 @@ const ProtectedLayout = ({ children }: { children: ReactNode }) => {
             ),
         },
     ];
-    const user = true;
+
+    const user = false;
     if (!user) {
-        redirect("/");
+        redirect("/login");
     }
+
     const [open, setOpen] = useState(false);
     return (
         <div

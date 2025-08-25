@@ -122,3 +122,9 @@
         font-family: var(--font-fira-code);
     }
 }
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #171717 inset !important;
+    /* replace white with your bg */
+    -webkit-text-fill-color: #fff !important;
+}

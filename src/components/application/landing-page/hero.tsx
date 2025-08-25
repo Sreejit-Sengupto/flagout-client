@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { Bitcount_Grid_Double } from "next/font/google";
 import Image from "next/image";
+import { SiGithub } from "@icons-pack/react-simple-icons";
 
 const dancingScript = Bitcount_Grid_Double({
     variable: "--font-pixel-sans",
@@ -41,13 +42,13 @@ const Hero = () => {
                             className="flex justify-center items-center gap-1"
                         >
                             <span>
-                                <Github />
+                                <SiGithub />
                             </span>
                             <span>Github</span>
                         </Link>
                     </Button>
                     <Button>
-                        <Link href={"/login"}>Get Started</Link>
+                        <Link href={"/workplace"}>Get Started</Link>
                     </Button>
                 </section>
             </section>

@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/drawer";
 import { Pixelify_Sans } from "next/font/google";
 import { Separator } from "@/components/ui/separator";
+import { SiGithub } from "@icons-pack/react-simple-icons";
 
 const pixelSans = Pixelify_Sans({
     variable: "--font-pixel-sans",
@@ -203,7 +204,7 @@ export default function Navbar() {
                             </DrawerDescription>
                         </DrawerHeader>
                         <section className="p-3 flex flex-col gap-4">
-                            <Link href={"/home"}>Dashboard</Link>
+                            <Link href={"/workplace"}>Dashboard</Link>
                             <Link href={"/home"}>Tools</Link>
                             <Link href={"/home"}>Docs</Link>
                             <Link href={"/home"}>Pricing</Link>
@@ -215,7 +216,7 @@ export default function Navbar() {
                                     className="flex justify-center items-center gap-1"
                                 >
                                     <span>
-                                        <Github />
+                                        <SiGithub />
                                     </span>
                                     <span>Github</span>
                                 </Link>

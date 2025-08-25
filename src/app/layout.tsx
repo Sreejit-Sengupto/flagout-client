@@ -90,7 +90,7 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} ${firaCode.variable} ${bungee.variable} antialiased`}
             >
-                <NextTopLoader />
+                <NextTopLoader showSpinner={false} />
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="dark"

@@ -157,9 +157,9 @@ const Workplace = () => {
                             enabled={item.enabled}
                             env={
                                 item.environment as
-                                | "production"
-                                | "staging"
-                                | "development"
+                                    | "production"
+                                    | "staging"
+                                    | "development"
                             }
                             evaluations={item.evaluations}
                             lastModified={item.created}
@@ -167,10 +167,10 @@ const Workplace = () => {
                             rolloutPercentage={item.rolloutPercentage}
                             user={
                                 item.targeting as
-                                | "beta"
-                                | "internal"
-                                | "all"
-                                | "premium"
+                                    | "beta"
+                                    | "internal"
+                                    | "all"
+                                    | "premium"
                             }
                             roundTop={index === 0}
                             roundBottom={index === flags.length - 1}
