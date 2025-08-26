@@ -84,7 +84,7 @@ const AppSidebar = ({ children }: { children: ReactNode }) => {
                         {isLoaded ? (
                             <SidebarLink
                                 link={{
-                                    label: `${user?.firstName} ${user?.lastName}`,
+                                    label: `${user?.firstName} ${user?.lastName ?? ""}`,
                                     href: "#",
                                     icon: (
                                         <img

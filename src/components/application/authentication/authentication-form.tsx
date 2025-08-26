@@ -17,6 +17,7 @@ import { SiGithub, SiGoogle } from "@icons-pack/react-simple-icons";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useSignUp, useSignIn } from "@clerk/nextjs";
+import { OAuthStrategy } from "@clerk/types";
 import {
     InputOTP,
     InputOTPGroup,
@@ -137,6 +138,19 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
             console.error(error);
         } finally {
             setLoaders((prev) => ({ ...prev, signUpLoader: false }));
+        }
+    };
+
+    const handleSignInWithOAuth = async (strategy: OAuthStrategy) => {
+        setLoaders((prev) => ({ ...prev, authLoader: true }));
+        try {
+            return signIn.authenticateWithRedirect({
+                strategy,
+                redirectUrl: "/oauth-callback",
+                redirectUrlComplete: "/workplace",
+            });
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -284,10 +298,12 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                         )}
                     </Button>
 
-                    <div
-                        id="clerk-captcha"
-                        className="w-full justify-center items-center mt-4"
-                    ></div>
+                    {type === "register" && (
+                        <div
+                            id="clerk-captcha"
+                            className="w-full justify-center items-center mt-4"
+                        ></div>
+                    )}
                 </form>
             </CardContent>
 
@@ -302,6 +318,7 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                     <Button
                         className="w-full cursor-pointer text-lg"
                         variant={"secondary"}
+                        onClick={() => handleSignInWithOAuth("oauth_google")}
                         asChild
                     >
                         <p className="flex justify-center items-center gap-1">
@@ -314,6 +331,7 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                     <Button
                         className="w-full cursor-pointer text-lg"
                         variant={"secondary"}
+                        onClick={() => handleSignInWithOAuth("oauth_github")}
                         asChild
                     >
                         <p className="flex justify-center items-center gap-1">
