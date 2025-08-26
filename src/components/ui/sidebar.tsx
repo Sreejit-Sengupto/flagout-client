@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { IconMenu2, IconX } from "@tabler/icons-react";
-import { Flag } from "lucide-react";
+import { Flag, Loader2 } from "lucide-react";
 import { Pixelify_Sans } from "next/font/google";
 
 const pixelSans = Pixelify_Sans({
@@ -96,7 +96,7 @@ export const DesktopSidebar = ({
         <>
             <motion.div
                 className={cn(
-                    "h-full px-4 py-4 hidden md:flex md:flex-col bg-primary-foreground w-[300px] shrink-0",
+                    "h-full px-4 py-4 hidden md:flex md:flex-col bg-primary-foreground w-[200px] shrink-0",
                     className,
                 )}
                 animate={{
@@ -209,5 +209,51 @@ export const SidebarLink = ({
                 {link.label}
             </motion.span>
         </a>
+    );
+};
+
+export const SidebarButton = ({
+    link,
+    className,
+    onClickHandler,
+    loading,
+    ...props
+}: {
+    link: Partial<Links>;
+    className?: string;
+    onClickHandler: () => void;
+    loading: boolean;
+}) => {
+    const { open, animate } = useSidebar();
+    return (
+        <button
+            onClick={onClickHandler}
+            className={cn(
+                "flex items-center justify-start gap-2  group/sidebar py-2 cursor-pointer",
+                className,
+            )}
+            {...props}
+        >
+            {!loading ? (
+                <>
+                    {link.icon}
+                    <motion.span
+                        animate={{
+                            display: animate
+                                ? open
+                                    ? "inline-block"
+                                    : "none"
+                                : "inline-block",
+                            opacity: animate ? (open ? 1 : 0) : 1,
+                        }}
+                        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+                    >
+                        {link.label}
+                    </motion.span>
+                </>
+            ) : (
+                <Loader2 className="animate-spin" />
+            )}
+        </button>
     );
 };
