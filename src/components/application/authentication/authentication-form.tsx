@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeClosed, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SiGithub, SiGoogle } from "@icons-pack/react-simple-icons";
+import { SiAuth0, SiGithub, SiGoogle } from "@icons-pack/react-simple-icons";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useSignUp, useSignIn } from "@clerk/nextjs";
@@ -108,9 +108,9 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
 
     // methods and handlers
     const toggleShowPassword = (e: FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
         setShowPassword((prev) => !prev);
-    }
+    };
 
     const handleAuthentication = async (e: FormEvent) => {
         setLoaders((prev) => ({ ...prev, authLoader: true }));
@@ -318,32 +318,72 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
 
             <CardFooter className="flex flex-col gap-2 justify-center items-center">
                 <section className="w-full flex flex-col justify-center items-center gap-2">
-                    <Button
-                        className="w-full cursor-pointer text-lg"
-                        variant={"secondary"}
-                        onClick={() => handleSignInWithOAuth("oauth_google")}
-                        asChild
-                    >
-                        <p className="flex justify-center items-center gap-1">
-                            <span>
-                                <SiGoogle />
-                            </span>
-                            <span>Google</span>
-                        </p>
-                    </Button>
-                    <Button
-                        className="w-full cursor-pointer text-lg"
-                        variant={"secondary"}
-                        onClick={() => handleSignInWithOAuth("oauth_github")}
-                        asChild
-                    >
-                        <p className="flex justify-center items-center gap-1">
-                            <span>
-                                <SiGithub />
-                            </span>
-                            <span>Github</span>
-                        </p>
-                    </Button>
+                    {process.env.NODE_ENV === "development" && (
+                        <>
+                            <Button
+                                className="w-full cursor-pointer text-lg"
+                                variant={"secondary"}
+                                onClick={() =>
+                                    handleSignInWithOAuth("oauth_google")
+                                }
+                                asChild
+                            >
+                                <p className="flex justify-center items-center gap-1">
+                                    <span>
+                                        <SiGoogle />
+                                    </span>
+                                    <span>Google</span>
+                                </p>
+                            </Button>
+                            <Button
+                                className="w-full cursor-pointer text-lg"
+                                variant={"secondary"}
+                                onClick={() =>
+                                    handleSignInWithOAuth("oauth_github")
+                                }
+                                asChild
+                            >
+                                <p className="flex justify-center items-center gap-1">
+                                    <span>
+                                        <SiGithub />
+                                    </span>
+                                    <span>Github</span>
+                                </p>
+                            </Button>
+                        </>
+                    )}
+                    {process.env.NODE_ENV === "production" && (
+                        <>
+                            <Button
+                                className="w-full cursor-pointer text-lg"
+                                variant={"secondary"}
+                                disabled
+                                asChild
+                            >
+                                <p className="flex justify-center items-center gap-1">
+                                    <span>
+                                        <SiGoogle />
+                                    </span>
+                                    <span>Google &#40;Coming Soon&#41;</span>
+                                </p>
+                            </Button>
+                            <Button
+                                className="w-full cursor-pointer text-lg"
+                                variant={"secondary"}
+                                onClick={() =>
+                                    handleSignInWithOAuth("oauth_github")
+                                }
+                                asChild
+                            >
+                                <p className="flex justify-center items-center gap-1">
+                                    <span>
+                                        <SiGithub />
+                                    </span>
+                                    <span>Github &#40;Coming Soon&#41;</span>
+                                </p>
+                            </Button>
+                        </>
+                    )}
                 </section>
 
                 <section className="my-4">
