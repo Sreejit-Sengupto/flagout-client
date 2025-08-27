@@ -370,9 +370,6 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                             <Button
                                 className="w-full cursor-pointer text-lg"
                                 variant={"secondary"}
-                                onClick={() =>
-                                    handleSignInWithOAuth("oauth_github")
-                                }
                                 asChild
                             >
                                 <p className="flex justify-center items-center gap-1">
