@@ -107,7 +107,10 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
     }
 
     // methods and handlers
-    const toggleShowPassword = () => setShowPassword((prev) => !prev);
+    const toggleShowPassword = (e: FormEvent) => {
+        e.preventDefault()
+        setShowPassword((prev) => !prev);
+    }
 
     const handleAuthentication = async (e: FormEvent) => {
         setLoaders((prev) => ({ ...prev, authLoader: true }));
@@ -307,14 +310,14 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                 </form>
             </CardContent>
 
-            {process.env.NODE_ENV === 'development' && <section className="flex justify-center items-center gap-2 overflow-hidden">
+            <section className="flex justify-center items-center gap-2 overflow-hidden">
                 <Separator />
                 <p>OR</p>
                 <Separator />
-            </section>}
+            </section>
 
             <CardFooter className="flex flex-col gap-2 justify-center items-center">
-                {process.env.NODE_ENV === 'development' && <section className="w-full flex flex-col justify-center items-center gap-2">
+                <section className="w-full flex flex-col justify-center items-center gap-2">
                     <Button
                         className="w-full cursor-pointer text-lg"
                         variant={"secondary"}
@@ -341,7 +344,7 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                             <span>Github</span>
                         </p>
                     </Button>
-                </section>}
+                </section>
 
                 <section className="my-4">
                     <Link href={redirectLink} className="text-blue-400">
