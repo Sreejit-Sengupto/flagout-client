@@ -10,6 +10,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/context/theme-provider";
 import NextTopLoader from "nextjs-toploader";
 import { ClerkProvider } from "@clerk/nextjs";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -81,6 +82,8 @@ export const metadata: Metadata = {
     },
 };
 
+const queryClient = new QueryClient()
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -92,15 +95,18 @@ export default function RootLayout({
                 <body
                     className={`${geistSans.variable} ${geistMono.variable} ${firaCode.variable} ${bungee.variable} antialiased`}
                 >
-                    <NextTopLoader showSpinner={false} />
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="dark"
-                        enableSystem
-                        disableTransitionOnChange
-                    >
-                        {children}
-                    </ThemeProvider>
+                    <QueryClientProvider client={queryClient}>
+
+                        <NextTopLoader showSpinner={false} />
+                        <ThemeProvider
+                            attribute="class"
+                            defaultTheme="dark"
+                            enableSystem
+                            disableTransitionOnChange
+                        >
+                            {children}
+                        </ThemeProvider>
+                    </QueryClientProvider>
                 </body>
             </ClerkProvider>
         </html>

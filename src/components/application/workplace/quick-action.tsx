@@ -9,6 +9,7 @@ import {
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import CreateFlagDialog from "./create-flag-dialog";
 
 const QuickAction = () => {
     return (
@@ -22,20 +23,10 @@ const QuickAction = () => {
             </CardHeader>
             <CardContent>
                 <div className="grid grid-cols-2 gap-1.5">
-                    <Link
-                        href={"#"}
-                        className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300"
-                    >
-                        {/* <Plus /> */}
-                        <div className="flex flex-col justify-center items-start">
-                            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                                Create Flag
-                            </h3>
-                            <p className="leading-7 text-gray-400">
-                                Add a new feature flag
-                            </p>
-                        </div>
-                    </Link>
+                    <div className="w-full">
+                        <CreateFlagDialog />
+
+                    </div>
                     <Link
                         href={"#"}
                         className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tr-2xl hover:bg-gray-700 transition-all duration-300"
