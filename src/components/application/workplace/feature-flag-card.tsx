@@ -1,6 +1,5 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -12,15 +11,11 @@ import {
 import { Pill, PillIndicator } from "@/components/ui/kibo-ui/pill";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
-import { Environment, TargetUser } from "@/generated/prisma";
+import { Environment, TargetUser } from "@prisma/client";
 import { formatNumber } from "@/lib/format-number";
 import { timeAgo } from "@/lib/time-date";
 import { cn } from "@/lib/utils";
-import {
-    IconGitMerge,
-    IconSettings,
-    IconSettingsFilled,
-} from "@tabler/icons-react";
+import { IconSettings } from "@tabler/icons-react";
 import { Activity, Calendar, TrendingUp, Users } from "lucide-react";
 import React, { useMemo, useState } from "react";
 

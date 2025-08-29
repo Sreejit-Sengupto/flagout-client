@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
-import {
-    Geist,
-    Geist_Mono,
-    Fira_Code,
-    Bungee,
-    Pixelify_Sans,
-} from "next/font/google";
+import { Geist, Geist_Mono, Fira_Code, Bungee } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/context/theme-provider";
 import NextTopLoader from "nextjs-toploader";

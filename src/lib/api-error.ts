@@ -1,9 +1,9 @@
 // utils/api-error.ts
 export class ApiError extends Error {
     status: number;
-    details?: any;
+    details?: string;
 
-    constructor(status: number, message: string, details?: any) {
+    constructor(status: number, message: string, details?: string) {
         super(message);
         this.status = status;
         this.details = details;

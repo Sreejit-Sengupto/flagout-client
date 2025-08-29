@@ -1,4 +1,3 @@
-import { FlagIcon } from "lucide-react";
 import React, { ReactNode } from "react";
 
 interface TEmptyState {

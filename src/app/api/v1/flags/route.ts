@@ -1,4 +1,4 @@
-import { TargetUser } from "@/generated/prisma";
+import { TargetUser } from "@prisma/client";
 import { ApiError } from "@/lib/api-error";
 import prisma from "@/lib/prisma";
 import {

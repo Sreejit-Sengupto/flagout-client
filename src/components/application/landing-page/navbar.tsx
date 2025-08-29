@@ -2,15 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-    CircleCheckIcon,
-    CircleHelpIcon,
-    CircleIcon,
-    Flag,
-    Github,
-    GoalIcon,
-    Menu,
-} from "lucide-react";
+import { Flag, Github, Menu } from "lucide-react";
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -23,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import {
     Drawer,
-    DrawerClose,
     DrawerContent,
     DrawerDescription,
     DrawerFooter,

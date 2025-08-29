@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeClosed, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SiAuth0, SiGithub, SiGoogle } from "@icons-pack/react-simple-icons";
+import { SiGithub, SiGoogle } from "@icons-pack/react-simple-icons";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useSignUp, useSignIn } from "@clerk/nextjs";
@@ -54,22 +54,22 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
             type === "login"
                 ? "Welcome back to"
                 : "We are excited to have you on",
-        [],
+        [type],
     );
     const buttonText = useMemo(
         () => (type === "login" ? "Login" : "Register"),
-        [],
+        [type],
     );
     const footerText = useMemo(
         () =>
             type === "login"
                 ? "No account? Sign up now"
                 : "Have an account? Login",
-        [],
+        [type],
     );
     const redirectLink = useMemo(
         () => (type === "login" ? "/register" : "/login"),
-        [],
+        [type],
     );
     // const signUpBtnDisabled = useMemo(() => {
     //     const { email, password, firstname, lastname } = authForm;

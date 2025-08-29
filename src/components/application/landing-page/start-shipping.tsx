@@ -1,5 +1,4 @@
 "use client";
-import { SettingsIcon } from "lucide-react";
 import React from "react";
 
 import type { BundledLanguage } from "@/components/ui/kibo-ui/code-block";

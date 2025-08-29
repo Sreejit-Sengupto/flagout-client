@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../keys";
 import { createFeatureFlag, getFeatureFlags } from "../api/feature-flag";
 import { TFeatureFlags } from "@/lib/zod-schemas/feature-flags";

@@ -17,9 +17,9 @@ import {
 import { Flag, Loader2 } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { showSuccess } from "@/lib/sonner";
+import Image from "next/image";
 
 const pixelSans = Pixelify_Sans({
     variable: "--font-pixel-sans",
@@ -88,8 +88,8 @@ const AppSidebar = ({ children }: { children: ReactNode }) => {
                                     label: `${user?.firstName} ${user?.lastName ?? ""}`,
                                     href: "#",
                                     icon: (
-                                        <img
-                                            src={user?.imageUrl}
+                                        <Image
+                                            src={user?.imageUrl ?? ""}
                                             className="h-7 w-7 shrink-0 rounded-full"
                                             width={50}
                                             height={50}

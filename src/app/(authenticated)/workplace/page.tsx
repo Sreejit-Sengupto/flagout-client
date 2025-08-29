@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 
 const Workplace = () => {
-    const { data: featureFlags, isLoading, isError } = useUserFlagQuery(5, 1);
+    const { data: featureFlags, isLoading } = useUserFlagQuery(5, 1);
     console.log("Data:", featureFlags);
 
     const metrics = [

@@ -2,7 +2,7 @@ import React from "react";
 import { Pacifico } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 
 const pacifico = Pacifico({

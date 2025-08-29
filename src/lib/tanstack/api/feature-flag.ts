@@ -3,7 +3,7 @@ import {
     TFeatureFlags,
     TGetAllFeatureFlags,
 } from "@/lib/zod-schemas/feature-flags";
-import { FeatureFlags } from "@/generated/prisma";
+import { FeatureFlags } from "@prisma/client";
 import { showSuccess } from "@/lib/sonner";
 
 export type TResponseGetAllFeatureFlags = TApiResponse<FeatureFlags[]>;
