@@ -30,11 +30,32 @@ export async function POST(request: Request) {
             );
         }
 
+        const slug = data.name
+            .toLowerCase()
+            .replace(/ /g, "-")
+            .replace(/[^\w-]+/g, "");
+
+        const flagExists = await prisma.featureFlags.findFirst({
+            where: {
+                slug: {
+                    equals: slug
+                }
+            }
+        })
+        if (flagExists) {
+            throw new ApiError(
+                400,
+                "A flag with this name already exists",
+                "Please create a flag with different name",
+            );
+        }
+
         const insertedFlag = await prisma.featureFlags.create({
             data: {
                 clerk_user_id: user.id,
                 description: data.description,
                 name: data.name,
+                slug,
                 enabled: data.enabled,
                 environment: data.environment,
                 rollout_percentage: data.rolloutPercentage,

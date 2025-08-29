@@ -31,6 +31,7 @@ model FeatureFlags {
   id                 String       @id @default(uuid())
   clerk_user_id      String
   name               String
+  slug               String       @unique
   description        String
   enabled            Boolean      @default(false)
   rollout_percentage Int          @default(0)
