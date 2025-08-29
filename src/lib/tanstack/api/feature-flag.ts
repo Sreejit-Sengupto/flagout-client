@@ -11,7 +11,7 @@ export const getFeatureFlags = async (input: TGetAllFeatureFlags) => {
     try {
         const response =
             await axiosInstance.request<TResponseGetAllFeatureFlags>({
-                url: "/v1/flags",
+                url: "/flags",
                 method: "GET",
                 params: {
                     limit: input.limit,
@@ -37,7 +37,7 @@ export const createFeatureFlag = async (input: TFeatureFlags) => {
     try {
         const response =
             await axiosInstance.request<TResponseCreateFeatureFlag>({
-                url: "/v1/flags",
+                url: "/flags",
                 method: "POST",
                 data: reqData,
             });

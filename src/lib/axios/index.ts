@@ -3,7 +3,8 @@ import { URL } from "../constants";
 import { showError } from "../sonner";
 
 const axiosInstance = axios.create({
-    baseURL: `${URL}/api`,
+    // baseURL: `${URL}/api`,
+    baseURL: `/api/v1`,
 });
 
 axiosInstance.interceptors.response.use(
