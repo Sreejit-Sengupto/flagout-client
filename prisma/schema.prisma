@@ -29,7 +29,7 @@ enum Environment {
 
 model FeatureFlags {
   id                 String       @id @default(uuid())
-  clerk_user_id      String       @unique
+  clerk_user_id      String
   name               String
   description        String
   enabled            Boolean      @default(false)

@@ -25,7 +25,6 @@ const QuickAction = () => {
                 <div className="grid grid-cols-2 gap-1.5">
                     <div className="w-full">
                         <CreateFlagDialog />
-
                     </div>
                     <Link
                         href={"#"}
