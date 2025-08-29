@@ -1,6 +1,7 @@
 import axiosInstance, { TApiResponse } from "@/lib/axios";
 import { TFeatureFlags, TGetAllFeatureFlags } from "@/lib/zod-schemas/feature-flags";
 import { FeatureFlags } from "@/generated/prisma";
+import { showSuccess } from "@/lib/sonner";
 
 export type TResponseGetAllFeatureFlags = TApiResponse<FeatureFlags[]>;
 export const getFeatureFlags = async (input: TGetAllFeatureFlags) => {
@@ -36,6 +37,9 @@ export const createFeatureFlag = async (input: TFeatureFlags) => {
             method: 'POST',
             data: reqData
         })
+        if (response.status === 201) {
+            showSuccess(response.data.message)
+        }
         return response.data;
     } catch (error) {
         throw error

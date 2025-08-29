@@ -11,6 +11,7 @@ import { ThemeProvider } from "@/context/theme-provider";
 import NextTopLoader from "nextjs-toploader";
 import { ClerkProvider } from "@clerk/nextjs";
 import TanstackProvider from "@/context/tanstack-provider";
+import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -100,7 +101,10 @@ export default function RootLayout({
                         enableSystem
                         disableTransitionOnChange
                     >
-                        <TanstackProvider>{children}</TanstackProvider>
+                        <TanstackProvider>
+                            {children}
+                            <Toaster />
+                        </TanstackProvider>
                     </ThemeProvider>
                 </body>
             </ClerkProvider>
