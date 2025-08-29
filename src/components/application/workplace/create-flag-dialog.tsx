@@ -74,7 +74,7 @@ const CreateFlagDialog = () => {
         },
     ];
 
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
     const [flagEnabled, setFlagEnabled] = useState<boolean>(false);
     const [sliderValue, setSliderValue] = useState<number[]>([21]);
     const [targets, setTargets] = useState<
@@ -86,24 +86,34 @@ const CreateFlagDialog = () => {
     });
     const [textData, setTextData] = useState({
         name: "",
-        description: ""
-    })
+        description: "",
+    });
 
-    const createFlagMutation = useCreateFlagMutation({ name: textData.name, description: textData.description, enabled: flagEnabled, environment: environment.value as "DEVELOPMENT" | "PRODUCTION" | "STAGING", rolloutPercentage: sliderValue[0], targeting: targets })
+    const createFlagMutation = useCreateFlagMutation({
+        name: textData.name,
+        description: textData.description,
+        enabled: flagEnabled,
+        environment: environment.value as
+            | "DEVELOPMENT"
+            | "PRODUCTION"
+            | "STAGING",
+        rolloutPercentage: sliderValue[0],
+        targeting: targets,
+    });
 
     const handleCreateFlag = async () => {
         if (!environment.value || !textData.description || !textData.name) {
-            alert("All fields are required")
-            return
+            alert("All fields are required");
+            return;
         }
         try {
-            await createFlagMutation.mutateAsync()
+            await createFlagMutation.mutateAsync();
         } catch (error) {
             console.error(error);
         } finally {
-            setOpen(false)
+            setOpen(false);
         }
-    }
+    };
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -113,7 +123,7 @@ const CreateFlagDialog = () => {
                     <Button
                         // href={"#"}
                         className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer"
-                    // onClick={() => setOpen(true)}
+                        // onClick={() => setOpen(true)}
                     >
                         <div className="flex flex-col justify-center items-start">
                             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-white">
@@ -142,8 +152,11 @@ const CreateFlagDialog = () => {
                                 placeholder="Super awesome feature"
                                 value={textData.name}
                                 onChange={(e) => {
-                                    e.preventDefault()
-                                    setTextData(prev => ({ ...prev, name: e.target.value }))
+                                    e.preventDefault();
+                                    setTextData((prev) => ({
+                                        ...prev,
+                                        name: e.target.value,
+                                    }));
                                 }}
                             />
                         </div>
@@ -158,8 +171,11 @@ const CreateFlagDialog = () => {
                                 className="max-h-[150px]"
                                 value={textData.description}
                                 onChange={(e) => {
-                                    e.preventDefault()
-                                    setTextData(prev => ({ ...prev, description: e.target.value }))
+                                    e.preventDefault();
+                                    setTextData((prev) => ({
+                                        ...prev,
+                                        description: e.target.value,
+                                    }));
                                 }}
                             />
                         </div>
@@ -188,7 +204,10 @@ const CreateFlagDialog = () => {
                             <Popover
                                 open={environment.open}
                                 onOpenChange={(open) =>
-                                    setEnvironment((prev) => ({ ...prev, open }))
+                                    setEnvironment((prev) => ({
+                                        ...prev,
+                                        open,
+                                    }))
                                 }
                             >
                                 <PopoverTrigger asChild>
@@ -200,10 +219,10 @@ const CreateFlagDialog = () => {
                                     >
                                         {environment.value
                                             ? enviroments.find(
-                                                (envs) =>
-                                                    envs.value ===
-                                                    environment.value,
-                                            )?.label
+                                                  (envs) =>
+                                                      envs.value ===
+                                                      environment.value,
+                                              )?.label
                                             : "Select enviroment"}
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
@@ -226,13 +245,13 @@ const CreateFlagDialog = () => {
                                                                 currentValue ===
                                                                     environment.value
                                                                     ? {
-                                                                        open: false,
-                                                                        value: "",
-                                                                    }
+                                                                          open: false,
+                                                                          value: "",
+                                                                      }
                                                                     : {
-                                                                        open: false,
-                                                                        value: currentValue,
-                                                                    },
+                                                                          open: false,
+                                                                          value: currentValue,
+                                                                      },
                                                             );
                                                         }}
                                                     >
@@ -288,10 +307,10 @@ const CreateFlagDialog = () => {
                                         <Checkbox
                                             checked={targets.includes(
                                                 item.value as
-                                                | "ALL"
-                                                | "INTERNAL"
-                                                | "BETA"
-                                                | "PREMIUM",
+                                                    | "ALL"
+                                                    | "INTERNAL"
+                                                    | "BETA"
+                                                    | "PREMIUM",
                                             )}
                                             onCheckedChange={(checked) => {
                                                 const val = item.value as
@@ -306,20 +325,20 @@ const CreateFlagDialog = () => {
                                                         (prev) =>
                                                             checked
                                                                 ? [
-                                                                    ...prev.filter(
-                                                                        (
-                                                                            item,
-                                                                        ) =>
-                                                                            item !==
-                                                                            "ALL",
-                                                                    ),
-                                                                    val,
-                                                                ] // add if checked
+                                                                      ...prev.filter(
+                                                                          (
+                                                                              item,
+                                                                          ) =>
+                                                                              item !==
+                                                                              "ALL",
+                                                                      ),
+                                                                      val,
+                                                                  ] // add if checked
                                                                 : prev.filter(
-                                                                    (t) =>
-                                                                        t !==
-                                                                        val,
-                                                                ), // remove if unchecked
+                                                                      (t) =>
+                                                                          t !==
+                                                                          val,
+                                                                  ), // remove if unchecked
                                                     );
                                                 }
                                             }}
@@ -340,8 +359,17 @@ const CreateFlagDialog = () => {
                                 Cancel
                             </Button>
                         </DialogClose>
-                        <Button type="submit" className="cursor-pointer" onClick={handleCreateFlag} disabled={createFlagMutation.isPending}>
-                            {createFlagMutation.isPending ? <Loader2 className="animate-spin" /> : "Create Flag"}
+                        <Button
+                            type="submit"
+                            className="cursor-pointer"
+                            onClick={handleCreateFlag}
+                            disabled={createFlagMutation.isPending}
+                        >
+                            {createFlagMutation.isPending ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                "Create Flag"
+                            )}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

@@ -9,11 +9,11 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
     (res) => res,
     (error) => {
-        const message = error.response?.data?.message || "Unexpected error"
-        showError(message)
-        return Promise.reject(error)
-    }
-)
+        const message = error.response?.data?.message || "Unexpected error";
+        showError(message);
+        return Promise.reject(error);
+    },
+);
 
 export interface TApiResponse<T> {
     data: T;

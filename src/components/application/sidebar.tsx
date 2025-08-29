@@ -117,7 +117,7 @@ const AppSidebar = ({ children }: { children: ReactNode }) => {
                             onClickHandler={async () => {
                                 setLogoutLoader(true);
                                 await signOut({ redirectUrl: "/login" });
-                                showSuccess("You've been logged out")
+                                showSuccess("You've been logged out");
                             }}
                             loading={logoutLoader}
                         />

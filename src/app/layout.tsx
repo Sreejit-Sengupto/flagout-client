@@ -11,7 +11,7 @@ import { ThemeProvider } from "@/context/theme-provider";
 import NextTopLoader from "nextjs-toploader";
 import { ClerkProvider } from "@clerk/nextjs";
 import TanstackProvider from "@/context/tanstack-provider";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

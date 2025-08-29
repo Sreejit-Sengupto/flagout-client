@@ -1,8 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 
 const useTanstackClient = () => {
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
     return queryClient;
-}
+};
 
 export default useTanstackClient;

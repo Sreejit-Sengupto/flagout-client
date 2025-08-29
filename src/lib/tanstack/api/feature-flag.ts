@@ -1,5 +1,8 @@
 import axiosInstance, { TApiResponse } from "@/lib/axios";
-import { TFeatureFlags, TGetAllFeatureFlags } from "@/lib/zod-schemas/feature-flags";
+import {
+    TFeatureFlags,
+    TGetAllFeatureFlags,
+} from "@/lib/zod-schemas/feature-flags";
 import { FeatureFlags } from "@/generated/prisma";
 import { showSuccess } from "@/lib/sonner";
 
@@ -9,7 +12,7 @@ export const getFeatureFlags = async (input: TGetAllFeatureFlags) => {
         const response =
             await axiosInstance.request<TResponseGetAllFeatureFlags>({
                 url: "/v1/flags",
-                method: 'GET',
+                method: "GET",
                 params: {
                     limit: input.limit,
                     page: input.page,
@@ -29,19 +32,20 @@ export const createFeatureFlag = async (input: TFeatureFlags) => {
         enabled: input.enabled,
         environment: input.environment,
         rolloutPercentage: input.rolloutPercentage,
-        targeting: input.targeting
-    }
+        targeting: input.targeting,
+    };
     try {
-        const response = await axiosInstance.request<TResponseCreateFeatureFlag>({
-            url: '/v1/flags',
-            method: 'POST',
-            data: reqData
-        })
+        const response =
+            await axiosInstance.request<TResponseCreateFeatureFlag>({
+                url: "/v1/flags",
+                method: "POST",
+                data: reqData,
+            });
         if (response.status === 201) {
-            showSuccess(response.data.message)
+            showSuccess(response.data.message);
         }
         return response.data;
     } catch (error) {
-        throw error
+        throw error;
     }
-}
+};

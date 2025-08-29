@@ -16,7 +16,11 @@ import { Environment, TargetUser } from "@/generated/prisma";
 import { formatNumber } from "@/lib/format-number";
 import { timeAgo } from "@/lib/time-date";
 import { cn } from "@/lib/utils";
-import { IconGitMerge, IconSettings, IconSettingsFilled } from "@tabler/icons-react";
+import {
+    IconGitMerge,
+    IconSettings,
+    IconSettingsFilled,
+} from "@tabler/icons-react";
 import { Activity, Calendar, TrendingUp, Users } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
@@ -28,7 +32,7 @@ interface TFlagCardProps {
     enabled: boolean;
     description: string;
     rolloutPercentage: number;
-    user: TargetUser[]
+    user: TargetUser[];
     lastModified: Date;
     evaluations: number;
 }
@@ -117,11 +121,13 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
                     <p>{rolloutPercentage}&#37;</p>
                     <p>Rollout</p>
                 </Pill>
-                {user.map(item => <Pill key={item}>
-                    <Users color="white" size={18} />
-                    <p>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
-                    <p>Users</p>
-                </Pill>)}
+                {user.map((item) => (
+                    <Pill key={item}>
+                        <Users color="white" size={18} />
+                        <p>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                        <p>Users</p>
+                    </Pill>
+                ))}
                 <Pill>
                     <Calendar color="yellow" size={18} />
                     <p>{timeAgo(lastModified)}</p>

@@ -13,11 +13,13 @@ export const useUserFlagQuery = (limit: number, page: number) => {
 };
 
 export const useCreateFlagMutation = (input: TFeatureFlags) => {
-    const queryClient = useTanstackClient()
+    const queryClient = useTanstackClient();
     return useMutation({
         mutationFn: () => createFeatureFlag(input),
         onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: queryKeys.userFlags })
-        }
-    })
-}
+            await queryClient.invalidateQueries({
+                queryKey: queryKeys.userFlags,
+            });
+        },
+    });
+};

@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 
 const Workplace = () => {
-    const { data: featureFlags, isLoading, isError } = useUserFlagQuery(10, 1);
+    const { data: featureFlags, isLoading, isError } = useUserFlagQuery(5, 1);
     console.log("Data:", featureFlags);
 
     const metrics = [
@@ -130,8 +130,7 @@ const Workplace = () => {
                                 key={item.id}
                                 description={item.description}
                                 enabled={item.enabled}
-                                env={
-                                    item.environment}
+                                env={item.environment}
                                 evaluations={0}
                                 // lastModified={new Date(item.createdAt)}
                                 lastModified={item.createdAt}
@@ -139,7 +138,9 @@ const Workplace = () => {
                                 rolloutPercentage={item.rollout_percentage}
                                 user={item.targeting}
                                 roundTop={index === 0}
-                                roundBottom={index === featureFlags.data.length - 1}
+                                roundBottom={
+                                    index === featureFlags.data.length - 1
+                                }
                             />
                         ))
                     )}
