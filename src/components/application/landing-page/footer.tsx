@@ -1,4 +1,4 @@
-import { Github, FileText, DollarSign, BookOpen, Flag } from "lucide-react";
+import { Github, FileText, BookOpen, Flag } from "lucide-react";
 import { Pixelify_Sans } from "next/font/google";
 
 const pixelSans = Pixelify_Sans({

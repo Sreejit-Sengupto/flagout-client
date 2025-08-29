@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { Bitcount_Grid_Double } from "next/font/google";

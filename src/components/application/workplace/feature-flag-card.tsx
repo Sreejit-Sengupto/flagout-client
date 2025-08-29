@@ -1,6 +1,5 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -12,10 +11,11 @@ import {
 import { Pill, PillIndicator } from "@/components/ui/kibo-ui/pill";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
+import { Environment, TargetUser } from "@prisma/client";
 import { formatNumber } from "@/lib/format-number";
 import { timeAgo } from "@/lib/time-date";
 import { cn } from "@/lib/utils";
-import { IconSettings, IconSettingsFilled } from "@tabler/icons-react";
+import { IconSettings } from "@tabler/icons-react";
 import { Activity, Calendar, TrendingUp, Users } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
@@ -23,11 +23,11 @@ interface TFlagCardProps {
     roundTop: boolean;
     roundBottom: boolean;
     name: string;
-    env: "production" | "development" | "staging";
+    env: Environment;
     enabled: boolean;
     description: string;
     rolloutPercentage: number;
-    user: "beta" | "internal" | "all" | "premium";
+    user: TargetUser[];
     lastModified: Date;
     evaluations: number;
 }
@@ -48,11 +48,11 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
 
     const envVariant = useMemo(() => {
         switch (env) {
-            case "staging":
+            case "STAGING":
                 return "warning";
-            case "production":
+            case "PRODUCTION":
                 return "success";
-            case "development":
+            case "DEVELOPMENT":
                 return "info";
             default:
                 return "error";
@@ -88,10 +88,10 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
                             {env}
                         </Pill>
                         <Badge
-                            variant={flagEnabled ? "destructive" : "secondary"}
+                            variant={flagEnabled ? "secondary" : "destructive"}
                             className={
                                 flagEnabled
-                                    ? "bg-green-500 text-white transition-all duration-300 hidden lg:block"
+                                    ? "bg-green-500 text-black transition-all duration-300 hidden lg:block"
                                     : "transition-all duration-300 hidden lg:block"
                             }
                         >
@@ -116,11 +116,13 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
                     <p>{rolloutPercentage}&#37;</p>
                     <p>Rollout</p>
                 </Pill>
-                <Pill>
-                    <Users color="white" size={18} />
-                    <p>{user.charAt(0).toUpperCase() + user.slice(1)}</p>
-                    <p>Users</p>
-                </Pill>
+                {user.map((item) => (
+                    <Pill key={item}>
+                        <Users color="white" size={18} />
+                        <p>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                        <p>Users</p>
+                    </Pill>
+                ))}
                 <Pill>
                     <Calendar color="yellow" size={18} />
                     <p>{timeAgo(lastModified)}</p>

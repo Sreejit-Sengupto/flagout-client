@@ -6,7 +6,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Pill, PillDelta } from "@/components/ui/kibo-ui/pill";
+import { Pill } from "@/components/ui/kibo-ui/pill";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import { Bitcount_Grid_Double } from "next/font/google";
 import React, { ReactNode } from "react";

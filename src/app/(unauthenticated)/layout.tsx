@@ -1,12 +1,12 @@
 import Logo from "@/components/application/logo";
 import Link from "next/link";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import React, { ReactNode } from "react";
 import { redirect } from "next/navigation";
 
 const UnauthenticatedLayout = async ({ children }: { children: ReactNode }) => {
-    const user = await currentUser();
-    if (user) {
+    const { isAuthenticated } = await auth();
+    if (isAuthenticated) {
         redirect("/workplace");
     }
     return (

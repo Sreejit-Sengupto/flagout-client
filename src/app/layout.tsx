@@ -1,15 +1,11 @@
 import type { Metadata } from "next";
-import {
-    Geist,
-    Geist_Mono,
-    Fira_Code,
-    Bungee,
-    Pixelify_Sans,
-} from "next/font/google";
+import { Geist, Geist_Mono, Fira_Code, Bungee } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/context/theme-provider";
 import NextTopLoader from "nextjs-toploader";
 import { ClerkProvider } from "@clerk/nextjs";
+import TanstackProvider from "@/context/tanstack-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -99,7 +95,10 @@ export default function RootLayout({
                         enableSystem
                         disableTransitionOnChange
                     >
-                        {children}
+                        <TanstackProvider>
+                            {children}
+                            <Toaster />
+                        </TanstackProvider>
                     </ThemeProvider>
                 </body>
             </ClerkProvider>

@@ -1,11 +1,24 @@
+"use client";
+import EmptyState from "@/components/application/emtpy-state";
 import FeatureFlagCard from "@/components/application/workplace/feature-flag-card";
 import MetricCard from "@/components/application/workplace/metric-cards";
 import QuickAction from "@/components/application/workplace/quick-action";
 import RecentActivity from "@/components/application/workplace/recent-activity";
-import { Activity, Flag, Users, History, ArrowRight } from "lucide-react";
+import { useUserFlagQuery } from "@/lib/tanstack/hooks/feature-flag";
+import {
+    Activity,
+    Flag,
+    Users,
+    History,
+    ArrowRight,
+    Loader2,
+} from "lucide-react";
 import Link from "next/link";
 
 const Workplace = () => {
+    const { data: featureFlags, isLoading } = useUserFlagQuery(5, 1);
+    console.log("Data:", featureFlags);
+
     const metrics = [
         {
             name: "Active Flags",
@@ -30,53 +43,6 @@ const Workplace = () => {
             value: 3,
             growth: -2,
             icon: <History size={18} />,
-        },
-    ];
-
-    const flags = [
-        {
-            id: 1,
-            name: "New Dashboard UI",
-            description: "Rollout of the redesigned dashboard interface",
-            enabled: true,
-            rolloutPercentage: 75,
-            environment: "production",
-            targeting: "beta",
-            created: new Date("2025-08-17T10:00:00Z"), // 2 days ago
-            evaluations: 12500,
-        },
-        {
-            id: 2,
-            name: "AI Recommendations",
-            description: "Machine learning powered feature recommendations",
-            enabled: false,
-            rolloutPercentage: 0,
-            environment: "staging",
-            targeting: "internal",
-            created: new Date("2025-08-14T10:00:00Z"), // 5 days ago
-            evaluations: 2100,
-        },
-        {
-            id: 3,
-            name: "Advanced Analytics",
-            description: "Enhanced analytics dashboard with real-time metrics",
-            enabled: true,
-            rolloutPercentage: 100,
-            environment: "development",
-            targeting: "all",
-            created: new Date("2025-08-12T10:00:00Z"), // 1 week ago
-            evaluations: 45200,
-        },
-        {
-            id: 4,
-            name: "Dark Mode Theme",
-            description: "Alternative dark theme for the application",
-            enabled: true,
-            rolloutPercentage: 50,
-            environment: "production",
-            targeting: "premium",
-            created: new Date("2025-08-16T10:00:00Z"), // 3 days ago
-            evaluations: 8700,
         },
     ];
 
@@ -150,32 +116,34 @@ const Workplace = () => {
                     <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance mr-auto mb-3 lg:mt-8">
                         Feature Flags
                     </h1>
-                    {flags.map((item, index) => (
-                        <FeatureFlagCard
-                            key={item.id}
-                            description={item.description}
-                            enabled={item.enabled}
-                            env={
-                                item.environment as
-                                    | "production"
-                                    | "staging"
-                                    | "development"
-                            }
-                            evaluations={item.evaluations}
-                            lastModified={item.created}
-                            name={item.name}
-                            rolloutPercentage={item.rolloutPercentage}
-                            user={
-                                item.targeting as
-                                    | "beta"
-                                    | "internal"
-                                    | "all"
-                                    | "premium"
-                            }
-                            roundTop={index === 0}
-                            roundBottom={index === flags.length - 1}
+                    {isLoading ? (
+                        <Loader2 className="animate-spin" />
+                    ) : featureFlags && featureFlags.data.length === 0 ? (
+                        <EmptyState
+                            icon={<Flag size={32} />}
+                            title="No Feature Flags"
+                            description="You haven't created any feature flags yet"
                         />
-                    ))}
+                    ) : (
+                        featureFlags?.data.map((item, index) => (
+                            <FeatureFlagCard
+                                key={item.id}
+                                description={item.description}
+                                enabled={item.enabled}
+                                env={item.environment}
+                                evaluations={0}
+                                // lastModified={new Date(item.createdAt)}
+                                lastModified={item.createdAt}
+                                name={item.name}
+                                rolloutPercentage={item.rollout_percentage}
+                                user={item.targeting}
+                                roundTop={index === 0}
+                                roundBottom={
+                                    index === featureFlags.data.length - 1
+                                }
+                            />
+                        ))
+                    )}
                     <Link
                         href={"#"}
                         className="flex justify-center items-center gap-1 mb-12 mt-2 text-blue-400"
