@@ -43,6 +43,9 @@ export async function GET(request: NextRequest) {
                     equals: user.id,
                 },
             },
+            orderBy: {
+                createdAt: "desc",
+            },
         });
         const totalActivities = prisma.recentActivity.count({
             where: {

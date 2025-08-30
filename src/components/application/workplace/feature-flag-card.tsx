@@ -18,10 +18,15 @@ import { cn } from "@/lib/utils";
 import { IconSettings } from "@tabler/icons-react";
 import { Activity, Calendar, TrendingUp, Users } from "lucide-react";
 import React, { useMemo, useState } from "react";
+import { debounce } from "@/lib/debounce";
+import { useUpdateFlagMutation } from "@/lib/tanstack/hooks/feature-flag";
+import { usePathname } from "next/navigation";
+import { queryKeys } from "@/lib/tanstack/keys";
 
 interface TFlagCardProps {
     roundTop: boolean;
     roundBottom: boolean;
+    id: string;
     name: string;
     env: Environment;
     enabled: boolean;
@@ -35,6 +40,7 @@ interface TFlagCardProps {
 const FeatureFlagCard: React.FC<TFlagCardProps> = ({
     roundTop,
     roundBottom,
+    id,
     name,
     env,
     enabled,
@@ -58,6 +64,26 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
                 return "error";
         }
     }, [env]);
+
+    const pathname = usePathname();
+    const invalidationKeys = useMemo(() => {
+        if (pathname.includes("workplace")) {
+            return [...queryKeys.userFlags, ...queryKeys.dashboardActivity];
+        } else {
+            return [...queryKeys.userFlags];
+        }
+    }, [pathname]);
+
+    const updateFlagMutation = useUpdateFlagMutation(id, invalidationKeys);
+    const toggleEnabled = debounce(async (enabled: boolean) => {
+        console.log("Request sent.");
+
+        try {
+            await updateFlagMutation.mutateAsync({ enabled });
+        } catch (error) {
+            console.error(error);
+        }
+    }, 2000);
 
     return (
         <Card
@@ -100,7 +126,10 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
                     </div>
                     <Switch
                         checked={flagEnabled}
-                        onCheckedChange={setFlagEnabled}
+                        onCheckedChange={(checked) => {
+                            setFlagEnabled(checked);
+                            toggleEnabled(checked);
+                        }}
                         className="cursor-pointer  data-[state=checked]:bg-[#00D100]"
                     />
                 </CardTitle>

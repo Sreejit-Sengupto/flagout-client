@@ -2,6 +2,7 @@ import axiosInstance, { TApiResponse } from "@/lib/axios";
 import {
     TFeatureFlags,
     TGetAllFeatureFlags,
+    TUpdateFeatureFlags,
 } from "@/lib/zod-schemas/feature-flags";
 import { FeatureFlags } from "@prisma/client";
 import { showSuccess } from "@/lib/sonner";
@@ -44,6 +45,24 @@ export const createFeatureFlag = async (input: TFeatureFlags) => {
         if (response.status === 201) {
             showSuccess(response.data.message);
         }
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export type TResponseUpdateFeatureFlag = TApiResponse<FeatureFlags>;
+export const updateFeatureFlag = async (
+    id: string,
+    data: TUpdateFeatureFlags,
+) => {
+    try {
+        const response =
+            await axiosInstance.request<TResponseUpdateFeatureFlag>({
+                url: `/flags/${id}`,
+                method: "PATCH",
+                data,
+            });
         return response.data;
     } catch (error) {
         throw error;

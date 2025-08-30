@@ -131,6 +131,7 @@ const Workplace = () => {
                         featureFlags?.data.map((item, index) => (
                             <FeatureFlagCard
                                 key={item.id}
+                                id={item.id}
                                 description={item.description}
                                 enabled={item.enabled}
                                 env={item.environment}
