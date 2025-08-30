@@ -18,7 +18,7 @@ export const useCreateFlagMutation = (input: TFeatureFlags) => {
         mutationFn: () => createFeatureFlag(input),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: queryKeys.userFlags,
+                queryKey: [queryKeys.userFlags, queryKeys.dashboardActivity],
             });
         },
     });

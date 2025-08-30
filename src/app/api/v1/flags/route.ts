@@ -38,10 +38,10 @@ export async function POST(request: Request) {
         const flagExists = await prisma.featureFlags.findFirst({
             where: {
                 slug: {
-                    equals: slug
-                }
-            }
-        })
+                    equals: slug,
+                },
+            },
+        });
         if (flagExists) {
             throw new ApiError(
                 400,
@@ -60,6 +60,14 @@ export async function POST(request: Request) {
                 environment: data.environment,
                 rollout_percentage: data.rolloutPercentage,
                 targeting: data.targeting as TargetUser[],
+            },
+        });
+
+        await prisma.recentActivity.create({
+            data: {
+                activity: "Feature Flag created",
+                flag_id: insertedFlag.id,
+                clerk_user_id: user.id,
             },
         });
 

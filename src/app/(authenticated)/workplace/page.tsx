@@ -5,6 +5,7 @@ import MetricCard from "@/components/application/workplace/metric-cards";
 import QuickAction from "@/components/application/workplace/quick-action";
 import RecentActivity from "@/components/application/workplace/recent-activity";
 import { useUserFlagQuery } from "@/lib/tanstack/hooks/feature-flag";
+import { useRecentActivity } from "@/lib/tanstack/hooks/recent-activity";
 import {
     Activity,
     Flag,
@@ -12,12 +13,14 @@ import {
     History,
     ArrowRight,
     Loader2,
+    ChartColumn,
 } from "lucide-react";
 import Link from "next/link";
 
 const Workplace = () => {
     const { data: featureFlags, isLoading } = useUserFlagQuery(5, 1);
-    console.log("Data:", featureFlags);
+    const { data: recentActivity, isLoading: activityLoading } =
+        useRecentActivity(5, 1);
 
     const metrics = [
         {
@@ -46,56 +49,56 @@ const Workplace = () => {
         },
     ];
 
-    const recentActivity = [
-        {
-            action: "Flag enabled",
-            target: "New Dashboard UI",
-            time: new Date("2025-08-19T12:02:00Z"),
-            user: "John Doe",
-        },
-        {
-            action: "Experiment started",
-            target: "Button Color Test",
-            time: new Date("2025-08-19T11:00:00Z"),
-            user: "Jane Smith",
-        },
-        {
-            action: "Flag disabled",
-            target: "Legacy Feature",
-            time: new Date("2025-08-19T09:00:00Z"),
-            user: "Mike Johnson",
-        },
-        {
-            action: "Flag created",
-            target: "Dark Mode Rollout",
-            time: new Date("2025-08-18T18:30:00Z"),
-            user: "Alice Brown",
-        },
-        {
-            action: "Experiment ended",
-            target: "Homepage Layout Test",
-            time: new Date("2025-08-18T15:45:00Z"),
-            user: "Robert Wilson",
-        },
-        {
-            action: "Flag updated",
-            target: "Checkout Flow",
-            time: new Date("2025-08-17T20:10:00Z"),
-            user: "Emily Davis",
-        },
-        {
-            action: "Flag deleted",
-            target: "Old Search Feature",
-            time: new Date("2025-08-17T09:25:00Z"),
-            user: "Chris Lee",
-        },
-        {
-            action: "Experiment started",
-            target: "Signup Funnel Test",
-            time: new Date("2025-08-16T22:00:00Z"),
-            user: "Sophia Martinez",
-        },
-    ];
+    // const recentActivity = [
+    //     {
+    //         action: "Flag enabled",
+    //         target: "New Dashboard UI",
+    //         time: new Date("2025-08-19T12:02:00Z"),
+    //         user: "John Doe",
+    //     },
+    //     {
+    //         action: "Experiment started",
+    //         target: "Button Color Test",
+    //         time: new Date("2025-08-19T11:00:00Z"),
+    //         user: "Jane Smith",
+    //     },
+    //     {
+    //         action: "Flag disabled",
+    //         target: "Legacy Feature",
+    //         time: new Date("2025-08-19T09:00:00Z"),
+    //         user: "Mike Johnson",
+    //     },
+    //     {
+    //         action: "Flag created",
+    //         target: "Dark Mode Rollout",
+    //         time: new Date("2025-08-18T18:30:00Z"),
+    //         user: "Alice Brown",
+    //     },
+    //     {
+    //         action: "Experiment ended",
+    //         target: "Homepage Layout Test",
+    //         time: new Date("2025-08-18T15:45:00Z"),
+    //         user: "Robert Wilson",
+    //     },
+    //     {
+    //         action: "Flag updated",
+    //         target: "Checkout Flow",
+    //         time: new Date("2025-08-17T20:10:00Z"),
+    //         user: "Emily Davis",
+    //     },
+    //     {
+    //         action: "Flag deleted",
+    //         target: "Old Search Feature",
+    //         time: new Date("2025-08-17T09:25:00Z"),
+    //         user: "Chris Lee",
+    //     },
+    //     {
+    //         action: "Experiment started",
+    //         target: "Signup Funnel Test",
+    //         time: new Date("2025-08-16T22:00:00Z"),
+    //         user: "Sophia Martinez",
+    //     },
+    // ];
 
     return (
         <div className="flex h-full w-full flex-1 flex-col lg:grid grid-cols-5 gap-2 rounded-tl-2xl bg-background p-5 overflow-auto">
@@ -176,14 +179,24 @@ const Workplace = () => {
                         Recent Activity
                     </h1>
                     <div className="flex flex-col justify-start items-center w-full gap-2 max-h-[60dvh] overflow-y-auto">
-                        {recentActivity.map((item, index) => (
-                            <RecentActivity
-                                key={index}
-                                flagName={item.target}
-                                title={item.action}
-                                time={item.time}
+                        {activityLoading ? (
+                            <Loader2 className="animate-spin" />
+                        ) : recentActivity && recentActivity.data.length > 0 ? (
+                            recentActivity.data.map((item, index) => (
+                                <RecentActivity
+                                    key={index}
+                                    flagName={item.flag.name}
+                                    title={item.activity}
+                                    time={item.createdAt}
+                                />
+                            ))
+                        ) : (
+                            <EmptyState
+                                icon={<ChartColumn size={32} />}
+                                title="No activity yet"
+                                description="You have not activity yet. Start by creating new flags"
                             />
-                        ))}
+                        )}
                     </div>
                     <Link
                         href={"#"}
