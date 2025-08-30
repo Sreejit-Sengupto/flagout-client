@@ -1,5 +1,4 @@
 import axios from "axios";
-import { URL } from "../constants";
 import { showError } from "../sonner";
 
 const axiosInstance = axios.create({

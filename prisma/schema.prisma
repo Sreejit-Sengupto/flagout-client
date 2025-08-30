@@ -28,15 +28,25 @@ enum Environment {
 }
 
 model FeatureFlags {
-  id                 String       @id @default(uuid())
+  id                 String           @id @default(uuid())
   clerk_user_id      String
   name               String
-  slug               String       @unique
+  slug               String           @unique
   description        String
-  enabled            Boolean      @default(false)
-  rollout_percentage Int          @default(0)
-  targeting          TargetUser[] @default([ALL])
-  environment        Environment  @default(DEVELOPMENT)
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
+  enabled            Boolean          @default(false)
+  rollout_percentage Int              @default(0)
+  targeting          TargetUser[]     @default([ALL])
+  environment        Environment      @default(DEVELOPMENT)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  recent_activities  RecentActivity[]
+}
+
+model RecentActivity {
+  id            String       @id @default(uuid())
+  clerk_user_id String
+  flag          FeatureFlags @relation(fields: [flag_id], references: [id])
+  flag_id       String
+  activity      String
+  createdAt     DateTime     @default(now())
 }
