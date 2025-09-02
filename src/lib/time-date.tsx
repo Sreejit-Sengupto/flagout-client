@@ -27,3 +27,21 @@ export const timeAgo = (input: Date | string) => {
     const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
     return rtf.format(-Math.floor(count), unit);
 };
+
+export function formatDate(date: Date) {
+    const d = new Date(date);
+
+    let day: number | string = d.getDate();
+    let month: number | string = d.getMonth() + 1;
+    const year = d.getFullYear();
+
+    if (day < 10) {
+        day = "0" + day;
+    }
+    if (month < 10) {
+        month = "0" + month;
+    }
+
+    // Return the formatted string.
+    return `${day}/${month}/${year}`;
+}
