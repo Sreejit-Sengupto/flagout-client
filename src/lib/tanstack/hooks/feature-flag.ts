@@ -1,7 +1,14 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../keys";
-import { createFeatureFlag, getFeatureFlags } from "../api/feature-flag";
-import { TFeatureFlags } from "@/lib/zod-schemas/feature-flags";
+import {
+    createFeatureFlag,
+    getFeatureFlags,
+    updateFeatureFlag,
+} from "../api/feature-flag";
+import {
+    TFeatureFlags,
+    TUpdateFeatureFlags,
+} from "@/lib/zod-schemas/feature-flags";
 import useTanstackClient from "../query-client";
 
 export const useUserFlagQuery = (limit: number, page: number) => {
@@ -22,6 +29,21 @@ export const useCreateFlagMutation = (input: TFeatureFlags) => {
                     ...queryKeys.userFlags,
                     ...queryKeys.dashboardActivity,
                 ],
+            });
+        },
+    });
+};
+
+export const useUpdateFlagMutation = (
+    id: string,
+    invalidationKeys: string[],
+) => {
+    const queryClient = useTanstackClient();
+    return useMutation({
+        mutationFn: (data: TUpdateFeatureFlags) => updateFeatureFlag(id, data),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: invalidationKeys,
             });
         },
     });
