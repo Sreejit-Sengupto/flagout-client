@@ -50,3 +50,13 @@ model RecentActivity {
   activity      String
   createdAt     DateTime     @default(now())
 }
+
+model APIKey {
+  id            String    @id @default(uuid())
+  clerk_user_id String
+  name          String
+  key           String    @unique
+  revoked       Boolean   @default(false)
+  lastUsed      DateTime?
+  createdAt     DateTime  @default(now())
+}
