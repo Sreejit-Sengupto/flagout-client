@@ -55,6 +55,7 @@ model APIKey {
   id            String    @id @default(uuid())
   clerk_user_id String
   name          String
+  prefix        String
   key           String    @unique
   revoked       Boolean   @default(false)
   lastUsed      DateTime?

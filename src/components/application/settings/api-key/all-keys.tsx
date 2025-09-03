@@ -112,7 +112,7 @@ export function AllKeys() {
                                 }
                             >
                                 {deleteKeyMutation.variables === key.id &&
-                                    deleteKeyMutation.isPending ? (
+                                deleteKeyMutation.isPending ? (
                                     <Loader2 className="animate-spin" />
                                 ) : (
                                     "Delete"

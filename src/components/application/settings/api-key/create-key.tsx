@@ -56,8 +56,8 @@ const CreateKey = () => {
                         <DialogHeader>
                             <DialogTitle>Your API Key</DialogTitle>
                             <DialogDescription>
-                                Make sure to copy the API key, you won&apos;t be able
-                                to see it again.
+                                Make sure to copy the API key, you won&apos;t be
+                                able to see it again.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="grid gap-4">

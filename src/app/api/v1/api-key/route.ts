@@ -29,6 +29,7 @@ export async function POST(request: Request) {
 
         const apiKey = `f0-${randomBytes(16).toString("hex")}`;
         const hashedKey = await bcrypt.hash(apiKey, 10);
+        const prefix = apiKey.slice(0, 10);
 
         const keysCount = await prisma.aPIKey.count({
             where: { clerk_user_id: { equals: user.id } },
@@ -45,6 +46,7 @@ export async function POST(request: Request) {
             data: {
                 clerk_user_id: user.id,
                 name: data.name,
+                prefix,
                 key: hashedKey,
             },
         });
@@ -58,6 +60,8 @@ export async function POST(request: Request) {
             { status: 200 },
         );
     } catch (error) {
+        console.error(error);
+
         if (error instanceof ApiError) {
             return Response.json(
                 {
