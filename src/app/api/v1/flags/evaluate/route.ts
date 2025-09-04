@@ -1,11 +1,12 @@
 import { ApiError } from "@/lib/api-error";
 import { getUserBucket } from "@/lib/api-utils/user-bucket";
+import { CORSHandler } from "@/lib/middleware/handle-cors";
 import { secureAPI } from "@/lib/middleware/secure-api";
 import prisma from "@/lib/prisma";
 import { TargetUser } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, response: NextResponse) {
     try {
         const searchParams = request.nextUrl.searchParams;
         const keySlug = searchParams.get("slug");
@@ -17,13 +18,22 @@ export async function GET(request: NextRequest) {
         const data = await secureAPI(request);
         const userData = await data.json();
 
-        console.log("User data", userData);
-
         if (!userData.data.userId) {
             throw new ApiError(
                 401,
                 "Invalid API Key",
                 "Your API key is invalid kindly check again.",
+            );
+        }
+
+        const cors = await CORSHandler(request, response, userData.data.userId);
+        if (request.method === "OPTIONS") {
+            if (cors.allowed) {
+                return NextResponse.json({}, { status: 200 });
+            }
+            return NextResponse.json(
+                { error: "Origin not allowed" },
+                { status: 403 },
             );
         }
 
@@ -48,6 +58,21 @@ export async function GET(request: NextRequest) {
                 404,
                 "Flag not found",
                 "No flag found for the provided slug and key",
+            );
+        }
+
+        const envUrls = await prisma.flagEnviroment.findFirst({
+            where: {
+                clerk_user_id: {
+                    equals: userData.data.userId as string,
+                },
+            },
+        });
+        if (!envUrls) {
+            throw new ApiError(
+                404,
+                "Data mismatch. Failed to get allowed URLs",
+                "We are unable to find the user. Kindly check your API keys.",
             );
         }
         // calculate parameters to return true or false for the flag
@@ -75,6 +100,46 @@ export async function GET(request: NextRequest) {
                 },
                 { status: 200 },
             );
+        }
+
+        if (cors.origin) {
+            if (
+                flag.environment === "PRODUCTION" &&
+                envUrls.prod !== cors.origin
+            ) {
+                return Response.json(
+                    {
+                        success: true,
+                        message: "This environment is not allowed",
+                        data: { flag, showFeature: false },
+                    },
+                    { status: 200 },
+                );
+            } else if (
+                flag.environment !== "DEVELOPMENT" &&
+                envUrls.dev !== cors.origin
+            ) {
+                return Response.json(
+                    {
+                        success: true,
+                        message: "This environment is not allowed",
+                        data: { flag, showFeature: false },
+                    },
+                    { status: 200 },
+                );
+            } else if (
+                flag.environment === "STAGING" &&
+                envUrls.stage !== cors.origin
+            ) {
+                return Response.json(
+                    {
+                        success: true,
+                        message: "This environment is not allowed",
+                        data: { flag, showFeature: false },
+                    },
+                    { status: 200 },
+                );
+            }
         }
 
         const bucket = getUserBucket(userId, flag.slug);
