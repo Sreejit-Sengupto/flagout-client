@@ -52,16 +52,16 @@ export function AllKeys() {
             <TableCaption>A list of all your API Keys.</TableCaption>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="scroll-m-20 text-xl font-semibold tracking-tight">
+                    <TableHead className="scroll-m-20 text-lg lg:text-xl font-semibold tracking-tight">
                         Name
                     </TableHead>
-                    <TableHead className="scroll-m-20 text-xl font-semibold tracking-tight">
+                    <TableHead className="scroll-m-20 text-lg lg:text-xl font-semibold tracking-tight">
                         Created at
                     </TableHead>
-                    <TableHead className="scroll-m-20 text-xl font-semibold tracking-tight">
+                    <TableHead className="scroll-m-20 text-lg lg:text-xl font-semibold tracking-tight">
                         Last used
                     </TableHead>
-                    <TableHead className="text-right scroll-m-20 text-xl font-semibold tracking-tight">
+                    <TableHead className="text-right scroll-m-20 text-lg lg:text-xl font-semibold tracking-tight">
                         Actions
                     </TableHead>
                 </TableRow>
