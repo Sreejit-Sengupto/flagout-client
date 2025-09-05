@@ -32,9 +32,9 @@ const Environment = () => {
         if (envUrls) {
             // setId(envUrls.data.id ?? "")
             setEnvs({
-                prod: envUrls?.data.prod ?? "",
-                dev: envUrls?.data.dev ?? "",
-                stage: envUrls?.data.stage ?? "",
+                prod: envUrls?.data?.prod ?? "",
+                dev: envUrls?.data?.dev ?? "",
+                stage: envUrls?.data?.stage ?? "",
             });
         }
     }, [envUrls]);
