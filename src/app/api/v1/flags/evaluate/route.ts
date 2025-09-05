@@ -1,12 +1,12 @@
 import { ApiError } from "@/lib/api-error";
 import { getUserBucket } from "@/lib/api-utils/user-bucket";
-import { CORSHandler } from "@/lib/middleware/handle-cors";
+import { CORSHandler, setCORSHeaders } from "@/lib/middleware/handle-cors";
 import { secureAPI } from "@/lib/middleware/secure-api";
 import prisma from "@/lib/prisma";
 import { TargetUser } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, response: NextResponse) {
+export async function GET(request: NextRequest) {
     try {
         const searchParams = request.nextUrl.searchParams;
         const keySlug = searchParams.get("slug");
@@ -26,12 +26,15 @@ export async function GET(request: NextRequest, response: NextResponse) {
             );
         }
 
-        const cors = await CORSHandler(request, response, userData.data.userId);
+        const cors = await CORSHandler(request, userData.data.userId);
         if (request.method === "OPTIONS") {
             if (cors.allowed) {
-                return NextResponse.json({}, { status: 200 });
+                return Response.json(
+                    {},
+                    { status: 200, headers: setCORSHeaders(cors.origin) },
+                );
             }
-            return NextResponse.json(
+            return Response.json(
                 { error: "Origin not allowed" },
                 { status: 403 },
             );
@@ -84,7 +87,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
                     message: "Flag is disabled",
                     data: { flag, showFeature: false },
                 },
-                { status: 200 },
+                { status: 200, headers: setCORSHeaders(cors.origin) },
             );
         }
 
@@ -98,7 +101,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
                     message: `Flag is disabled for ${userRole} users`,
                     data: { flag, showFeature: false },
                 },
-                { status: 200 },
+                { status: 200, headers: setCORSHeaders(cors.origin) },
             );
         }
 
@@ -113,7 +116,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
                         message: "This environment is not allowed",
                         data: { flag, showFeature: false },
                     },
-                    { status: 200 },
+                    { status: 200, headers: setCORSHeaders(cors.origin) },
                 );
             } else if (
                 flag.environment !== "DEVELOPMENT" &&
@@ -125,7 +128,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
                         message: "This environment is not allowed",
                         data: { flag, showFeature: false },
                     },
-                    { status: 200 },
+                    { status: 200, headers: setCORSHeaders(cors.origin) },
                 );
             } else if (
                 flag.environment === "STAGING" &&
@@ -137,7 +140,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
                         message: "This environment is not allowed",
                         data: { flag, showFeature: false },
                     },
-                    { status: 200 },
+                    { status: 200, headers: setCORSHeaders(cors.origin) },
                 );
             }
         }
@@ -151,7 +154,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
                 message: "Flag analyzed successfully",
                 data: { flag, showFeature: bucket < flag.rollout_percentage },
             },
-            { status: 200 },
+            { status: 200, headers: setCORSHeaders(cors.origin) },
         );
     } catch (error) {
         if (error instanceof ApiError) {

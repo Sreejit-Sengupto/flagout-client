@@ -1,12 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import prisma from "../prisma";
 import { ApiError } from "../api-error";
 
-export const CORSHandler = async (
-    request: NextRequest,
-    response: NextResponse,
-    userId: string,
-) => {
+export const CORSHandler = async (request: NextRequest, userId: string) => {
     try {
         const origin = request.headers.get("origin");
         console.log("Origin: ", origin);
@@ -35,9 +31,9 @@ export const CORSHandler = async (
             userAddedEnvURLs.prod,
             userAddedEnvURLs.dev,
             userAddedEnvURLs.stage,
-        ];
+        ].filter(Boolean);
         if (origin && allowedOrigins.includes(origin)) {
-            response.headers.set("Access-Control-Allow-Origin", origin);
+            // response.headers.set("Access-Control-Allow-Origin", origin);
             // response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
             // response.headers.set('Access-Control-Allow-Headers', 'Authorization, X-Client-ID, Content-Type');
             // response.headers.set('Access-Control-Allow-Credentials', 'true');
@@ -48,4 +44,12 @@ export const CORSHandler = async (
     } catch (error) {
         throw error;
     }
+};
+
+export const setCORSHeaders = (origin?: string | null) => {
+    const headers = new Headers();
+    if (origin) {
+        headers.set("Access-Control-Allow-Origin", origin);
+    }
+    return headers;
 };
