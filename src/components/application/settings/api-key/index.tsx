@@ -15,12 +15,12 @@ const APIKeys = () => {
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                     <p className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                        API Keys
+                        Public API Keys
                     </p>
                     <CreateKey />
                 </CardTitle>
                 <CardDescription>
-                    Create and manage your API keys
+                    Create and manage your Public API keys.
                 </CardDescription>
             </CardHeader>
             <CardContent>
