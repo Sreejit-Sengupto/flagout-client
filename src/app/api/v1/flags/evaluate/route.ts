@@ -1,6 +1,5 @@
 import { ApiError } from "@/lib/api-error";
 import { getUserBucket } from "@/lib/api-utils/user-bucket";
-import { CORSHandler, setCORSHeaders } from "@/lib/middleware/handle-cors";
 import { secureAPI } from "@/lib/middleware/secure-api";
 import prisma from "@/lib/prisma";
 import { TargetUser } from "@prisma/client";
@@ -23,20 +22,6 @@ export async function GET(request: NextRequest) {
                 401,
                 "Invalid API Key",
                 "Your API key is invalid kindly check again.",
-            );
-        }
-
-        const cors = await CORSHandler(request, userData.data.userId);
-        if (request.method === "OPTIONS") {
-            if (cors.allowed) {
-                return Response.json(
-                    {},
-                    { status: 200, headers: setCORSHeaders(cors.origin) },
-                );
-            }
-            return Response.json(
-                { error: "Origin not allowed" },
-                { status: 403 },
             );
         }
 
@@ -87,7 +72,7 @@ export async function GET(request: NextRequest) {
                     message: "Flag is disabled",
                     data: { flag, showFeature: false },
                 },
-                { status: 200, headers: setCORSHeaders(cors.origin) },
+                { status: 200 },
             );
         }
 
@@ -101,26 +86,24 @@ export async function GET(request: NextRequest) {
                     message: `Flag is disabled for ${userRole} users`,
                     data: { flag, showFeature: false },
                 },
-                { status: 200, headers: setCORSHeaders(cors.origin) },
+                { status: 200 },
             );
         }
 
-        if (cors.origin) {
-            if (
-                flag.environment === "PRODUCTION" &&
-                envUrls.prod !== cors.origin
-            ) {
+        const origin = request.headers.get("Origin");
+        if (request.headers.get("Origin")) {
+            if (flag.environment === "PRODUCTION" && envUrls.prod !== origin) {
                 return Response.json(
                     {
                         success: true,
                         message: "This environment is not allowed",
                         data: { flag, showFeature: false },
                     },
-                    { status: 200, headers: setCORSHeaders(cors.origin) },
+                    { status: 200 },
                 );
             } else if (
                 flag.environment !== "DEVELOPMENT" &&
-                envUrls.dev !== cors.origin
+                envUrls.dev !== origin
             ) {
                 return Response.json(
                     {
@@ -128,11 +111,11 @@ export async function GET(request: NextRequest) {
                         message: "This environment is not allowed",
                         data: { flag, showFeature: false },
                     },
-                    { status: 200, headers: setCORSHeaders(cors.origin) },
+                    { status: 200 },
                 );
             } else if (
                 flag.environment === "STAGING" &&
-                envUrls.stage !== cors.origin
+                envUrls.stage !== origin
             ) {
                 return Response.json(
                     {
@@ -140,7 +123,7 @@ export async function GET(request: NextRequest) {
                         message: "This environment is not allowed",
                         data: { flag, showFeature: false },
                     },
-                    { status: 200, headers: setCORSHeaders(cors.origin) },
+                    { status: 200 },
                 );
             }
         }
@@ -151,10 +134,13 @@ export async function GET(request: NextRequest) {
         return Response.json(
             {
                 success: true,
-                message: "Flag analyzed successfully",
+                message:
+                    bucket < flag.rollout_percentage
+                        ? "User is not falling under the allowed percentage"
+                        : "User falls in the allowed percentage",
                 data: { flag, showFeature: bucket < flag.rollout_percentage },
             },
-            { status: 200, headers: setCORSHeaders(cors.origin) },
+            { status: 200 },
         );
     } catch (error) {
         if (error instanceof ApiError) {
