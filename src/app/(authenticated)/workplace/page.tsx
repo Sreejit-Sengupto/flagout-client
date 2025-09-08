@@ -5,15 +5,14 @@ import MetricCard from "@/components/application/workplace/metric-cards";
 import QuickAction from "@/components/application/workplace/quick-action";
 import RecentActivity from "@/components/application/workplace/recent-activity";
 import { useUserFlagQuery } from "@/lib/tanstack/hooks/feature-flag";
+import { useGetMetrics } from "@/lib/tanstack/hooks/metrics";
 import { useRecentActivity } from "@/lib/tanstack/hooks/recent-activity";
 import {
-    Activity,
     Flag,
-    Users,
-    History,
     ArrowRight,
     Loader2,
     ChartColumn,
+    ChartBarIncreasing,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -21,98 +20,33 @@ const Workplace = () => {
     const { data: featureFlags, isLoading } = useUserFlagQuery(5, 1);
     const { data: recentActivity, isLoading: activityLoading } =
         useRecentActivity(5, 1);
-
-    const metrics = [
-        {
-            name: "Active Flags",
-            value: 24,
-            growth: 12,
-            icon: <Flag size={18} />,
-        },
-        {
-            name: "Flag Calls",
-            value: 24000000,
-            growth: 23,
-            icon: <Activity size={18} />,
-        },
-        {
-            name: "Users Targeted",
-            value: 45200,
-            growth: 8,
-            icon: <Users size={18} />,
-        },
-        {
-            name: "Rollbacks",
-            value: 3,
-            growth: -2,
-            icon: <History size={18} />,
-        },
-    ];
-
-    // const recentActivity = [
-    //     {
-    //         action: "Flag enabled",
-    //         target: "New Dashboard UI",
-    //         time: new Date("2025-08-19T12:02:00Z"),
-    //         user: "John Doe",
-    //     },
-    //     {
-    //         action: "Experiment started",
-    //         target: "Button Color Test",
-    //         time: new Date("2025-08-19T11:00:00Z"),
-    //         user: "Jane Smith",
-    //     },
-    //     {
-    //         action: "Flag disabled",
-    //         target: "Legacy Feature",
-    //         time: new Date("2025-08-19T09:00:00Z"),
-    //         user: "Mike Johnson",
-    //     },
-    //     {
-    //         action: "Flag created",
-    //         target: "Dark Mode Rollout",
-    //         time: new Date("2025-08-18T18:30:00Z"),
-    //         user: "Alice Brown",
-    //     },
-    //     {
-    //         action: "Experiment ended",
-    //         target: "Homepage Layout Test",
-    //         time: new Date("2025-08-18T15:45:00Z"),
-    //         user: "Robert Wilson",
-    //     },
-    //     {
-    //         action: "Flag updated",
-    //         target: "Checkout Flow",
-    //         time: new Date("2025-08-17T20:10:00Z"),
-    //         user: "Emily Davis",
-    //     },
-    //     {
-    //         action: "Flag deleted",
-    //         target: "Old Search Feature",
-    //         time: new Date("2025-08-17T09:25:00Z"),
-    //         user: "Chris Lee",
-    //     },
-    //     {
-    //         action: "Experiment started",
-    //         target: "Signup Funnel Test",
-    //         time: new Date("2025-08-16T22:00:00Z"),
-    //         user: "Sophia Martinez",
-    //     },
-    // ];
+    const { data: metrics, isLoading: metricsLoading } = useGetMetrics();
 
     return (
         <div className="flex h-full w-full flex-1 flex-col lg:grid grid-cols-5 gap-2 rounded-tl-2xl bg-background p-5 overflow-auto">
             <div className="col-span-3 flex flex-col justify-start items-center gap-4">
                 <div className="w-full hidden lg:flex flex-col lg:flex-row justify-between items-center gap-2">
-                    {metrics.map((item, index) => (
-                        <MetricCard
-                            key={index}
-                            name={item.name}
-                            value={item.value}
-                            growth={item.growth}
-                            icon={item.icon}
+                    {metricsLoading ? (
+                        <Loader2 className="animate-spin" />
+                    ) : metrics ? (
+                        Object.entries(metrics.data).map(([key, data]) => (
+                            <MetricCard
+                                key={key}
+                                // name={"Name"}
+                                name={key
+                                    .replace(/([A-Z])/g, " $1")
+                                    .replace(/^./, (str) => str.toUpperCase())}
+                                value={data.value}
+                                growth={data.change}
+                            />
+                        ))
+                    ) : (
+                        <EmptyState
+                            icon={<ChartBarIncreasing />}
+                            title="No metrics yet"
+                            description="Not enough data to generate metrics"
                         />
-                    ))}
+                    )}
                 </div>
 
                 <div className="w-full flex flex-col justify-center items-center">
@@ -158,15 +92,27 @@ const Workplace = () => {
                 </div>
 
                 <div className="w-full flex lg:hidden flex-col lg:flex-row justify-between items-center gap-2 mb-12">
-                    {metrics.map((item, index) => (
-                        <MetricCard
-                            key={index}
-                            name={item.name}
-                            value={item.value}
-                            growth={item.growth}
-                            icon={item.icon}
+                    {metricsLoading ? (
+                        <Loader2 className="animate-spin" />
+                    ) : metrics ? (
+                        Object.entries(metrics.data).map(([key, data]) => (
+                            <MetricCard
+                                key={key}
+                                // name={"Name"}
+                                name={key
+                                    .replace(/([A-Z])/g, " $1")
+                                    .replace(/^./, (str) => str.toUpperCase())}
+                                value={data.value}
+                                growth={data.change}
+                            />
+                        ))
+                    ) : (
+                        <EmptyState
+                            icon={<ChartBarIncreasing />}
+                            title=" No metrics yet"
+                            description="Not enough data to generate metrics"
                         />
-                    ))}
+                    )}
                 </div>
             </div>
 

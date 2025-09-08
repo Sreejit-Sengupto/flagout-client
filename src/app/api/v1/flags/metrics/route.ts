@@ -77,7 +77,7 @@ const featureVisible = async (clerkUserId: string, start: Date, end: Date) => {
     }
 };
 
-const getActiveFlags = async (clerkUserId: string) => {
+const getActiveFlags = async (clerkUserId: string, start: Date, end: Date) => {
     try {
         const activeFlags = (
             await prisma.featureFlags.findMany({
@@ -88,6 +88,7 @@ const getActiveFlags = async (clerkUserId: string) => {
                     enabled: {
                         equals: true,
                     },
+                    createdAt: { gte: start, lte: end },
                 },
             })
         ).length;
@@ -145,7 +146,16 @@ export async function GET() {
             lastMonthEnd,
         );
 
-        const activeFlagsPrms = getActiveFlags(user.id);
+        const thisMonthActiveFlagsPrms = getActiveFlags(
+            user.id,
+            thisMonthStart,
+            thisMonthEnd,
+        );
+        const lastMonthActiveFlagsPrms = getActiveFlags(
+            user.id,
+            lastMonthStart,
+            lastMonthEnd,
+        );
 
         const [
             thisMnthFlagCalls,
@@ -154,7 +164,8 @@ export async function GET() {
             lastMnthUsers,
             thisMnthVisiblity,
             lastMnthVisibility,
-            activeFlags,
+            thisMnthActiveFlags,
+            lastMntActiveFlags,
         ] = await Promise.all([
             thisMonthFlagCallsPrms,
             lastMonthFlagCallsPrms,
@@ -162,7 +173,8 @@ export async function GET() {
             lastMonthUsersTargetedPrms,
             thisMonthFeatureVisiblePrms,
             lastMonthFeatureVisiblePrms,
-            activeFlagsPrms,
+            thisMonthActiveFlagsPrms,
+            lastMonthActiveFlagsPrms,
         ]);
 
         const flagCallsPercentageChange = getPercentageChange(
@@ -177,9 +189,16 @@ export async function GET() {
             thisMnthVisiblity,
             lastMnthVisibility,
         );
+        const activeFlagsChange = getPercentageChange(
+            thisMnthActiveFlags,
+            lastMntActiveFlags,
+        );
 
         const responseData = {
-            activeFlags,
+            activeFlags: {
+                value: thisMnthActiveFlags,
+                change: activeFlagsChange,
+            },
             featureVisibilty: {
                 value: thisMnthVisiblity * 100,
                 change: visibiltyPercentageChange,

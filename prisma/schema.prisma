@@ -75,7 +75,7 @@ model FlagEnviroment {
 
 model FlagEvaluationLogs {
   id              String       @id @default(uuid())
-  clerk_user_id   String       @unique
+  clerk_user_id   String
   flag            FeatureFlags @relation(fields: [flag_id], references: [id])
   flag_id         String
   enabled         Boolean
