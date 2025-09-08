@@ -63,8 +63,9 @@ export async function GET(request: NextRequest) {
                 "We are unable to find the user. Kindly check your API keys.",
             );
         }
+
         // calculate parameters to return true or false for the flag
-        // for now just check if it is enabled or not
+        let enbld = false;
         if (!flag.enabled) {
             return Response.json(
                 {
@@ -129,7 +130,20 @@ export async function GET(request: NextRequest) {
         }
 
         const bucket = getUserBucket(userId, flag.slug);
-        console.log(`Bucket for user id: ${userId} - ${bucket}`);
+        const rollOutData = {
+            flag,
+            showFeature: bucket < flag.rollout_percentage,
+        };
+        enbld = rollOutData.showFeature;
+
+        await prisma.flagEvaluationLogs.create({
+            data: {
+                clerk_user_id: flag.clerk_user_id,
+                flag_id: flag.id,
+                enabled: enbld,
+                visited_user_id: userId,
+            },
+        });
 
         return Response.json(
             {
