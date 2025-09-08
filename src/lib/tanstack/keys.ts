@@ -3,4 +3,5 @@ export const queryKeys = {
     dashboardActivity: ["dash-activity"] as const,
     apiKey: ["api-key"] as const,
     envUrl: ["env-url"] as const,
+    metrics: ["metrics"] as const,
 };

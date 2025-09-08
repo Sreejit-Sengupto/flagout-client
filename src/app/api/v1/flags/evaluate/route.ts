@@ -63,9 +63,17 @@ export async function GET(request: NextRequest) {
                 "We are unable to find the user. Kindly check your API keys.",
             );
         }
+
         // calculate parameters to return true or false for the flag
-        // for now just check if it is enabled or not
         if (!flag.enabled) {
+            await prisma.flagEvaluationLogs.create({
+                data: {
+                    clerk_user_id: flag.clerk_user_id,
+                    flag_id: flag.id,
+                    enabled: false,
+                    visited_user_id: userId,
+                },
+            });
             return Response.json(
                 {
                     success: true,
@@ -80,6 +88,14 @@ export async function GET(request: NextRequest) {
             !flag.targeting.includes("ALL") &&
             !flag.targeting.includes(userRole)
         ) {
+            await prisma.flagEvaluationLogs.create({
+                data: {
+                    clerk_user_id: flag.clerk_user_id,
+                    flag_id: flag.id,
+                    enabled: false,
+                    visited_user_id: userId,
+                },
+            });
             return Response.json(
                 {
                     success: true,
@@ -93,6 +109,14 @@ export async function GET(request: NextRequest) {
         const origin = request.headers.get("Origin");
         if (request.headers.get("Origin")) {
             if (flag.environment === "PRODUCTION" && envUrls.prod !== origin) {
+                await prisma.flagEvaluationLogs.create({
+                    data: {
+                        clerk_user_id: flag.clerk_user_id,
+                        flag_id: flag.id,
+                        enabled: false,
+                        visited_user_id: userId,
+                    },
+                });
                 return Response.json(
                     {
                         success: true,
@@ -105,6 +129,14 @@ export async function GET(request: NextRequest) {
                 flag.environment !== "DEVELOPMENT" &&
                 envUrls.dev !== origin
             ) {
+                await prisma.flagEvaluationLogs.create({
+                    data: {
+                        clerk_user_id: flag.clerk_user_id,
+                        flag_id: flag.id,
+                        enabled: false,
+                        visited_user_id: userId,
+                    },
+                });
                 return Response.json(
                     {
                         success: true,
@@ -117,6 +149,14 @@ export async function GET(request: NextRequest) {
                 flag.environment === "STAGING" &&
                 envUrls.stage !== origin
             ) {
+                await prisma.flagEvaluationLogs.create({
+                    data: {
+                        clerk_user_id: flag.clerk_user_id,
+                        flag_id: flag.id,
+                        enabled: false,
+                        visited_user_id: userId,
+                    },
+                });
                 return Response.json(
                     {
                         success: true,
@@ -129,20 +169,30 @@ export async function GET(request: NextRequest) {
         }
 
         const bucket = getUserBucket(userId, flag.slug);
-        console.log(`Bucket for user id: ${userId} - ${bucket}`);
+
+        await prisma.flagEvaluationLogs.create({
+            data: {
+                clerk_user_id: flag.clerk_user_id,
+                flag_id: flag.id,
+                enabled: bucket < flag.rollout_percentage,
+                visited_user_id: userId,
+            },
+        });
 
         return Response.json(
             {
                 success: true,
                 message:
                     bucket < flag.rollout_percentage
-                        ? "User is not falling under the allowed percentage"
-                        : "User falls in the allowed percentage",
+                        ? "User falls in the allowed percentage"
+                        : "User is not falling under the allowed percentage",
                 data: { flag, showFeature: bucket < flag.rollout_percentage },
             },
             { status: 200 },
         );
     } catch (error) {
+        console.log(error);
+
         if (error instanceof ApiError) {
             return NextResponse.json(
                 {

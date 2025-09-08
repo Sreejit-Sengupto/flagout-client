@@ -7,16 +7,22 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Pill } from "@/components/ui/kibo-ui/pill";
-import { TrendingDown, TrendingUp } from "lucide-react";
+import {
+    Activity,
+    Flag,
+    TrendingDown,
+    TrendingUp,
+    Users,
+    History,
+} from "lucide-react";
 import { Bitcount_Grid_Double } from "next/font/google";
-import React, { ReactNode } from "react";
+import React from "react";
 import CountUp from "react-countup";
 
 interface TMetricCardProps {
     name: string;
     value: number;
     growth: number;
-    icon: ReactNode;
 }
 
 const dancingScript = Bitcount_Grid_Double({
@@ -25,25 +31,30 @@ const dancingScript = Bitcount_Grid_Double({
     subsets: ["latin"],
 });
 
-const MetricCard: React.FC<TMetricCardProps> = ({
-    name,
-    value,
-    growth,
-    icon,
-}) => {
+const MetricCard: React.FC<TMetricCardProps> = ({ name, value, growth }) => {
     const growthText = () => {
         switch (name) {
-            case "Active Flags":
-                return "this month";
-
-            case "Flag Calls":
-                return "this month";
-
             case "Users Targeted":
                 return "unique users";
 
-            case "Rollbacks":
-                return "this week";
+            default:
+                return "this month";
+        }
+    };
+
+    const cardIcon = () => {
+        switch (name) {
+            case "Active Flags":
+                return <Flag size={18} />;
+
+            case "Flag Calls":
+                return <Activity size={18} />;
+
+            case "Users Targeted":
+                return <Users size={18} />;
+
+            case "Feature Visibility":
+                return <History size={18} />;
 
             default:
                 return "";
@@ -55,7 +66,7 @@ const MetricCard: React.FC<TMetricCardProps> = ({
             <CardHeader>
                 <CardTitle>
                     <div className="flex justify-start items-center gap-2">
-                        <p>{icon}</p>
+                        <p>{cardIcon()}</p>
                         <p className="text-lg font-semibold">{name}</p>
                     </div>
                 </CardTitle>
