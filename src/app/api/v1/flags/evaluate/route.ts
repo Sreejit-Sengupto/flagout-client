@@ -65,20 +65,22 @@ export async function GET(request: NextRequest) {
         }
 
         // calculate parameters to return true or false for the flag
+        // if the flag is not enabled simply DO NOT perform any check and return true
+        // so that all users can see the feature
         if (!flag.enabled) {
             await prisma.flagEvaluationLogs.create({
                 data: {
                     clerk_user_id: flag.clerk_user_id,
                     flag_id: flag.id,
-                    enabled: false,
+                    enabled: true,
                     visited_user_id: userId,
                 },
             });
             return Response.json(
                 {
                     success: true,
-                    message: "Flag is disabled",
-                    data: { flag, showFeature: false },
+                    message: "Flag is disabled. Showing feature to all.",
+                    data: { flag, showFeature: true },
                 },
                 { status: 200 },
             );
