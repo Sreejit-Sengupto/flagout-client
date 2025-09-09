@@ -7,7 +7,13 @@ import {
 import { FeatureFlags } from "@prisma/client";
 import { showSuccess } from "@/lib/sonner";
 
-export type TResponseGetAllFeatureFlags = TApiResponse<FeatureFlags[]>;
+export type TResponseGetAllFeatureFlags = TApiResponse<
+    (FeatureFlags & {
+        _count: {
+            evaluationLogs: number;
+        };
+    })[]
+>;
 export const getFeatureFlags = async (input: TGetAllFeatureFlags) => {
     try {
         const response =

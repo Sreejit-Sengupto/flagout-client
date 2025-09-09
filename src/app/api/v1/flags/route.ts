@@ -139,6 +139,13 @@ export async function GET(request: NextRequest) {
                     equals: user.id,
                 },
             },
+            include: {
+                _count: {
+                    select: {
+                        evaluationLogs: true,
+                    },
+                },
+            },
         });
         const totalFlags = prisma.featureFlags.count({
             where: {

@@ -69,7 +69,7 @@ const Workplace = () => {
                                 description={item.description}
                                 enabled={item.enabled}
                                 env={item.environment}
-                                evaluations={0}
+                                evaluations={item._count.evaluationLogs}
                                 // lastModified={new Date(item.createdAt)}
                                 lastModified={item.createdAt}
                                 name={item.name}
