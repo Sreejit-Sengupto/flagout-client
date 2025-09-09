@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../keys";
 import {
     createFeatureFlag,
@@ -13,8 +13,9 @@ import useTanstackClient from "../query-client";
 
 export const useUserFlagQuery = (limit: number, page: number) => {
     return useQuery({
-        queryKey: queryKeys.userFlags,
+        queryKey: [...queryKeys.userFlags, limit, page],
         queryFn: () => getFeatureFlags({ limit, page }),
+        placeholderData: keepPreviousData,
         staleTime: 60 * 1000,
     });
 };

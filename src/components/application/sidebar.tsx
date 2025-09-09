@@ -8,8 +8,8 @@ import {
 } from "../ui/sidebar";
 import { Pixelify_Sans } from "next/font/google";
 import {
-    IconArrowLeft,
     IconBrandTabler,
+    IconFlag,
     IconLogout,
     IconSettings,
     IconUserBolt,
@@ -36,6 +36,13 @@ const links = [
         ),
     },
     {
+        label: "Feature Flags",
+        href: "/feature-flags",
+        icon: (
+            <IconFlag className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+        ),
+    },
+    {
         label: "Profile",
         href: "/profile",
         icon: (
@@ -47,13 +54,6 @@ const links = [
         href: "/settings",
         icon: (
             <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-        ),
-    },
-    {
-        label: "Logout",
-        href: "#",
-        icon: (
-            <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
         ),
     },
 ];
