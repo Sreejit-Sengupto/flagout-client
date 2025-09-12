@@ -1,5 +1,8 @@
 name: "Format and Lint CI"
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main

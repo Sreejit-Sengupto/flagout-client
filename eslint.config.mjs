@@ -12,6 +12,9 @@ const compat = new FlatCompat({
 const eslintConfig = [
     {
         ignores: ["src/components/ui"],
+        rules: {
+            "no-unused-vars": "error"
+        }
     },
     ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
