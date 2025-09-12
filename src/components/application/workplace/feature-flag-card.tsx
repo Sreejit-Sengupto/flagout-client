@@ -16,12 +16,29 @@ import { formatNumber } from "@/lib/format-number";
 import { timeAgo } from "@/lib/time-date";
 import { cn } from "@/lib/utils";
 import { IconSettings } from "@tabler/icons-react";
-import { Activity, Calendar, TrendingUp, Users } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import { Activity, Calendar, Delete, Edit, TrendingUp, Users } from "lucide-react";
+import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { debounce } from "@/lib/debounce";
 import { useUpdateFlagMutation } from "@/lib/tanstack/hooks/feature-flag";
 import { usePathname } from "next/navigation";
 import { queryKeys } from "@/lib/tanstack/keys";
+import {
+    ContextMenu,
+    ContextMenuCheckboxItem,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuLabel,
+    ContextMenuRadioGroup,
+    ContextMenuRadioItem,
+    ContextMenuSeparator,
+    ContextMenuShortcut,
+    ContextMenuSub,
+    ContextMenuSubContent,
+    ContextMenuSubTrigger,
+    ContextMenuTrigger,
+} from "@/components/ui/context-menu"
+import { Button } from "@/components/ui/button";
+import UpsertFlagDialog from "./create-flag-dialog";
 
 interface TFlagCardProps {
     roundTop: boolean;
@@ -73,11 +90,10 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
             return [...queryKeys.userFlags];
         }
     }, [pathname]);
+    const [settingsOpen, setSettingsOpen] = useState(false)
 
     const updateFlagMutation = useUpdateFlagMutation(id, invalidationKeys);
     const toggleEnabled = debounce(async (enabled: boolean) => {
-        console.log("Request sent.");
-
         try {
             await updateFlagMutation.mutateAsync({ enabled });
         } catch (error) {
@@ -173,13 +189,56 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
                         className="w-[80%] lg:w-[60%]"
                     />
                 </div>
-                <IconSettings
-                    size={25}
-                    className="cursor-pointer text-gray-400"
-                />
+
+                <div className="relative">
+
+                    <IconSettings
+                        onClick={() => setSettingsOpen(prev => !prev)}
+                        size={25}
+                        className="cursor-pointer text-gray-400"
+                    />
+
+                    {/* <ContextMenu>
+                    <ContextMenuTrigger >
+                        <IconSettings
+                            size={25}
+                            className="cursor-pointer text-gray-400"
+                            />
+                            </ContextMenuTrigger>
+                            <ContextMenuContent>
+                            <ContextMenuItem inset>
+                            <div className="w-full flex justify-between items-center gap-2">
+                                <p>Edit</p>
+                                <Edit />
+                                </div>
+                                </ContextMenuItem>
+                                <ContextMenuItem inset>
+                                <div className="w-full flex justify-between items-center gap-2">
+                                <p>Edit</p>
+                                <Edit />
+                                </div>
+                                </ContextMenuItem>
+                    </ContextMenuContent>
+                    </ContextMenu> */}
+
+                    <div className="absolute -top-28 left-0">
+                        <SettingsMenu open={settingsOpen} setOpen={setSettingsOpen} />
+                    </div>
+                </div>
             </CardFooter>
         </Card>
     );
 };
+
+
+const SettingsMenu = ({ open }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
+    return (
+        open && <div className="w-full p-2.5 bg-primary-foreground rounded-lg border transition-all duration-300">
+            {/* <Button variant={'outline'} className="min-w-[100px] my-1">Edit</Button> */}
+            <UpsertFlagDialog flagName="test name" env="PRODUCTION" />
+            <Button variant={'destructive'} className="min-w-[100px] my-1">Delete</Button>
+        </div>
+    )
+}
 
 export default FeatureFlagCard;
