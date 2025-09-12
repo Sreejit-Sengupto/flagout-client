@@ -34,7 +34,16 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import React, { useState } from "react";
 
-const CreateFlagDialog = () => {
+interface TFlagProps {
+    enabled?: boolean;
+    rollout?: number;
+    targetUsers?: ("ALL" | "INTERNAL" | "BETA" | "PREMIUM")[];
+    env?: string;
+    flagName?: string;
+    flagDescription?: string
+}
+
+const UpsertFlagDialog = ({ enabled, env, flagDescription, flagName, rollout, targetUsers }: TFlagProps) => {
     const checkboxItems = [
         {
             id: "all",
@@ -74,18 +83,18 @@ const CreateFlagDialog = () => {
     ];
 
     const [open, setOpen] = useState(false);
-    const [flagEnabled, setFlagEnabled] = useState<boolean>(false);
-    const [sliderValue, setSliderValue] = useState<number[]>([21]);
+    const [flagEnabled, setFlagEnabled] = useState<boolean>(enabled ?? false);
+    const [sliderValue, setSliderValue] = useState<number[]>([rollout ?? 21]);
     const [targets, setTargets] = useState<
         ("ALL" | "INTERNAL" | "BETA" | "PREMIUM")[]
-    >(["ALL"]);
+    >(targetUsers ?? ["ALL"]);
     const [environment, setEnvironment] = useState({
         open: false,
-        value: "",
+        value: env ?? "",
     });
     const [textData, setTextData] = useState({
-        name: "",
-        description: "",
+        name: flagName ?? "",
+        description: flagDescription ?? "",
     });
 
     const createFlagMutation = useCreateFlagMutation({
@@ -119,10 +128,10 @@ const CreateFlagDialog = () => {
             <form onSubmit={handleCreateFlag}>
                 <DialogTrigger asChild className="w-full rounded-none">
                     {/* <Button variant="outline">Create Flag</Button> */}
-                    <Button
+                    {flagName ? <Button variant={'outline'} className="min-w-[100px] my-1 rounded-md">Edit</Button> : <Button
                         // href={"#"}
                         className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer"
-                        // onClick={() => setOpen(true)}
+                    // onClick={() => setOpen(true)}
                     >
                         <div className="flex flex-col justify-center items-start">
                             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-white">
@@ -132,7 +141,7 @@ const CreateFlagDialog = () => {
                                 Add a new feature flag
                             </p>
                         </div>
-                    </Button>
+                    </Button>}
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
@@ -218,10 +227,10 @@ const CreateFlagDialog = () => {
                                     >
                                         {environment.value
                                             ? enviroments.find(
-                                                  (envs) =>
-                                                      envs.value ===
-                                                      environment.value,
-                                              )?.label
+                                                (envs) =>
+                                                    envs.value ===
+                                                    environment.value,
+                                            )?.label
                                             : "Select enviroment"}
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
@@ -244,13 +253,13 @@ const CreateFlagDialog = () => {
                                                                 currentValue ===
                                                                     environment.value
                                                                     ? {
-                                                                          open: false,
-                                                                          value: "",
-                                                                      }
+                                                                        open: false,
+                                                                        value: "",
+                                                                    }
                                                                     : {
-                                                                          open: false,
-                                                                          value: currentValue,
-                                                                      },
+                                                                        open: false,
+                                                                        value: currentValue,
+                                                                    },
                                                             );
                                                         }}
                                                     >
@@ -306,10 +315,10 @@ const CreateFlagDialog = () => {
                                         <Checkbox
                                             checked={targets.includes(
                                                 item.value as
-                                                    | "ALL"
-                                                    | "INTERNAL"
-                                                    | "BETA"
-                                                    | "PREMIUM",
+                                                | "ALL"
+                                                | "INTERNAL"
+                                                | "BETA"
+                                                | "PREMIUM",
                                             )}
                                             onCheckedChange={(checked) => {
                                                 const val = item.value as
@@ -324,20 +333,20 @@ const CreateFlagDialog = () => {
                                                         (prev) =>
                                                             checked
                                                                 ? [
-                                                                      ...prev.filter(
-                                                                          (
-                                                                              item,
-                                                                          ) =>
-                                                                              item !==
-                                                                              "ALL",
-                                                                      ),
-                                                                      val,
-                                                                  ] // add if checked
+                                                                    ...prev.filter(
+                                                                        (
+                                                                            item,
+                                                                        ) =>
+                                                                            item !==
+                                                                            "ALL",
+                                                                    ),
+                                                                    val,
+                                                                ] // add if checked
                                                                 : prev.filter(
-                                                                      (t) =>
-                                                                          t !==
-                                                                          val,
-                                                                  ), // remove if unchecked
+                                                                    (t) =>
+                                                                        t !==
+                                                                        val,
+                                                                ), // remove if unchecked
                                                     );
                                                 }
                                             }}
@@ -377,4 +386,4 @@ const CreateFlagDialog = () => {
     );
 };
 
-export default CreateFlagDialog;
+export default UpsertFlagDialog;
