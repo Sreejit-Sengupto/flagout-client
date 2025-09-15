@@ -37,11 +37,12 @@ import { queryKeys } from "@/lib/tanstack/keys";
 import { cn } from "@/lib/utils";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 interface TFlagProps {
-    id: string;
-    setCloseContextMenu: Dispatch<SetStateAction<boolean>>;
+    id?: string;
+    setCloseContextMenu?: Dispatch<SetStateAction<boolean>>;
+    children?: ReactNode;
     enabled?: boolean;
     rollout?: number;
     targetUsers?: ("ALL" | "INTERNAL" | "BETA" | "PREMIUM")[];
@@ -53,6 +54,7 @@ interface TFlagProps {
 const UpsertFlagDialog = ({
     id,
     setCloseContextMenu,
+    children,
     enabled,
     env,
     flagDescription,
@@ -125,7 +127,7 @@ const UpsertFlagDialog = ({
         targeting: targets,
     });
 
-    const updateFlagMutation = useUpdateFlagMutation(id, [
+    const updateFlagMutation = useUpdateFlagMutation(id ?? "", [
         ...queryKeys.userFlags,
     ]);
     const handleUpdateFlag = async () => {
@@ -149,7 +151,9 @@ const UpsertFlagDialog = ({
             setOpen(false);
 
             // close context menu
-            setCloseContextMenu(false);
+            if (setCloseContextMenu) {
+                setCloseContextMenu(false);
+            }
         }
     };
 
@@ -180,20 +184,19 @@ const UpsertFlagDialog = ({
                             Edit
                         </Button>
                     ) : (
-                        <Button
-                            // href={"#"}
-                            className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer"
-                            // onClick={() => setOpen(true)}
-                        >
-                            <div className="flex flex-col justify-center items-start">
-                                <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-white">
-                                    Create Flag
-                                </h3>
-                                <p className="leading-7 text-gray-400">
-                                    Add a new feature flag
-                                </p>
-                            </div>
-                        </Button>
+                        // <Button
+                        //     className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer"
+                        // >
+                        //     <div className="flex flex-col justify-center items-start">
+                        //         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-white">
+                        //             Create Flag
+                        //         </h3>
+                        //         <p className="leading-7 text-gray-400">
+                        //             Add a new feature flag
+                        //         </p>
+                        //     </div>
+                        // </Button>
+                        children
                     )}
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">

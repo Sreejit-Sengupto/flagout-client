@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import React from "react";
 import CreateFlagDialog from "./create-flag-dialog";
+import { Button } from "@/components/ui/button";
 
 const QuickAction = () => {
     return (
@@ -16,7 +17,18 @@ const QuickAction = () => {
             <CardContent>
                 <div className="grid grid-cols-2 gap-1.5">
                     <div className="w-full">
-                        <CreateFlagDialog />
+                        <CreateFlagDialog>
+                            <Button className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer">
+                                <div className="flex flex-col justify-center items-start">
+                                    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-white">
+                                        Create Flag
+                                    </h3>
+                                    <p className="leading-7 text-gray-400">
+                                        Add a new feature flag
+                                    </p>
+                                </div>
+                            </Button>
+                        </CreateFlagDialog>
                     </div>
                     <Link
                         href={"#"}
