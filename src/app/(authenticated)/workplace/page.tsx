@@ -4,15 +4,17 @@ import FeatureFlagCard from "@/components/application/workplace/feature-flag-car
 import MetricCard from "@/components/application/workplace/metric-cards";
 import QuickAction from "@/components/application/workplace/quick-action";
 import RecentActivity from "@/components/application/workplace/recent-activity";
+import FeatureFlagsSkeleton from "@/components/application/workplace/skeletons/feature-flags-skeleton";
+import MetricCardSkeleton from "@/components/application/workplace/skeletons/metric-cards-skeleton";
+import RecentActivitySkeleton from "@/components/application/workplace/skeletons/recent-activity-skeleton";
 import { useUserFlagQuery } from "@/lib/tanstack/hooks/feature-flag";
 import { useGetMetrics } from "@/lib/tanstack/hooks/metrics";
 import { useRecentActivity } from "@/lib/tanstack/hooks/recent-activity";
 import {
     Flag,
     ArrowRight,
-    Loader2,
-    ChartColumn,
     ChartBarIncreasing,
+    ChartColumn,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -27,7 +29,7 @@ const Workplace = () => {
             <div className="col-span-3 flex flex-col justify-start items-center gap-4">
                 <div className="w-full hidden lg:flex flex-col lg:flex-row justify-between items-center gap-2">
                     {metricsLoading ? (
-                        <Loader2 className="animate-spin" />
+                        <MetricCardSkeleton />
                     ) : metrics ? (
                         Object.entries(metrics.data).map(([key, data]) => (
                             <MetricCard
@@ -54,7 +56,7 @@ const Workplace = () => {
                         Feature Flags
                     </h1>
                     {isLoading ? (
-                        <Loader2 className="animate-spin" />
+                        <FeatureFlagsSkeleton />
                     ) : featureFlags && featureFlags.data.length === 0 ? (
                         <EmptyState
                             icon={<Flag size={32} />}
@@ -93,7 +95,7 @@ const Workplace = () => {
 
                 <div className="w-full flex lg:hidden flex-col lg:flex-row justify-between items-center gap-2 mb-12">
                     {metricsLoading ? (
-                        <Loader2 className="animate-spin" />
+                        <MetricCardSkeleton />
                     ) : metrics ? (
                         Object.entries(metrics.data).map(([key, data]) => (
                             <MetricCard
@@ -127,7 +129,7 @@ const Workplace = () => {
                     </h1>
                     <div className="flex flex-col justify-start items-center w-full gap-2 max-h-[60dvh] overflow-y-auto">
                         {activityLoading ? (
-                            <Loader2 className="animate-spin" />
+                            <RecentActivitySkeleton />
                         ) : recentActivity && recentActivity.data.length > 0 ? (
                             recentActivity.data.map((item, index) => (
                                 <RecentActivity

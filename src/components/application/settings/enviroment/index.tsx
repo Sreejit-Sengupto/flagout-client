@@ -15,6 +15,7 @@ import {
     useAddEnvUrlMutation,
     useGetEnvQuery,
 } from "@/lib/tanstack/hooks/flag-env";
+import EnvironmentSkeleton from "../skeletons/environment-skeleton";
 import { Loader2 } from "lucide-react";
 
 const Environment = () => {
@@ -69,7 +70,7 @@ const Environment = () => {
             </CardHeader>
             <CardContent>
                 {isLoading && !envUrls ? (
-                    <Loader2 className="animate-spin" />
+                    <EnvironmentSkeleton />
                 ) : (
                     <div className="flex flex-col justify-center items-center gap-8 w-full">
                         <div className="w-full">
