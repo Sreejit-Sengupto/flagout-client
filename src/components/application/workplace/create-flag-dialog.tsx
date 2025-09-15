@@ -28,22 +28,38 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreateFlagMutation } from "@/lib/tanstack/hooks/feature-flag";
+import { showSuccess } from "@/lib/sonner";
+import {
+    useCreateFlagMutation,
+    useUpdateFlagMutation,
+} from "@/lib/tanstack/hooks/feature-flag";
+import { queryKeys } from "@/lib/tanstack/keys";
 import { cn } from "@/lib/utils";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
 interface TFlagProps {
+    id: string;
+    setCloseContextMenu: Dispatch<SetStateAction<boolean>>;
     enabled?: boolean;
     rollout?: number;
     targetUsers?: ("ALL" | "INTERNAL" | "BETA" | "PREMIUM")[];
     env?: string;
     flagName?: string;
-    flagDescription?: string
+    flagDescription?: string;
 }
 
-const UpsertFlagDialog = ({ enabled, env, flagDescription, flagName, rollout, targetUsers }: TFlagProps) => {
+const UpsertFlagDialog = ({
+    id,
+    setCloseContextMenu,
+    enabled,
+    env,
+    flagDescription,
+    flagName,
+    rollout,
+    targetUsers,
+}: TFlagProps) => {
     const checkboxItems = [
         {
             id: "all",
@@ -109,6 +125,34 @@ const UpsertFlagDialog = ({ enabled, env, flagDescription, flagName, rollout, ta
         targeting: targets,
     });
 
+    const updateFlagMutation = useUpdateFlagMutation(id, [
+        ...queryKeys.userFlags,
+    ]);
+    const handleUpdateFlag = async () => {
+        try {
+            await updateFlagMutation.mutateAsync({
+                description: textData.description,
+                enabled: flagEnabled,
+                environment: environment.value as
+                    | "DEVELOPMENT"
+                    | "PRODUCTION"
+                    | "STAGING",
+                name: textData.name,
+                rolloutPercentage: sliderValue[0],
+                targeting: targets,
+            });
+            showSuccess("Flag updated. The changes will reflect soon.");
+        } catch (error) {
+            console.error(error);
+        } finally {
+            // close edit modal
+            setOpen(false);
+
+            // close context menu
+            setCloseContextMenu(false);
+        }
+    };
+
     const handleCreateFlag = async () => {
         if (!environment.value || !textData.description || !textData.name) {
             alert("All fields are required");
@@ -128,20 +172,29 @@ const UpsertFlagDialog = ({ enabled, env, flagDescription, flagName, rollout, ta
             <form onSubmit={handleCreateFlag}>
                 <DialogTrigger asChild className="w-full rounded-none">
                     {/* <Button variant="outline">Create Flag</Button> */}
-                    {flagName ? <Button variant={'outline'} className="min-w-[100px] my-1 rounded-md">Edit</Button> : <Button
-                        // href={"#"}
-                        className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer"
-                    // onClick={() => setOpen(true)}
-                    >
-                        <div className="flex flex-col justify-center items-start">
-                            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-white">
-                                Create Flag
-                            </h3>
-                            <p className="leading-7 text-gray-400">
-                                Add a new feature flag
-                            </p>
-                        </div>
-                    </Button>}
+                    {flagName ? (
+                        <Button
+                            variant={"outline"}
+                            className="min-w-[100px] my-1 rounded-md cursor-pointer"
+                        >
+                            Edit
+                        </Button>
+                    ) : (
+                        <Button
+                            // href={"#"}
+                            className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer"
+                            // onClick={() => setOpen(true)}
+                        >
+                            <div className="flex flex-col justify-center items-start">
+                                <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-white">
+                                    Create Flag
+                                </h3>
+                                <p className="leading-7 text-gray-400">
+                                    Add a new feature flag
+                                </p>
+                            </div>
+                        </Button>
+                    )}
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
@@ -227,10 +280,10 @@ const UpsertFlagDialog = ({ enabled, env, flagDescription, flagName, rollout, ta
                                     >
                                         {environment.value
                                             ? enviroments.find(
-                                                (envs) =>
-                                                    envs.value ===
-                                                    environment.value,
-                                            )?.label
+                                                  (envs) =>
+                                                      envs.value ===
+                                                      environment.value,
+                                              )?.label
                                             : "Select enviroment"}
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
@@ -253,13 +306,13 @@ const UpsertFlagDialog = ({ enabled, env, flagDescription, flagName, rollout, ta
                                                                 currentValue ===
                                                                     environment.value
                                                                     ? {
-                                                                        open: false,
-                                                                        value: "",
-                                                                    }
+                                                                          open: false,
+                                                                          value: "",
+                                                                      }
                                                                     : {
-                                                                        open: false,
-                                                                        value: currentValue,
-                                                                    },
+                                                                          open: false,
+                                                                          value: currentValue,
+                                                                      },
                                                             );
                                                         }}
                                                     >
@@ -315,10 +368,10 @@ const UpsertFlagDialog = ({ enabled, env, flagDescription, flagName, rollout, ta
                                         <Checkbox
                                             checked={targets.includes(
                                                 item.value as
-                                                | "ALL"
-                                                | "INTERNAL"
-                                                | "BETA"
-                                                | "PREMIUM",
+                                                    | "ALL"
+                                                    | "INTERNAL"
+                                                    | "BETA"
+                                                    | "PREMIUM",
                                             )}
                                             onCheckedChange={(checked) => {
                                                 const val = item.value as
@@ -333,20 +386,20 @@ const UpsertFlagDialog = ({ enabled, env, flagDescription, flagName, rollout, ta
                                                         (prev) =>
                                                             checked
                                                                 ? [
-                                                                    ...prev.filter(
-                                                                        (
-                                                                            item,
-                                                                        ) =>
-                                                                            item !==
-                                                                            "ALL",
-                                                                    ),
-                                                                    val,
-                                                                ] // add if checked
+                                                                      ...prev.filter(
+                                                                          (
+                                                                              item,
+                                                                          ) =>
+                                                                              item !==
+                                                                              "ALL",
+                                                                      ),
+                                                                      val,
+                                                                  ] // add if checked
                                                                 : prev.filter(
-                                                                    (t) =>
-                                                                        t !==
-                                                                        val,
-                                                                ), // remove if unchecked
+                                                                      (t) =>
+                                                                          t !==
+                                                                          val,
+                                                                  ), // remove if unchecked
                                                     );
                                                 }
                                             }}
@@ -367,18 +420,33 @@ const UpsertFlagDialog = ({ enabled, env, flagDescription, flagName, rollout, ta
                                 Cancel
                             </Button>
                         </DialogClose>
-                        <Button
-                            type="submit"
-                            className="cursor-pointer"
-                            onClick={handleCreateFlag}
-                            disabled={createFlagMutation.isPending}
-                        >
-                            {createFlagMutation.isPending ? (
-                                <Loader2 className="animate-spin" />
-                            ) : (
-                                "Create Flag"
-                            )}
-                        </Button>
+                        {flagName ? (
+                            <Button
+                                type="submit"
+                                className="cursor-pointer"
+                                onClick={handleUpdateFlag}
+                                disabled={updateFlagMutation.isPending}
+                            >
+                                {updateFlagMutation.isPending ? (
+                                    <Loader2 className="animate-spin" />
+                                ) : (
+                                    "Update Flag"
+                                )}
+                            </Button>
+                        ) : (
+                            <Button
+                                type="submit"
+                                className="cursor-pointer"
+                                onClick={handleCreateFlag}
+                                disabled={createFlagMutation.isPending}
+                            >
+                                {createFlagMutation.isPending ? (
+                                    <Loader2 className="animate-spin" />
+                                ) : (
+                                    "Create Flag"
+                                )}
+                            </Button>
+                        )}
                     </DialogFooter>
                 </DialogContent>
             </form>

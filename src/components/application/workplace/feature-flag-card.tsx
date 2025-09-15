@@ -16,29 +16,28 @@ import { formatNumber } from "@/lib/format-number";
 import { timeAgo } from "@/lib/time-date";
 import { cn } from "@/lib/utils";
 import { IconSettings } from "@tabler/icons-react";
-import { Activity, Calendar, Delete, Edit, TrendingUp, Users } from "lucide-react";
+import { Activity, Calendar, Loader2, TrendingUp, Users } from "lucide-react";
 import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { debounce } from "@/lib/debounce";
-import { useUpdateFlagMutation } from "@/lib/tanstack/hooks/feature-flag";
+import {
+    useDeleteFlagMutation,
+    useUpdateFlagMutation,
+} from "@/lib/tanstack/hooks/feature-flag";
 import { usePathname } from "next/navigation";
 import { queryKeys } from "@/lib/tanstack/keys";
-import {
-    ContextMenu,
-    ContextMenuCheckboxItem,
-    ContextMenuContent,
-    ContextMenuItem,
-    ContextMenuLabel,
-    ContextMenuRadioGroup,
-    ContextMenuRadioItem,
-    ContextMenuSeparator,
-    ContextMenuShortcut,
-    ContextMenuSub,
-    ContextMenuSubContent,
-    ContextMenuSubTrigger,
-    ContextMenuTrigger,
-} from "@/components/ui/context-menu"
 import { Button } from "@/components/ui/button";
 import UpsertFlagDialog from "./create-flag-dialog";
+import { showSuccess } from "@/lib/sonner";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface TFlagCardProps {
     roundTop: boolean;
@@ -90,7 +89,7 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
             return [...queryKeys.userFlags];
         }
     }, [pathname]);
-    const [settingsOpen, setSettingsOpen] = useState(false)
+    const [settingsOpen, setSettingsOpen] = useState(false);
 
     const updateFlagMutation = useUpdateFlagMutation(id, invalidationKeys);
     const toggleEnabled = debounce(async (enabled: boolean) => {
@@ -191,9 +190,8 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
                 </div>
 
                 <div className="relative">
-
                     <IconSettings
-                        onClick={() => setSettingsOpen(prev => !prev)}
+                        onClick={() => setSettingsOpen((prev) => !prev)}
                         size={25}
                         className="cursor-pointer text-gray-400"
                     />
@@ -221,8 +219,20 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
                     </ContextMenuContent>
                     </ContextMenu> */}
 
-                    <div className="absolute -top-28 left-0">
-                        <SettingsMenu open={settingsOpen} setOpen={setSettingsOpen} />
+                    <div className="absolute -top-28 -left-28">
+                        <SettingsMenu
+                            open={settingsOpen}
+                            setOpen={setSettingsOpen}
+                            fieldProps={{
+                                id,
+                                description,
+                                enabled,
+                                env,
+                                name,
+                                rolloutPercentage,
+                                user,
+                            }}
+                        />
                     </div>
                 </div>
             </CardFooter>
@@ -230,15 +240,91 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
     );
 };
 
+const SettingsMenu = ({
+    open,
+    setOpen,
+    fieldProps,
+}: {
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+    fieldProps: Partial<TFlagCardProps>;
+}) => {
+    const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
 
-const SettingsMenu = ({ open }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
+    const deleteFlagMuatation = useDeleteFlagMutation();
+    const handleDeleteFlag = async () => {
+        try {
+            await deleteFlagMuatation.mutateAsync(fieldProps.id ?? "");
+            showSuccess("Flag Deleted");
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setOpen(false);
+            setOpenDeleteDialog(false);
+        }
+    };
+
     return (
-        open && <div className="w-full p-2.5 bg-primary-foreground rounded-lg border transition-all duration-300">
-            {/* <Button variant={'outline'} className="min-w-[100px] my-1">Edit</Button> */}
-            <UpsertFlagDialog flagName="test name" env="PRODUCTION" />
-            <Button variant={'destructive'} className="min-w-[100px] my-1">Delete</Button>
-        </div>
-    )
-}
+        open && (
+            <div className="w-full p-2.5 bg-primary-foreground rounded-lg border transition-all duration-300">
+                {/* <Button variant={'outline'} className="min-w-[100px] my-1">Edit</Button> */}
+                <UpsertFlagDialog
+                    id={fieldProps.id ?? ""}
+                    setCloseContextMenu={setOpen}
+                    flagName={fieldProps.name}
+                    enabled={fieldProps.enabled}
+                    flagDescription={fieldProps.description}
+                    rollout={fieldProps.rolloutPercentage}
+                    targetUsers={fieldProps.user}
+                    env={fieldProps.env}
+                />
+                <Dialog
+                    open={openDeleteDialog}
+                    onOpenChange={setOpenDeleteDialog}
+                >
+                    <form onSubmit={handleDeleteFlag}>
+                        <DialogTrigger asChild>
+                            <Button
+                                variant="destructive"
+                                className="min-w-[100px] my-1 rounded-md cursor-pointer"
+                            >
+                                Delete
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>
+                                    Delete {fieldProps.name} Flag
+                                </DialogTitle>
+                                <DialogDescription>
+                                    Are you sure you want to delete this flag?
+                                    The change cannot be undone.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">Cancel</Button>
+                                </DialogClose>
+                                <Button
+                                    type="submit"
+                                    variant={"destructive"}
+                                    className="cursor-pointer"
+                                    disabled={deleteFlagMuatation.isPending}
+                                    onClick={handleDeleteFlag}
+                                >
+                                    {deleteFlagMuatation.isPending ? (
+                                        <Loader2 className="animate-spin" />
+                                    ) : (
+                                        "Delete Flag"
+                                    )}
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </form>
+                </Dialog>
+            </div>
+        )
+    );
+};
 
 export default FeatureFlagCard;

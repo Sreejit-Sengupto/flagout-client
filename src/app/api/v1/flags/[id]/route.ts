@@ -94,3 +94,64 @@ export async function PATCH(
         );
     }
 }
+
+export async function DELETE(
+    _: Request,
+    { params }: { params: Promise<{ id: string }> },
+) {
+    try {
+        const { id } = await params;
+
+        const user = await currentUser();
+        if (!user) {
+            throw new ApiError(
+                401,
+                "Please login first",
+                "You must be logged in to create flags",
+            );
+        }
+
+        const deletedFlag = await prisma.featureFlags.delete({
+            where: {
+                id,
+            },
+        });
+        if (!deletedFlag) {
+            throw new ApiError(404, "No flag was found with the provided id");
+        }
+
+        return Response.json(
+            {
+                success: true,
+                message: "Fetched feature flags",
+                data: {
+                    id: deletedFlag.id,
+                    slug: deletedFlag.slug,
+                    name: deletedFlag.name,
+                },
+            },
+            { status: 200 },
+        );
+    } catch (error) {
+        if (error instanceof ApiError) {
+            return Response.json(
+                {
+                    success: false,
+                    message: error.message,
+                    data: [error.details],
+                },
+                { status: error.status },
+            );
+        }
+
+        // fallback for unhandled errors
+        return Response.json(
+            {
+                success: false,
+                message: "Internal Server Error",
+                data: [],
+            },
+            { status: 500 },
+        );
+    }
+}

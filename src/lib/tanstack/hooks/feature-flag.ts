@@ -2,6 +2,7 @@ import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../keys";
 import {
     createFeatureFlag,
+    deleteFeatureFlag,
     getFeatureFlags,
     updateFeatureFlag,
 } from "../api/feature-flag";
@@ -25,12 +26,13 @@ export const useCreateFlagMutation = (input: TFeatureFlags) => {
     return useMutation({
         mutationFn: () => createFeatureFlag(input),
         onSuccess: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: [
-                    ...queryKeys.userFlags,
-                    ...queryKeys.dashboardActivity,
-                ],
+            const flagsPrms = queryClient.invalidateQueries({
+                queryKey: queryKeys.userFlags,
             });
+            const activityPrms = queryClient.invalidateQueries({
+                queryKey: queryKeys.dashboardActivity,
+            });
+            await Promise.all([flagsPrms, activityPrms]);
         },
     });
 };
@@ -43,8 +45,23 @@ export const useUpdateFlagMutation = (
     return useMutation({
         mutationFn: (data: TUpdateFeatureFlags) => updateFeatureFlag(id, data),
         onSuccess: async () => {
+            const invalidatePrms = invalidationKeys.map((item) => {
+                return queryClient.invalidateQueries({
+                    queryKey: [item],
+                });
+            });
+            await Promise.all(invalidatePrms);
+        },
+    });
+};
+
+export const useDeleteFlagMutation = () => {
+    const queryClient = useTanstackClient();
+    return useMutation({
+        mutationFn: (id: string) => deleteFeatureFlag(id),
+        onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: invalidationKeys,
+                queryKey: queryKeys.userFlags,
             });
         },
     });
