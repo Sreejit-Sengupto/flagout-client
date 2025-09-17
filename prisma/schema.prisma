@@ -46,7 +46,7 @@ model FeatureFlags {
 model RecentActivity {
   id            String       @id @default(uuid())
   clerk_user_id String
-  flag          FeatureFlags @relation(fields: [flag_id], references: [id])
+  flag          FeatureFlags @relation(fields: [flag_id], references: [id], onDelete: Cascade)
   flag_id       String
   activity      String
   createdAt     DateTime     @default(now())

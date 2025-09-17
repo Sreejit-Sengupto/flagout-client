@@ -74,3 +74,21 @@ export const updateFeatureFlag = async (
         throw error;
     }
 };
+
+export type TResponseDeleteFeatureFlag = TApiResponse<{
+    id: string;
+    slug: string;
+    name: string;
+}>;
+export const deleteFeatureFlag = async (id: string) => {
+    try {
+        const response =
+            await axiosInstance.request<TResponseDeleteFeatureFlag>({
+                url: `/flags/${id}`,
+                method: "DELETE",
+            });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

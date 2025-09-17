@@ -50,7 +50,7 @@ const Workplace = () => {
                 </div>
 
                 <div className="w-full flex flex-col justify-center items-center">
-                    <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance mr-auto mb-3 lg:mt-8">
+                    <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance mr-auto mb-3 lg:mt-9">
                         Feature Flags
                     </h1>
                     {isLoading ? (
