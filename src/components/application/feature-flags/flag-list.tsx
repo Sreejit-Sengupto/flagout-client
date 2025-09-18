@@ -1,10 +1,10 @@
 "use client";
 import { useUserFlagQuery } from "@/lib/tanstack/hooks/feature-flag";
-import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import FeatureFlagCard from "../workplace/feature-flag-card";
 import PaginationBar from "../pagination-bar";
+import FeatureFlagsSkeleton from "../workplace/skeletons/feature-flags-skeleton";
 
 const FlagList = () => {
     const searchParams = useSearchParams();
@@ -16,7 +16,7 @@ const FlagList = () => {
     return (
         <div className="w-full">
             {isLoading ? (
-                <Loader2 className="animate-spin" />
+                <FeatureFlagsSkeleton />
             ) : (
                 featureFlags &&
                 featureFlags.data.map((flag, index) => {

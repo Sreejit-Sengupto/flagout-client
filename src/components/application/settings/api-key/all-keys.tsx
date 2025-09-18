@@ -17,6 +17,7 @@ import {
     useQueryAPIKeys,
     useRevokeAPIKey,
 } from "@/lib/tanstack/hooks/api-key";
+import APIKeysSkeleton from "../skeletons/api-keys-skeleton";
 
 export function AllKeys() {
     const { data: apiKeys, isLoading } = useQueryAPIKeys();
@@ -40,7 +41,7 @@ export function AllKeys() {
     };
 
     return isLoading ? (
-        <Loader2 className="animate-spin" />
+        <APIKeysSkeleton />
     ) : apiKeys && apiKeys.data.length <= 0 ? (
         <EmptyState
             icon={<KeyIcon size={32} />}
