@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/button";
 import React from "react";
+import ChangePassword from "./danger-zone/change-password";
+import DeleteAccount from "./danger-zone/delete-account";
 
 const DangerZone = () => {
     return (
@@ -13,9 +14,7 @@ const DangerZone = () => {
                         Change your old password with a new one.
                     </p>
                 </div>
-                <Button className="min-w-44 cursor-pointer ml-auto lg:ml-0 lg:mt-0">
-                    Change Password
-                </Button>
+                <ChangePassword />
             </div>
 
             <div className="w-full flex flex-col lg:flex-row justify-between items-center p-5">
@@ -27,12 +26,7 @@ const DangerZone = () => {
                         Permanently delete your account from flag0ut.
                     </p>
                 </div>
-                <Button
-                    variant={"destructive"}
-                    className="min-w-44 cursor-pointer ml-auto lg:ml-0 mt-4 lg:mt-0"
-                >
-                    Delete Account
-                </Button>
+                <DeleteAccount />
             </div>
         </section>
     );
