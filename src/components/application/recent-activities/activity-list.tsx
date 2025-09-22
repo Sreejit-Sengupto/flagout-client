@@ -14,8 +14,6 @@ const ActivityList = () => {
 
     const { data: activities, isLoading } = useRecentActivity(limit, page);
 
-    console.log("Total Pages", activities?.meta?.totalPages);
-
     return (
         <div className="w-full">
             {isLoading ? (

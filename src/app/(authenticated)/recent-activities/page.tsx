@@ -1,5 +1,6 @@
 import ActivityList from "@/components/application/recent-activities/activity-list";
-import React from "react";
+import RecentActivitySkeleton from "@/components/application/workplace/skeletons/recent-activity-skeleton";
+import React, { Suspense } from "react";
 
 const RecentActivities = () => {
     return (
@@ -10,7 +11,9 @@ const RecentActivities = () => {
                 </h2>
             </div>
             <div className="w-full flex flex-col justify-center items-center">
-                <ActivityList />
+                <Suspense fallback={<RecentActivitySkeleton className="bg-primary-foreground my-4" />}>
+                    <ActivityList />
+                </Suspense>
             </div>
         </div>
     );
