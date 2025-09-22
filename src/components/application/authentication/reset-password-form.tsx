@@ -2,20 +2,18 @@
 import {
     Card,
     CardContent,
-    CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import React, { FormEvent, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../logo";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Bitcoin, Eye, EyeClosed, Loader2 } from "lucide-react";
+import { Eye, EyeClosed, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { useAuth, useClerk, useSignIn } from "@clerk/nextjs";
+import { useAuth, useSignIn } from "@clerk/nextjs";
 import {
     InputOTP,
     InputOTPGroup,
@@ -42,7 +40,6 @@ const ResetPasswordForm = () => {
 
     // hooks
     const router = useRouter()
-    const clerk = useClerk()
     const { isSignedIn } = useAuth()
     const { isLoaded, signIn, setActive } = useSignIn()
 
@@ -80,7 +77,7 @@ const ResetPasswordForm = () => {
                 strategy: 'reset_password_email_code',
                 identifier: email,
             })
-            .then((_) => {
+            .then(() => {
                 setSuccessfulCreation(true)
                 showSuccess("Code sent to your E-mail")
                 setError('')
