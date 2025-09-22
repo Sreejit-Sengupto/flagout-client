@@ -148,7 +148,7 @@ const Workplace = () => {
                         )}
                     </div>
                     <Link
-                        href={"#"}
+                        href={"/recent-activities"}
                         className="flex justify-center items-center gap-1 mt-4 text-blue-400"
                     >
                         <p>See all Recent Activity</p>

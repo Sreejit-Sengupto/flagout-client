@@ -9,6 +9,9 @@ export async function GET(request: NextRequest) {
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
 
+    console.log("Page: ", page);
+    console.log("Limit: ", limit);
+
     const result = ZGetRecentActivities.safeParse({ page, limit });
     if (!result.success) {
         throw new ApiError(400, "Invalid request body", result.error.message);
@@ -64,7 +67,7 @@ export async function GET(request: NextRequest) {
             recentActivities,
             meta: {
                 page: data.page,
-                totaPages: Math.ceil(count / data.limit),
+                totalPages: Math.ceil(count / data.limit),
                 totalItems: count,
             },
         };

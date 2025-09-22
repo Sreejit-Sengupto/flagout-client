@@ -1,4 +1,5 @@
 import { timeAgo } from "@/lib/time-date";
+import { cn } from "@/lib/utils";
 import { Dot } from "lucide-react";
 import React from "react";
 
@@ -6,15 +7,17 @@ interface TRecentActivityProps {
     title: string;
     flagName: string;
     time: Date;
+    className?: string;
 }
 
 const RecentActivity: React.FC<TRecentActivityProps> = ({
     flagName,
     title,
     time,
+    className,
 }) => {
     return (
-        <div className="w-full bg-background p-5 rounded-2xl">
+        <div className={cn("w-full bg-background p-5 rounded-2xl", className)}>
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight flex justify-start items-center gap-1">
                 <Dot size={32} />
                 {title}
