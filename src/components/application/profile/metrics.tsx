@@ -1,9 +1,10 @@
 "use client";
 import { useGetMetrics } from "@/lib/tanstack/hooks/metrics";
-import { ChartBarIncreasing, Loader2 } from "lucide-react";
+import { ChartBarIncreasing } from "lucide-react";
 import React from "react";
 import MetricCard from "../workplace/metric-cards";
 import EmptyState from "../emtpy-state";
+import MetricCardSkeleton from "../workplace/skeletons/metric-cards-skeleton";
 
 const Metrics = () => {
     const { data: metrics, isLoading: metricsLoading } = useGetMetrics();
@@ -11,7 +12,7 @@ const Metrics = () => {
     return (
         <div className="w-full hidden lg:flex flex-col lg:flex-row justify-between items-center gap-2">
             {metricsLoading ? (
-                <Loader2 className="animate-spin" />
+                <MetricCardSkeleton />
             ) : metrics ? (
                 Object.entries(metrics.data).map(([key, data]) => (
                     <MetricCard

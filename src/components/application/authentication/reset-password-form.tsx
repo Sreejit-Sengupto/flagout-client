@@ -24,30 +24,29 @@ import { showError, showSuccess, showWarning } from "@/lib/sonner";
 
 const ResetPasswordForm = () => {
     // states
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [code, setCode] = useState('')
-    const [successfulCreation, setSuccessfulCreation] = useState(false)
-    const [secondFactor, setSecondFactor] = useState(false)
-    const [error, setError] = useState('')
-    const [showPassword, setShowPassword] = useState(false)
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [code, setCode] = useState("");
+    const [successfulCreation, setSuccessfulCreation] = useState(false);
+    const [secondFactor, setSecondFactor] = useState(false);
+    const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [cooldown, setCooldown] = useState(60);
     const [loaders, setLoaders] = useState({
         createLoader: false,
-        resetLoader: false
-    })
-
+        resetLoader: false,
+    });
 
     // hooks
-    const router = useRouter()
-    const { isSignedIn } = useAuth()
-    const { isLoaded, signIn, setActive } = useSignIn()
+    const router = useRouter();
+    const { isSignedIn } = useAuth();
+    const { isLoaded, signIn, setActive } = useSignIn();
 
     useEffect(() => {
         if (isSignedIn) {
-            router.push('/')
+            router.push("/");
         }
-    }, [isSignedIn, router])
+    }, [isSignedIn, router]);
 
     useEffect(() => {
         if (cooldown <= 0) {
@@ -60,53 +59,55 @@ const ResetPasswordForm = () => {
         return () => clearInterval(timer);
     }, [cooldown]);
 
-
     if (!isLoaded) {
-        return null
+        return null;
     }
 
     async function create(e: React.FormEvent) {
-        e.preventDefault()
+        e.preventDefault();
         if (!email) {
-            showWarning("Email is required")
+            showWarning("Email is required");
             return;
         }
-        setLoaders((prev) => ({ ...prev, createLoader: true }))
+        setLoaders((prev) => ({ ...prev, createLoader: true }));
         await signIn
             ?.create({
-                strategy: 'reset_password_email_code',
+                strategy: "reset_password_email_code",
                 identifier: email,
             })
             .then(() => {
-                setSuccessfulCreation(true)
-                showSuccess("Code sent to your E-mail")
-                setError('')
+                setSuccessfulCreation(true);
+                showSuccess("Code sent to your E-mail");
+                setError("");
             })
             .catch((err) => {
-                console.error('error', err.errors[0].longMessage)
-                setError(err.errors[0].longMessage)
-                showError(err.errors[0].longMessage)
-            }).finally(() => setLoaders((prev) => ({ ...prev, createLoader: false })))
+                console.error("error", err.errors[0].longMessage);
+                setError(err.errors[0].longMessage);
+                showError(err.errors[0].longMessage);
+            })
+            .finally(() =>
+                setLoaders((prev) => ({ ...prev, createLoader: false })),
+            );
     }
 
     // Reset the user's password.
     // Upon successful reset, the user will be
     // signed in and redirected to the home page
     async function reset(e: React.FormEvent) {
-        e.preventDefault()
-        setLoaders((prev) => ({ ...prev, resetLoader: true }))
+        e.preventDefault();
+        setLoaders((prev) => ({ ...prev, resetLoader: true }));
         await signIn
             ?.attemptFirstFactor({
-                strategy: 'reset_password_email_code',
+                strategy: "reset_password_email_code",
                 code,
                 password,
             })
             .then((result) => {
                 // Check if 2FA is required
-                if (result.status === 'needs_second_factor') {
-                    setSecondFactor(true)
-                    setError('')
-                } else if (result.status === 'complete') {
+                if (result.status === "needs_second_factor") {
+                    setSecondFactor(true);
+                    setError("");
+                } else if (result.status === "complete") {
                     // Set the active session to
                     // the newly created session (user is now signed in)
                     setActive({
@@ -115,24 +116,27 @@ const ResetPasswordForm = () => {
                             if (session?.currentTask) {
                                 // Check for tasks and navigate to custom UI to help users resolve them
                                 // See https://clerk.com/docs/custom-flows/overview#session-tasks
-                                console.log(session?.currentTask)
-                                return
+                                console.log(session?.currentTask);
+                                return;
                             }
 
-                            router.push('/workplace')
+                            router.push("/workplace");
                         },
-                    })
-                    showSuccess("Password reset success. Go to Dashboard!")
-                    setError('')
+                    });
+                    showSuccess("Password reset success. Go to Dashboard!");
+                    setError("");
                 } else {
-                    console.log(result)
+                    console.log(result);
                 }
             })
             .catch((err) => {
-                console.error('error', err.errors[0].longMessage)
-                setError(err.errors[0].longMessage)
-                showError(err.errors[0].longMessage)
-            }).finally(() => setLoaders((prev) => ({ ...prev, resetLoader: false })))
+                console.error("error", err.errors[0].longMessage);
+                setError(err.errors[0].longMessage);
+                showError(err.errors[0].longMessage);
+            })
+            .finally(() =>
+                setLoaders((prev) => ({ ...prev, resetLoader: false })),
+            );
     }
 
     return (
@@ -150,7 +154,9 @@ const ResetPasswordForm = () => {
                     {!successfulCreation && (
                         <div className="flex flex-col justify-center items-center gap-6">
                             <div className="w-full space-y-2">
-                                <Label htmlFor="email">Provide your email address</Label>
+                                <Label htmlFor="email">
+                                    Provide your email address
+                                </Label>
                                 <Input
                                     type="email"
                                     placeholder="e.g john@doe.com"
@@ -159,7 +165,16 @@ const ResetPasswordForm = () => {
                                 />
                             </div>
 
-                            <Button className="cursor-pointer" disabled={loaders.createLoader}>{loaders.createLoader ? <Loader2 className="animate-spin" /> : "Send password reset code"}</Button>
+                            <Button
+                                className="cursor-pointer"
+                                disabled={loaders.createLoader}
+                            >
+                                {loaders.createLoader ? (
+                                    <Loader2 className="animate-spin" />
+                                ) : (
+                                    "Send password reset code"
+                                )}
+                            </Button>
                             {error && <p>{error}</p>}
                         </div>
                     )}
@@ -167,21 +182,23 @@ const ResetPasswordForm = () => {
                     {successfulCreation && (
                         <div className="flex flex-col justify-center items-center gap-6">
                             <div className="relative w-full space-y-2">
-                                <Label htmlFor="password">Enter your new password</Label>
+                                <Label htmlFor="password">
+                                    Enter your new password
+                                </Label>
                                 <Input
                                     placeholder="ssshhhhh....."
                                     type={showPassword ? "text" : "password"}
                                     value={password}
                                     onChange={(e) => {
-                                        e.preventDefault()
-                                        setPassword(e.target.value)
+                                        e.preventDefault();
+                                        setPassword(e.target.value);
                                     }}
                                     required
                                 />
                                 <button
                                     onClick={(e) => {
-                                        e.preventDefault()
-                                        setShowPassword(prev => !prev)
+                                        e.preventDefault();
+                                        setShowPassword((prev) => !prev);
                                     }}
                                     className="absolute right-2 top-1/2 "
                                 >
@@ -202,7 +219,10 @@ const ResetPasswordForm = () => {
                             </div>
 
                             <div className="w-full space-y-2">
-                                <Label htmlFor="code">Enter the password reset code that was sent to your email</Label>
+                                <Label htmlFor="code">
+                                    Enter the password reset code that was sent
+                                    to your email
+                                </Label>
                                 <InputOTP
                                     maxLength={6}
                                     value={code}
@@ -218,7 +238,16 @@ const ResetPasswordForm = () => {
                                     </InputOTPGroup>
                                 </InputOTP>
                             </div>
-                            <Button className="w-full cursor-pointer" disabled={loaders.resetLoader}>{loaders.resetLoader ? <Loader2 className="animate-spin" /> : "Reset"}</Button>
+                            <Button
+                                className="w-full cursor-pointer"
+                                disabled={loaders.resetLoader}
+                            >
+                                {loaders.resetLoader ? (
+                                    <Loader2 className="animate-spin" />
+                                ) : (
+                                    "Reset"
+                                )}
+                            </Button>
                             <Button
                                 variant={"outline"}
                                 className="mx-auto cursor-pointer"
@@ -241,7 +270,9 @@ const ResetPasswordForm = () => {
                         </div>
                     )}
 
-                    {secondFactor && <p>2FA is required, but this UI does not handle that</p>}
+                    {secondFactor && (
+                        <p>2FA is required, but this UI does not handle that</p>
+                    )}
                 </form>
             </CardContent>
 

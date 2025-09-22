@@ -387,9 +387,14 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                     <Link href={redirectLink} className="text-blue-400">
                         {footerText}
                     </Link>
-                    {type === 'login' && <Link href={'/reset-password'} className="text-blue-200">
-                        Forgot Password?
-                    </Link>}
+                    {type === "login" && (
+                        <Link
+                            href={"/reset-password"}
+                            className="text-blue-200"
+                        >
+                            Forgot Password?
+                        </Link>
+                    )}
                 </section>
             </CardFooter>
         </Card>

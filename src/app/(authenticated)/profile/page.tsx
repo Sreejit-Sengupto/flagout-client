@@ -1,6 +1,7 @@
 import DangerZone from "@/components/application/profile/danger-zone";
 import ProfileDetails from "@/components/application/profile/details";
-import React from "react";
+import ProfileDetailsSkeleton from "@/components/application/profile/skeleton/details-skeleton";
+import React, { Suspense } from "react";
 
 const Profile = () => {
     return (
@@ -10,7 +11,9 @@ const Profile = () => {
             </p>
 
             <div className="mt-20 flex justify-center items-center">
-                <ProfileDetails />
+                <Suspense fallback={<ProfileDetailsSkeleton />}>
+                    <ProfileDetails />
+                </Suspense>
             </div>
 
             <div className="mt-10">
