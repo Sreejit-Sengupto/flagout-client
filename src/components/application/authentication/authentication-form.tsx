@@ -383,10 +383,13 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                     )}
                 </section>
 
-                <section className="my-4">
+                <section className="my-4 flex flex-col gap-2 justify-center items-center">
                     <Link href={redirectLink} className="text-blue-400">
                         {footerText}
                     </Link>
+                    {type === 'login' && <Link href={'/reset-password'} className="text-blue-200">
+                        Forgot Password?
+                    </Link>}
                 </section>
             </CardFooter>
         </Card>
