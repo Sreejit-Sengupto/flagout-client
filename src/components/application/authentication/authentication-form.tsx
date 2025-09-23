@@ -24,6 +24,7 @@ import {
     InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useRouter } from "next/navigation";
+import { showError } from "@/lib/sonner";
 
 interface TAuthForm {
     type: "login" | "register";
@@ -138,9 +139,12 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                 }
             }
         } catch (error) {
+            if (error instanceof Error) {
+                showError(error.message)
+            }
             console.error(error);
         } finally {
-            setLoaders((prev) => ({ ...prev, signUpLoader: false }));
+            setLoaders((prev) => ({ ...prev, signUpLoader: false, authLoader: false }));
         }
     };
 
@@ -153,7 +157,12 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                 redirectUrlComplete: "/workplace",
             });
         } catch (error) {
+            if (error instanceof Error) {
+                showError(error.message)
+            }
             console.error(error);
+        } finally {
+            setLoaders((prev) => ({ ...prev, signUpLoader: false, authLoader: false }));
         }
     };
 
@@ -169,6 +178,9 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
             }
             router.replace("/workplace");
         } catch (error) {
+            if (error instanceof Error) {
+                showError(error.message)
+            }
             console.error(error);
         } finally {
             setLoaders((prev) => ({ ...prev, verifyBtnLoader: false }));
@@ -186,6 +198,9 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
             });
             setCooldown(60);
         } catch (error) {
+            if (error instanceof Error) {
+                showError(error.message)
+            }
             console.error(error);
         } finally {
             setLoaders((prev) => ({ ...prev, resendCodeLoader: false }));
@@ -326,6 +341,7 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                                 onClick={() =>
                                     handleSignInWithOAuth("oauth_google")
                                 }
+                                disabled={loaders.authLoader}
                                 asChild
                             >
                                 <p className="flex justify-center items-center gap-1">
@@ -341,6 +357,7 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                                 onClick={() =>
                                     handleSignInWithOAuth("oauth_github")
                                 }
+                                disabled={loaders.authLoader}
                                 asChild
                             >
                                 <p className="flex justify-center items-center gap-1">
