@@ -11,7 +11,11 @@ const RecentActivities = () => {
                 </h2>
             </div>
             <div className="w-full flex flex-col justify-center items-center">
-                <Suspense fallback={<RecentActivitySkeleton className="bg-primary-foreground my-4" />}>
+                <Suspense
+                    fallback={
+                        <RecentActivitySkeleton className="bg-primary-foreground my-4" />
+                    }
+                >
                     <ActivityList />
                 </Suspense>
             </div>
