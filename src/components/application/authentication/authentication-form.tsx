@@ -140,11 +140,15 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
             }
         } catch (error) {
             if (error instanceof Error) {
-                showError(error.message)
+                showError(error.message);
             }
             console.error(error);
         } finally {
-            setLoaders((prev) => ({ ...prev, signUpLoader: false, authLoader: false }));
+            setLoaders((prev) => ({
+                ...prev,
+                signUpLoader: false,
+                authLoader: false,
+            }));
         }
     };
 
@@ -158,11 +162,15 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
             });
         } catch (error) {
             if (error instanceof Error) {
-                showError(error.message)
+                showError(error.message);
             }
             console.error(error);
         } finally {
-            setLoaders((prev) => ({ ...prev, signUpLoader: false, authLoader: false }));
+            setLoaders((prev) => ({
+                ...prev,
+                signUpLoader: false,
+                authLoader: false,
+            }));
         }
     };
 
@@ -179,7 +187,7 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
             router.replace("/workplace");
         } catch (error) {
             if (error instanceof Error) {
-                showError(error.message)
+                showError(error.message);
             }
             console.error(error);
         } finally {
@@ -199,7 +207,7 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
             setCooldown(60);
         } catch (error) {
             if (error instanceof Error) {
-                showError(error.message)
+                showError(error.message);
             }
             console.error(error);
         } finally {
