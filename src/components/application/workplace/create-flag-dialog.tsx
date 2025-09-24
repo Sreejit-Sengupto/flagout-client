@@ -29,10 +29,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { showSuccess } from "@/lib/sonner";
-import {
-    useCreateFlagMutation,
-    useUpdateFlagMutation,
-} from "@/lib/tanstack/hooks/feature-flag";
+import { useUserFlagMutations } from "@/lib/tanstack/hooks/feature-flag";
 import { queryKeys } from "@/lib/tanstack/keys";
 import { cn } from "@/lib/utils";
 import { DialogTrigger } from "@radix-ui/react-dialog";
@@ -115,33 +112,37 @@ const UpsertFlagDialog = ({
         description: flagDescription ?? "",
     });
 
-    const createFlagMutation = useCreateFlagMutation({
-        name: textData.name,
-        description: textData.description,
-        enabled: flagEnabled,
-        environment: environment.value as
-            | "DEVELOPMENT"
-            | "PRODUCTION"
-            | "STAGING",
-        rolloutPercentage: sliderValue[0],
-        targeting: targets,
-    });
+    // mutations
+    const { createFlag, updateFlag } = useUserFlagMutations();
 
-    const updateFlagMutation = useUpdateFlagMutation(id ?? "", [
-        ...queryKeys.userFlags,
-    ]);
+    // const createFlagMutation = createFlag({
+    // name: textData.name,
+    // description: textData.description,
+    // enabled: flagEnabled,
+    // environment: environment.value as
+    //     | "DEVELOPMENT"
+    //     | "PRODUCTION"
+    //     | "STAGING",
+    // rolloutPercentage: sliderValue[0],
+    // targeting: targets,
+    // });
+
     const handleUpdateFlag = async () => {
         try {
-            await updateFlagMutation.mutateAsync({
-                description: textData.description,
-                enabled: flagEnabled,
-                environment: environment.value as
-                    | "DEVELOPMENT"
-                    | "PRODUCTION"
-                    | "STAGING",
-                name: textData.name,
-                rolloutPercentage: sliderValue[0],
-                targeting: targets,
+            await updateFlag.mutateAsync({
+                id: id ?? "",
+                data: {
+                    description: textData.description,
+                    enabled: flagEnabled,
+                    environment: environment.value as
+                        | "DEVELOPMENT"
+                        | "PRODUCTION"
+                        | "STAGING",
+                    name: textData.name,
+                    rolloutPercentage: sliderValue[0],
+                    targeting: targets,
+                },
+                invalidationKeys: [...queryKeys.userFlags],
             });
             showSuccess("Flag updated. The changes will reflect soon.");
         } catch (error) {
@@ -163,7 +164,17 @@ const UpsertFlagDialog = ({
             return;
         }
         try {
-            await createFlagMutation.mutateAsync();
+            await createFlag.mutateAsync({
+                name: textData.name,
+                description: textData.description,
+                enabled: flagEnabled,
+                environment: environment.value as
+                    | "DEVELOPMENT"
+                    | "PRODUCTION"
+                    | "STAGING",
+                rolloutPercentage: sliderValue[0],
+                targeting: targets,
+            });
         } catch (error) {
             console.error(error);
         } finally {
@@ -428,9 +439,9 @@ const UpsertFlagDialog = ({
                                 type="submit"
                                 className="cursor-pointer"
                                 onClick={handleUpdateFlag}
-                                disabled={updateFlagMutation.isPending}
+                                disabled={updateFlag.isPending}
                             >
-                                {updateFlagMutation.isPending ? (
+                                {updateFlag.isPending ? (
                                     <Loader2 className="animate-spin" />
                                 ) : (
                                     "Update Flag"
@@ -441,9 +452,9 @@ const UpsertFlagDialog = ({
                                 type="submit"
                                 className="cursor-pointer"
                                 onClick={handleCreateFlag}
-                                disabled={createFlagMutation.isPending}
+                                disabled={createFlag.isPending}
                             >
-                                {createFlagMutation.isPending ? (
+                                {createFlag.isPending ? (
                                     <Loader2 className="animate-spin" />
                                 ) : (
                                     "Create Flag"
