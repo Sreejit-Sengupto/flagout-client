@@ -13,20 +13,21 @@ import { formatDate, timeAgo } from "@/lib/time-date";
 import EmptyState from "../../emtpy-state";
 import { KeyIcon, Loader2 } from "lucide-react";
 import {
-    useDeleteAPIKey,
+    useAPIKeysMutation,
     useQueryAPIKeys,
-    useRevokeAPIKey,
 } from "@/lib/tanstack/hooks/api-key";
 import APIKeysSkeleton from "../skeletons/api-keys-skeleton";
 
 export function AllKeys() {
     const { data: apiKeys, isLoading } = useQueryAPIKeys();
-    const revokeKeyMutation = useRevokeAPIKey();
-    const deleteKeyMutation = useDeleteAPIKey();
+    // const revokeKeyMutation = useRevokeAPIKey();
+    // const deleteKeyMutation = useDeleteAPIKey();
+
+    const { revokeKey, deleteKey } = useAPIKeysMutation();
 
     const handleDeleteAPIKey = async (id: string) => {
         try {
-            await deleteKeyMutation.mutateAsync(id);
+            await deleteKey.mutateAsync(id);
         } catch (error) {
             console.error(error);
         }
@@ -34,7 +35,7 @@ export function AllKeys() {
 
     const handleRevokeAPIKey = async (id: string, revoke: boolean) => {
         try {
-            await revokeKeyMutation.mutateAsync({ id, revoke });
+            await revokeKey.mutateAsync({ id, revoke });
         } catch (error) {
             throw error;
         }
@@ -89,13 +90,12 @@ export function AllKeys() {
                                     handleRevokeAPIKey(key.id, !key.revoked)
                                 }
                                 disabled={
-                                    (revokeKeyMutation.variables?.id ===
-                                        key.id &&
-                                        revokeKeyMutation.isPending) ||
-                                    deleteKeyMutation.isPending
+                                    (revokeKey.variables?.id === key.id &&
+                                        revokeKey.isPending) ||
+                                    deleteKey.isPending
                                 }
                             >
-                                {revokeKeyMutation.isPending ? (
+                                {revokeKey.isPending ? (
                                     <Loader2 className="animate-spin" />
                                 ) : key.revoked ? (
                                     "Revoked"
@@ -108,12 +108,12 @@ export function AllKeys() {
                                 className="cursor-pointer"
                                 onClick={() => handleDeleteAPIKey(key.id)}
                                 disabled={
-                                    deleteKeyMutation.variables === key.id &&
-                                    deleteKeyMutation.isPending
+                                    deleteKey.variables === key.id &&
+                                    deleteKey.isPending
                                 }
                             >
-                                {deleteKeyMutation.variables === key.id &&
-                                deleteKeyMutation.isPending ? (
+                                {deleteKey.variables === key.id &&
+                                deleteKey.isPending ? (
                                     <Loader2 className="animate-spin" />
                                 ) : (
                                     "Delete"

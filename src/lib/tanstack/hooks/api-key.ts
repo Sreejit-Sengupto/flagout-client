@@ -16,9 +16,9 @@ export const useQueryAPIKeys = () => {
     });
 };
 
-export const useCreateAPIKey = () => {
+export const useAPIKeysMutation = () => {
     const queryClient = useTanstackClient();
-    return useMutation({
+    const createKey = useMutation({
         mutationFn: (name: string) => createAPIKey(name),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
@@ -26,11 +26,8 @@ export const useCreateAPIKey = () => {
             });
         },
     });
-};
 
-export const useDeleteAPIKey = () => {
-    const queryClient = useTanstackClient();
-    return useMutation({
+    const deleteKey = useMutation({
         mutationFn: (id: string) => deleteAPIKey(id),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
@@ -38,11 +35,8 @@ export const useDeleteAPIKey = () => {
             });
         },
     });
-};
 
-export const useRevokeAPIKey = () => {
-    const queryClient = useTanstackClient();
-    return useMutation({
+    const revokeKey = useMutation({
         mutationFn: ({ id, revoke }: { id: string; revoke: boolean }) =>
             revokeAPIKey(id, revoke),
         onSuccess: async () => {
@@ -51,4 +45,43 @@ export const useRevokeAPIKey = () => {
             });
         },
     });
+
+    return { createKey, deleteKey, revokeKey };
 };
+
+// export const useCreateAPIKey = () => {
+//     const queryClient = useTanstackClient();
+//     return useMutation({
+//         mutationFn: (name: string) => createAPIKey(name),
+//         onSuccess: async () => {
+//             await queryClient.invalidateQueries({
+//                 queryKey: queryKeys.apiKey,
+//             });
+//         },
+//     });
+// };
+
+// export const useDeleteAPIKey = () => {
+//     const queryClient = useTanstackClient();
+//     return useMutation({
+//         mutationFn: (id: string) => deleteAPIKey(id),
+//         onSuccess: async () => {
+//             await queryClient.invalidateQueries({
+//                 queryKey: queryKeys.apiKey,
+//             });
+//         },
+//     });
+// };
+
+// export const useRevokeAPIKey = () => {
+//     const queryClient = useTanstackClient();
+//     return useMutation({
+//         mutationFn: ({ id, revoke }: { id: string; revoke: boolean }) =>
+//             revokeAPIKey(id, revoke),
+//         onSuccess: async () => {
+//             await queryClient.invalidateQueries({
+//                 queryKey: queryKeys.apiKey,
+//             });
+//         },
+//     });
+// };

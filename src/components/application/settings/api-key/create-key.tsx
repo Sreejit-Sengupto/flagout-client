@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreateAPIKey } from "@/lib/tanstack/hooks/api-key";
+import { useAPIKeysMutation } from "@/lib/tanstack/hooks/api-key";
 import { Loader2, PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 
@@ -28,10 +28,10 @@ const CreateKey = () => {
         copied: false,
     });
 
-    const createAPIKeyMutation = useCreateAPIKey();
+    const { createKey } = useAPIKeysMutation();
     const handleCreateAPIKey = async () => {
         try {
-            const result = await createAPIKeyMutation.mutateAsync(keyName);
+            const result = await createKey.mutateAsync(keyName);
             if (result.data) {
                 setShowKeyDialog(true);
                 setKeyDetails({
@@ -144,12 +144,10 @@ const CreateKey = () => {
                         <Button
                             type="submit"
                             className="cursor-pointer"
-                            disabled={
-                                !keyName || createAPIKeyMutation.isPending
-                            }
+                            disabled={!keyName || createKey.isPending}
                             onClick={handleCreateAPIKey}
                         >
-                            {createAPIKeyMutation.isPending ? (
+                            {createKey.isPending ? (
                                 <Loader2 className="animate-spin" />
                             ) : (
                                 "Create API Key"

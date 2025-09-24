@@ -19,10 +19,7 @@ import { IconSettings } from "@tabler/icons-react";
 import { Activity, Calendar, Loader2, TrendingUp, Users } from "lucide-react";
 import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { debounce } from "@/lib/debounce";
-import {
-    useDeleteFlagMutation,
-    useUpdateFlagMutation,
-} from "@/lib/tanstack/hooks/feature-flag";
+import { useUserFlagMutations } from "@/lib/tanstack/hooks/feature-flag";
 import { usePathname } from "next/navigation";
 import { queryKeys } from "@/lib/tanstack/keys";
 import { Button } from "@/components/ui/button";
@@ -91,10 +88,14 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
     }, [pathname]);
     const [settingsOpen, setSettingsOpen] = useState(false);
 
-    const updateFlagMutation = useUpdateFlagMutation(id, invalidationKeys);
+    const { updateFlag } = useUserFlagMutations();
     const toggleEnabled = debounce(async (enabled: boolean) => {
         try {
-            await updateFlagMutation.mutateAsync({ enabled });
+            await updateFlag.mutateAsync({
+                id,
+                data: { enabled },
+                invalidationKeys,
+            });
         } catch (error) {
             console.error(error);
         }
@@ -251,10 +252,10 @@ const SettingsMenu = ({
 }) => {
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
 
-    const deleteFlagMuatation = useDeleteFlagMutation();
+    const { deleteFlag } = useUserFlagMutations();
     const handleDeleteFlag = async () => {
         try {
-            await deleteFlagMuatation.mutateAsync(fieldProps.id ?? "");
+            await deleteFlag.mutateAsync(fieldProps.id ?? "");
             showSuccess("Flag Deleted");
         } catch (error) {
             console.error(error);
@@ -309,10 +310,10 @@ const SettingsMenu = ({
                                     type="submit"
                                     variant={"destructive"}
                                     className="cursor-pointer"
-                                    disabled={deleteFlagMuatation.isPending}
+                                    disabled={deleteFlag.isPending}
                                     onClick={handleDeleteFlag}
                                 >
-                                    {deleteFlagMuatation.isPending ? (
+                                    {deleteFlag.isPending ? (
                                         <Loader2 className="animate-spin" />
                                     ) : (
                                         "Delete Flag"

@@ -21,10 +21,10 @@ export const useUserFlagQuery = (limit: number, page: number) => {
     });
 };
 
-export const useCreateFlagMutation = (input: TFeatureFlags) => {
+export const useUserFlagMutations = () => {
     const queryClient = useTanstackClient();
-    return useMutation({
-        mutationFn: () => createFeatureFlag(input),
+    const createFlag = useMutation({
+        mutationFn: (input: TFeatureFlags) => createFeatureFlag(input),
         onSuccess: async () => {
             const flagsPrms = queryClient.invalidateQueries({
                 queryKey: queryKeys.userFlags,
@@ -35,17 +35,18 @@ export const useCreateFlagMutation = (input: TFeatureFlags) => {
             await Promise.all([flagsPrms, activityPrms]);
         },
     });
-};
 
-export const useUpdateFlagMutation = (
-    id: string,
-    invalidationKeys: string[],
-) => {
-    const queryClient = useTanstackClient();
-    return useMutation({
-        mutationFn: (data: TUpdateFeatureFlags) => updateFeatureFlag(id, data),
-        onSuccess: async () => {
-            const invalidatePrms = invalidationKeys.map((item) => {
+    const updateFlag = useMutation({
+        mutationFn: ({
+            id,
+            data,
+        }: {
+            id: string;
+            data: TUpdateFeatureFlags;
+            invalidationKeys: string[];
+        }) => updateFeatureFlag(id, data),
+        onSuccess: async (data, variables) => {
+            const invalidatePrms = variables.invalidationKeys.map((item) => {
                 return queryClient.invalidateQueries({
                     queryKey: [item],
                 });
@@ -53,11 +54,8 @@ export const useUpdateFlagMutation = (
             await Promise.all(invalidatePrms);
         },
     });
-};
 
-export const useDeleteFlagMutation = () => {
-    const queryClient = useTanstackClient();
-    return useMutation({
+    const deleteFlag = useMutation({
         mutationFn: (id: string) => deleteFeatureFlag(id),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
@@ -65,4 +63,52 @@ export const useDeleteFlagMutation = () => {
             });
         },
     });
+
+    return { createFlag, updateFlag, deleteFlag };
 };
+
+// export const useCreateFlagMutation = (input: TFeatureFlags) => {
+//     const queryClient = useTanstackClient();
+//     return useMutation({
+//         mutationFn: () => createFeatureFlag(input),
+//         onSuccess: async () => {
+//             const flagsPrms = queryClient.invalidateQueries({
+//                 queryKey: queryKeys.userFlags,
+//             });
+//             const activityPrms = queryClient.invalidateQueries({
+//                 queryKey: queryKeys.dashboardActivity,
+//             });
+//             await Promise.all([flagsPrms, activityPrms]);
+//         },
+//     });
+// };
+
+// export const useUpdateFlagMutation = (
+//     id: string,
+//     invalidationKeys: string[],
+// ) => {
+//     const queryClient = useTanstackClient();
+//     return useMutation({
+//         mutationFn: (data: TUpdateFeatureFlags) => updateFeatureFlag(id, data),
+//         onSuccess: async () => {
+//             const invalidatePrms = invalidationKeys.map((item) => {
+//                 return queryClient.invalidateQueries({
+//                     queryKey: [item],
+//                 });
+//             });
+//             await Promise.all(invalidatePrms);
+//         },
+//     });
+// };
+
+// export const useDeleteFlagMutation = () => {
+//     const queryClient = useTanstackClient();
+//     return useMutation({
+//         mutationFn: (id: string) => deleteFeatureFlag(id),
+//         onSuccess: async () => {
+//             await queryClient.invalidateQueries({
+//                 queryKey: queryKeys.userFlags,
+//             });
+//         },
+//     });
+// };
