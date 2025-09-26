@@ -4,6 +4,7 @@ import {
     createFeatureFlag,
     deleteFeatureFlag,
     getFeatureFlags,
+    getFlagMetric,
     updateFeatureFlag,
 } from "../api/feature-flag";
 import {
@@ -18,6 +19,13 @@ export const useUserFlagQuery = (limit: number, page: number) => {
         queryFn: () => getFeatureFlags({ limit, page }),
         placeholderData: keepPreviousData,
         staleTime: 60 * 1000,
+    });
+};
+
+export const useFeatureFlagQuery = (slug: string) => {
+    return useQuery({
+        queryKey: queryKeys.flagMetrics,
+        queryFn: () => getFlagMetric(slug),
     });
 };
 
