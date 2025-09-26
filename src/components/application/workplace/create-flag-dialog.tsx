@@ -1,4 +1,5 @@
 "use client";
+import { generateDescription } from "@/app/actions/gen-ai";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -33,7 +34,7 @@ import { useUserFlagMutations } from "@/lib/tanstack/hooks/feature-flag";
 import { queryKeys } from "@/lib/tanstack/keys";
 import { cn } from "@/lib/utils";
 import { DialogTrigger } from "@radix-ui/react-dialog";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { Brain, Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import React, { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 interface TFlagProps {
@@ -111,6 +112,7 @@ const UpsertFlagDialog = ({
         name: flagName ?? "",
         description: flagDescription ?? "",
     });
+    const [suggestionLoading, setSuggestionLoading] = useState<boolean>(false);
 
     // mutations
     const { createFlag, updateFlag } = useUserFlagMutations();
@@ -182,6 +184,23 @@ const UpsertFlagDialog = ({
         }
     };
 
+    const handleGenerateDescriptionFromAI = async () => {
+        try {
+            setSuggestionLoading(true);
+            if (textData.name) {
+                const suggestion = await generateDescription(textData.name);
+                setTextData((prev) => ({
+                    ...prev,
+                    description: suggestion as string,
+                }));
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setSuggestionLoading(false);
+        }
+    };
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <form onSubmit={handleCreateFlag}>
@@ -236,7 +255,7 @@ const UpsertFlagDialog = ({
                             />
                         </div>
 
-                        <div className="grid gap-3">
+                        <div className="relative grid gap-3">
                             <Label htmlFor="description">Description</Label>
                             <Textarea
                                 id="description"
@@ -253,6 +272,18 @@ const UpsertFlagDialog = ({
                                     }));
                                 }}
                             />
+                            <Button
+                                onClick={handleGenerateDescriptionFromAI}
+                                className="absolute bottom-1 right-1 cursor-pointer"
+                                variant={"link"}
+                                disabled={suggestionLoading}
+                            >
+                                {suggestionLoading ? (
+                                    <Loader2 className="animate-spin" />
+                                ) : (
+                                    <Brain color="green" />
+                                )}
+                            </Button>
                         </div>
 
                         <div className="w-full grid grid-cols-2 gap-3 place-items-start">
