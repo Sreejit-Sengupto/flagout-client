@@ -28,6 +28,7 @@ const FlagList = () => {
                             env={flag.environment}
                             evaluations={flag._count.evaluationLogs}
                             id={flag.id}
+                            slug={flag.slug}
                             lastModified={flag.updatedAt}
                             name={flag.name}
                             rolloutPercentage={flag.rollout_percentage}

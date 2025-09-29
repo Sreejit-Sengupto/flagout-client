@@ -6,6 +6,7 @@ import {
 } from "@/lib/zod-schemas/feature-flags";
 import { FeatureFlags } from "@prisma/client";
 import { showSuccess } from "@/lib/sonner";
+import { getFlagIdFromSlug } from "@/app/actions/flag.action";
 
 export type TResponseGetAllFeatureFlags = TApiResponse<
     (FeatureFlags & {
@@ -87,6 +88,30 @@ export const deleteFeatureFlag = async (id: string) => {
                 url: `/flags/${id}`,
                 method: "DELETE",
             });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export type TResponseGetFlagMetric = TApiResponse<
+    {
+        month: string;
+        metrics: {
+            flagCalls: number;
+            usersTargeted: number;
+            visibility: number;
+            totalFlags: number;
+        };
+    }[]
+>;
+export const getFlagMetric = async (slug: string) => {
+    try {
+        const flagId = await getFlagIdFromSlug(slug);
+        const response = await axiosInstance.request<TResponseGetFlagMetric>({
+            url: `/flags/metrics/${flagId}`,
+            method: "GET",
+        });
         return response.data;
     } catch (error) {
         throw error;

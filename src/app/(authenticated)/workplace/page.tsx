@@ -68,6 +68,7 @@ const Workplace = () => {
                             <FeatureFlagCard
                                 key={item.id}
                                 id={item.id}
+                                slug={item.slug}
                                 description={item.description}
                                 enabled={item.enabled}
                                 env={item.environment}
