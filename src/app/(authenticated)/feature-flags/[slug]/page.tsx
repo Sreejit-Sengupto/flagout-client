@@ -1,6 +1,4 @@
 "use client";
-import { generateAISuggestions } from "@/app/actions/ai-summary.action";
-import { getFlagIdFromSlug } from "@/app/actions/flag.action";
 import { GradientBarChart } from "@/components/application/charts/bar-chart";
 import { ValueLineBarChart } from "@/components/application/charts/bar-chart-2";
 import { RainbowGlowGradientLineChart } from "@/components/application/charts/pie-chart";
@@ -24,57 +22,57 @@ const FlagDetails = () => {
     const flagCalls = useMemo(() => {
         return metrics
             ? metrics.data.map((item) => ({
-                month: item.month.slice(0, item.month.indexOf(" ")),
-                value: item.metrics.flagCalls,
-            }))
+                  month: item.month.slice(0, item.month.indexOf(" ")),
+                  value: item.metrics.flagCalls,
+              }))
             : [];
     }, [metrics]);
 
     const usersTargeted = useMemo(() => {
         return metrics
             ? metrics.data.map((item) => ({
-                month: item.month.slice(0, item.month.indexOf(" ")),
-                value: item.metrics.usersTargeted,
-            }))
+                  month: item.month.slice(0, item.month.indexOf(" ")),
+                  value: item.metrics.usersTargeted,
+              }))
             : [];
     }, [metrics]);
 
     const visibility = useMemo(() => {
         return metrics
             ? metrics.data.map((item) => ({
-                month: item.month.slice(0, item.month.indexOf(" ")),
-                value: item.metrics.visibility,
-            }))
+                  month: item.month.slice(0, item.month.indexOf(" ")),
+                  value: item.metrics.visibility,
+              }))
             : [];
     }, [metrics]);
 
     const totalFlags = useMemo(() => {
         return metrics
             ? metrics.data.map((item) => ({
-                month: item.month.slice(0, item.month.indexOf(" ")),
-                value: item.metrics.totalFlags,
-            }))
+                  month: item.month.slice(0, item.month.indexOf(" ")),
+                  value: item.metrics.totalFlags,
+              }))
             : [];
     }, [metrics]);
 
     const dataForAI = [
         {
             category: "flag calls",
-            metrics: flagCalls
+            metrics: flagCalls,
         },
         {
             category: "users targeted",
-            metrics: usersTargeted
+            metrics: usersTargeted,
         },
         {
             category: "visibility",
-            metrics: visibility
+            metrics: visibility,
         },
         {
             category: "total flags",
-            metrics: totalFlags
-        }
-    ]
+            metrics: totalFlags,
+        },
+    ];
 
     return (
         <section className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl bg-background p-5 overflow-auto">
