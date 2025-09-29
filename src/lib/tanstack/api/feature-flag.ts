@@ -101,7 +101,7 @@ export type TResponseGetFlagMetric = TApiResponse<
             flagCalls: number;
             usersTargeted: number;
             visibility: number;
-            activeFlags: number;
+            totalFlags: number;
         };
     }[]
 >;

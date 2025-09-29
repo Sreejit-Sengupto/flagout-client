@@ -6,9 +6,10 @@ import { ValueLineBarChart } from "@/components/application/charts/bar-chart-2";
 import { RainbowGlowGradientLineChart } from "@/components/application/charts/pie-chart";
 import { GlowingStrokeRadarChart } from "@/components/application/charts/radar-chart";
 import AISummary from "@/components/application/flag-metrics/ai-summary";
+import FlagDetailsSkeleton from "@/components/application/feature-flags/flag-details-skeleton";
 import { useFeatureFlagQuery } from "@/lib/tanstack/hooks/feature-flag";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 
 const FlagDetails = () => {
     const { slug } = useParams();
@@ -47,11 +48,11 @@ const FlagDetails = () => {
             : [];
     }, [metrics]);
 
-    const activeFlags = useMemo(() => {
+    const totalFlags = useMemo(() => {
         return metrics
             ? metrics.data.map((item) => ({
                 month: item.month.slice(0, item.month.indexOf(" ")),
-                value: item.metrics.activeFlags,
+                value: item.metrics.totalFlags,
             }))
             : [];
     }, [metrics]);
@@ -70,8 +71,8 @@ const FlagDetails = () => {
             metrics: visibility
         },
         {
-            category: "active flags",
-            metrics: activeFlags
+            category: "total flags",
+            metrics: totalFlags
         }
     ]
 
@@ -87,7 +88,7 @@ const FlagDetails = () => {
             </div>
 
             {isLoading ? (
-                <p>Loading...</p>
+                <FlagDetailsSkeleton />
             ) : (
                 <div className="w-full flex flex-col lg:grid lg:grid-cols-5 rounded-tl-2xl bg-background lg:p-5 gap-2 overflow-auto">
                     <div className="col-span-2 flex flex-col justify-start items-center gap-4">
@@ -108,8 +109,8 @@ const FlagDetails = () => {
                             chartData={visibility}
                         />
                         <ValueLineBarChart
-                            title="Active Flags"
-                            chartData={activeFlags}
+                            title="Total Flags"
+                            chartData={totalFlags}
                         />
                     </div>
                 </div>

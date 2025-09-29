@@ -47,7 +47,7 @@ const getSummAndRec = async ({ serializedData }: {
     }[]
 }) => {
     const promptTemplate = PromptTemplate.fromTemplate(
-        `You are analyzing feature flag usage data for an application. The data includes the category name (flag calls, users targeted, feature visibility, active flags), the percentage change between last two months and the average of the values of the rest of the months.
+        `You are analyzing feature flag usage data for an application. The data includes the category name (flag calls, users targeted, feature visibility, flags created), the percentage change between last two months and the average of the values of the rest of the months. It should be user focused and NOT developer focused. Write summary and recommendations such that it is useful for the user to understand the feature flag usage that they have created using the application's admin dashboard.
          Your task:  
             1. Write a concise, human-readable summary of the key metrics (flag calls, users targeted, feature visibility, active flags).  
             2. Suggest 2–3 actionable recommendations, such as increasing or decreasing rollout percentage, adjusting targeting, or monitoring performance trends.  
@@ -121,11 +121,14 @@ export const generateAISuggestions = async (flagId: string, data: TInput[]) => {
         // const shouldRegenerate = serializedData.map((item) => (item.percentage_change_last_two_months > 10 || item.percentage_change_last_two_months < -10) && item.percentage_change_last_two_months !== prev).includes(true);
         const shouldRegenerate = hashedData !== existingSuggestion.hash;
         if (shouldRegenerate) {
+            console.log("Regenerating...");
+
             const suggestions = await getSummAndRec({ serializedData });
             const updatedSuggestion = await prisma.aISum.update({
                 data: {
                     summary: suggestions.summary,
-                    recommendation: suggestions.recommendation
+                    recommendation: suggestions.recommendation,
+                    hash: hashedData
                 },
                 where: {
                     flag_id: flagId

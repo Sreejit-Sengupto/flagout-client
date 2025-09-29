@@ -121,7 +121,7 @@ export async function GET(
                 flagCalls: number;
                 usersTargeted: number;
                 visibility: number;
-                activeFlags: number;
+                totalFlags: number;
             };
         }>[] = [];
 
@@ -147,7 +147,7 @@ export async function GET(
                     monthStart,
                     monthEnd,
                 );
-                const activeFlags = await getActiveFlags(
+                const totalFlags = await getActiveFlags(
                     user.id,
                     monthStart,
                     monthEnd,
@@ -159,7 +159,7 @@ export async function GET(
                         flagCalls,
                         usersTargeted: totalUsers,
                         visibility: visibility * 100,
-                        activeFlags,
+                        totalFlags,
                     },
                 };
             })();

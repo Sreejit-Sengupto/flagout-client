@@ -35,11 +35,13 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import Link from "next/link";
 
 interface TFlagCardProps {
     roundTop: boolean;
     roundBottom: boolean;
     id: string;
+    slug: string;
     name: string;
     env: Environment;
     enabled: boolean;
@@ -54,6 +56,7 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
     roundTop,
     roundBottom,
     id,
+    slug,
     name,
     env,
     enabled,
@@ -112,9 +115,11 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                     <div className="flex flex-col lg:flex-row justify-center items-start lg:items-center gap-2">
-                        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                            {name}
-                        </h3>
+                        <Link href={`/feature-flags/${slug}`}>
+                            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+                                {name}
+                            </h3>
+                        </Link>
                         <Badge
                             variant={flagEnabled ? "destructive" : "secondary"}
                             className={
