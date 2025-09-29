@@ -28,11 +28,11 @@ const AISummary = ({ slug, data }: { slug: string, data: TInput[] }) => {
                 <h4 className="scroll-m-20 text-xl font-semibold tracking-tight underline">
                     Summary
                 </h4>
-                <p className="leading-7">
+                <div className="leading-7">
                     <Markdown remarkPlugins={[remarkGfm]}>
                         {summary}
                     </Markdown>
-                </p>
+                </div>
             </div>
             <div>
                 <h4 className="scroll-m-20 text-xl font-semibold tracking-tight underline">

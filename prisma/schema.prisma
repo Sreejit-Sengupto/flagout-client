@@ -89,6 +89,7 @@ model AISum {
   id             String       @id @default(uuid())
   flag           FeatureFlags @relation(fields: [flag_id], references: [id])
   flag_id        String       @unique
+  hash           String
   summary        String       @default("")
   recommendation String       @default("")
 }

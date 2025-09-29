@@ -4,6 +4,7 @@ import { PromptTemplate } from "@langchain/core/prompts"
 import { JsonOutputParser } from "@langchain/core/output_parsers"
 import { initModel } from "@/lib/gen-ai/init";
 import prisma from "@/lib/prisma";
+import crypto from "crypto"
 
 export interface TInput {
     category: string;
@@ -58,7 +59,7 @@ const getSummAndRec = async ({ serializedData }: {
             Format Instructions: {format_instructions}
         `
     )
-    const formatInstructions = "Respond with a valid JSON object, containing two fields: 'summary' and 'recommendation'. Both string fields, follow the format strictly DO NOT come up with your own.";
+    const formatInstructions = "Respond with a valid JSON object, containing two fields: 'summary' and 'recommendation'. Both string fields, follow the format strictly DO NOT come up with your own. 'summary' is string and 'recommendation' is string as well and NOT AN array";
 
     try {
         const partialPrompt = await promptTemplate.partial({
@@ -72,6 +73,9 @@ const getSummAndRec = async ({ serializedData }: {
         const response = await chain.invoke({
             metrics: serializedData,
         })
+
+        console.log("response", response);
+
         console.log("Summary:", response.summary);
         console.log("Recommendation:", response.recommendation);
 
@@ -95,12 +99,18 @@ export const generateAISuggestions = async (flagId: string, data: TInput[]) => {
             }
         })
 
+
         const serializedData = serializeInput(data);
+        const stringifiedData = JSON.stringify(serializedData);
+        const hashedData = crypto.createHash('sha256').update(stringifiedData).digest('hex');
         if (!existingSuggestion) {
+            console.log("I am in");
+
             const suggestions = await getSummAndRec({ serializedData })
             const addedSuggestion = await prisma.aISum.create({
                 data: {
                     flag_id: flagId,
+                    hash: hashedData,
                     summary: suggestions.summary,
                     recommendation: suggestions.recommendation
                 }
@@ -108,7 +118,8 @@ export const generateAISuggestions = async (flagId: string, data: TInput[]) => {
             return addedSuggestion;
         }
 
-        const shouldRegenerate = serializedData.map((item) => item.percentage_change_last_two_months > 10).includes(true);
+        // const shouldRegenerate = serializedData.map((item) => (item.percentage_change_last_two_months > 10 || item.percentage_change_last_two_months < -10) && item.percentage_change_last_two_months !== prev).includes(true);
+        const shouldRegenerate = hashedData !== existingSuggestion.hash;
         if (shouldRegenerate) {
             const suggestions = await getSummAndRec({ serializedData });
             const updatedSuggestion = await prisma.aISum.update({
