@@ -77,7 +77,7 @@ model FlagEnviroment {
 model FlagEvaluationLogs {
   id              String       @id @default(uuid())
   clerk_user_id   String
-  flag            FeatureFlags @relation(fields: [flag_id], references: [id])
+  flag            FeatureFlags @relation(fields: [flag_id], references: [id], onDelete: Cascade)
   flag_id         String
   enabled         Boolean
   visited_user_id String?
@@ -87,7 +87,7 @@ model FlagEvaluationLogs {
 
 model AISum {
   id             String       @id @default(uuid())
-  flag           FeatureFlags @relation(fields: [flag_id], references: [id])
+  flag           FeatureFlags @relation(fields: [flag_id], references: [id], onDelete: Cascade)
   flag_id        String       @unique
   hash           String
   summary        String       @default("")

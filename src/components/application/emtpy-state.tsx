@@ -9,12 +9,12 @@ interface TEmptyState {
 
 const EmptyState = ({ icon, title, description, action }: TEmptyState) => {
     return (
-        <div className="w-full h-[200px] flex flex-col justify-center items-center bg-primary-foreground p-5 rounded-2xl">
+        <div className="w-full h-[300px] flex flex-col justify-center items-center bg-primary-foreground p-5 rounded-2xl">
             {icon}
             <p className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">
                 {title}
             </p>
-            <p className="leading-7 text-gray-400">{description}</p>
+            <p className="leading-7 text-gray-400 text-center">{description}</p>
             {action}
         </div>
     );
