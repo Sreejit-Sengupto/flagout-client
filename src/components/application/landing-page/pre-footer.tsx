@@ -13,7 +13,10 @@ const pacifico = Pacifico({
 
 const PreFooter = () => {
     return (
-        <main className="p-5 flex flex-col justify-center items-center gap-3 my-20">
+        <main
+            id="get-started"
+            className="p-5 flex flex-col justify-center items-center gap-3 my-20"
+        >
             <section className={`${pacifico.className}`}>
                 <p className="scroll-m-20 text-center text-6xl font-extrabold tracking-tight text-balance">
                     Feature Flags.

@@ -47,7 +47,7 @@ const Hero = () => {
                         </Link>
                     </Button>
                     <Button>
-                        <Link href={"/workplace"}>Get Started</Link>
+                        <Link href={"/login"}>Get Started</Link>
                     </Button>
                 </section>
             </section>

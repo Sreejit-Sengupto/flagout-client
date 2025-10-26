@@ -43,7 +43,7 @@ const Control = () => {
             </section>
             <section>
                 <Image
-                    src={"/dashboard.avif"}
+                    src={"/app_dashboard.png"}
                     alt="dashboard image"
                     width={700}
                     height={700}

@@ -34,39 +34,38 @@ const pixelSans = Pixelify_Sans({
 
 const components: { title: string; href: string; description: string }[] = [
     {
-        title: "Create Flag",
-        href: "/docs/flags/create",
-        description:
-            "Define a new feature flag with name, key, and default state.",
+        title: "Feature Flag Management",
+        href: "#features",
+        description: "Manage, monitor, and optimize feature rollouts.",
     },
     {
-        title: "Targeting Rules",
-        href: "/docs/flags/targeting",
-        description: "Control which users or environments see the feature.",
-    },
-    {
-        title: "Rollouts",
-        href: "/docs/flags/rollouts",
+        title: "Percentage-based Rollouts",
+        href: "#features",
         description:
             "Gradually release features to a percentage of your users.",
     },
     {
-        title: "Environments",
-        href: "/docs/flags/environments",
+        title: "Role-based Targeting",
+        href: "#features",
         description:
-            "Manage separate flag states for dev, staging, and production.",
+            "Target specific user segments like BETA, INTERNAL, or PREMIUM users.",
     },
     {
-        title: "SDK Integration",
-        href: "/docs/sdk",
+        title: "API Key Management",
+        href: "#features",
         description:
-            "Integrate the SDK into your app to check and toggle flags.",
+            "Generate and manage API keys to securely interact with the API.",
     },
     {
-        title: "Audit Logs",
-        href: "/docs/audit-logs",
+        title: "Recent Activity Tracking",
+        href: "#features",
+        description: "Keep track of all changes made to your feature flags.",
+    },
+    {
+        title: "Dashboard",
+        href: "#features",
         description:
-            "Track every change to feature flags for security and debugging.",
+            "An intuitive dashboard with key metrics and recent activity.",
     },
 ];
 
@@ -111,17 +110,20 @@ export default function Navbar() {
                                             </a>
                                         </NavigationMenuLink>
                                     </li>
-                                    <ListItem href="/docs" title="Introduction">
+                                    <ListItem
+                                        href="#what-is-flagout"
+                                        title="Introduction"
+                                    >
                                         Control features without redeploys.
                                     </ListItem>
                                     <ListItem
-                                        href="/docs/installation"
+                                        href="#get-started"
                                         title="Installation"
                                     >
                                         Install the SDK and connect quickly.
                                     </ListItem>
                                     <ListItem
-                                        href="/docs/using-flags"
+                                        href="/feature-flags"
                                         title="Using Feature Flags"
                                     >
                                         Add flags, roll out, and monitor.
@@ -152,7 +154,9 @@ export default function Navbar() {
                                 asChild
                                 className={navigationMenuTriggerStyle()}
                             >
-                                <Link href="/docs">Docs</Link>
+                                <Link href="https://github.com/Sreejit-Sengupto/flagout-client">
+                                    Docs
+                                </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
@@ -179,7 +183,7 @@ export default function Navbar() {
                         </Link>
                     </Button>
                     <Button>
-                        <Link href={"/login"}>Get Started</Link>
+                        <Link href={"/workplace"}>Workplace</Link>
                     </Button>
                 </section>
 
@@ -196,9 +200,14 @@ export default function Navbar() {
                         </DrawerHeader>
                         <section className="p-3 flex flex-col gap-4">
                             <Link href={"/workplace"}>Dashboard</Link>
-                            <Link href={"/home"}>Tools</Link>
-                            <Link href={"/home"}>Docs</Link>
-                            <Link href={"/home"}>Pricing</Link>
+                            <Link
+                                href={
+                                    "https://github.com/Sreejit-Sengupto/flagout-client"
+                                }
+                            >
+                                Docs
+                            </Link>
+                            <Link href={"/pricing"}>Pricing</Link>
                         </section>
                         <DrawerFooter>
                             <Button variant={"outline"}>
@@ -213,7 +222,7 @@ export default function Navbar() {
                                 </Link>
                             </Button>
                             <Button>
-                                <Link href={"/login"}>Get Started</Link>
+                                <Link href={"/workplace"}>Go to Workplace</Link>
                             </Button>
                         </DrawerFooter>
                     </DrawerContent>

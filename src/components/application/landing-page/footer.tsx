@@ -46,13 +46,13 @@ export const Footer = () => {
                                 Features
                             </a>
                             <a
-                                href="#pricing"
+                                href="/pricing"
                                 className="block text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 Pricing
                             </a>
                             <a
-                                href="#integrations"
+                                href="#get-started"
                                 className="block text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 Integrations
@@ -66,21 +66,21 @@ export const Footer = () => {
                         </h4>
                         <div className="space-y-2">
                             <a
-                                href="#docs"
+                                href="https://github.com/Sreejit-Sengupto/flagout-client"
                                 className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 <FileText className="w-4 h-4" />
                                 Documentation
                             </a>
                             <a
-                                href="#blog"
+                                href="#"
                                 className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 <BookOpen className="w-4 h-4" />
                                 Blog
                             </a>
                             <a
-                                href="#github"
+                                href="https://github.com/Sreejit-Sengupto/"
                                 className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 <Github className="w-4 h-4" />
@@ -95,19 +95,19 @@ export const Footer = () => {
                         </h4>
                         <div className="space-y-2">
                             <a
-                                href="#about"
+                                href="https://github.com/Sreejit-Sengupto/flagout-client"
                                 className="block text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 About
                             </a>
                             <a
-                                href="#contact"
+                                href="mailto:sreejitsengupta2003@gmail.com"
                                 className="block text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 Contact
                             </a>
                             <a
-                                href="#careers"
+                                href="#"
                                 className="block text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 Careers
@@ -119,17 +119,17 @@ export const Footer = () => {
                 <div className="border-t border-border pt-8">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <p className="text-text-muted text-sm">
-                            © 2024 FlagshipAI. All rights reserved.
+                            © 2025 FlagshipAI. All rights reserved.
                         </p>
                         <div className="flex items-center gap-6">
                             <a
-                                href="#privacy"
+                                href="#"
                                 className="text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 Privacy Policy
                             </a>
                             <a
-                                href="#terms"
+                                href="#"
                                 className="text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 Terms of Service
