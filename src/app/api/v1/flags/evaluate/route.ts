@@ -10,7 +10,10 @@ export async function GET(request: NextRequest) {
         const searchParams = request.nextUrl.searchParams;
         const keySlug = searchParams.get("slug");
         const userRole = searchParams.get("user_role") as TargetUser;
-        const userId = searchParams.get("user_id");
+        const userId =
+            searchParams.get("user_id") ??
+            request.headers.get("x-forwarded-for")?.split(",")[0] ??
+            "unknown";
         if (!keySlug || !userId) {
             throw new ApiError(400, "slug or userId is required");
         }

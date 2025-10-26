@@ -106,7 +106,7 @@ const PricingPage = () => {
                 </span>
             </Link>
             <div className="mt-60 lg:mt-80 w-full">
-                <h2 className="relative z-10 mx-auto max-w-4xl text-center text-2xl font-bold text-pink-700 text-4xl lg:text-7xl dark:text-pink-600">
+                <h2 className="relative z-10 mx-auto max-w-4xl text-center font-bold text-pink-700 text-4xl lg:text-7xl dark:text-pink-600">
                     Pricing
                 </h2>
                 <p className="relative z-10 mx-auto mt-4 max-w-xl text-center text-xl">
