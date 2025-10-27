@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         description: "Find the perfect plan for your team. Start for free and scale with us.",
         images: [
             {
-                url: "https://flagout.app/f0_logo.png",
+                url: "https://flag0ut.vercel.app/f0_logo.png",
                 width: 1200,
                 height: 630,
                 alt: "flag0ut Logo",

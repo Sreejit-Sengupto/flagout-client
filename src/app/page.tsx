@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         siteName: "flag0ut",
         images: [
             {
-                url: "https://asset.cloudinary.com/dagn8yyfi/0ce7ee5d3c73ef1298ae591e091d52a4",
+                url: "https://flag0ut.vercel.app/f0_logo.png",
                 width: 1200,
                 height: 630,
                 alt: "flag0ut Feature Flags Dashboard Preview",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
         description:
             "AI-powered feature flag service. Optimize rollouts, run experiments, and control features with ease.",
         images: [
-            "https://asset.cloudinary.com/dagn8yyfi/0ce7ee5d3c73ef1298ae591e091d52a4",
+            "https://flag0ut.vercel.app/f0_logo.png",
         ],
     },
 };

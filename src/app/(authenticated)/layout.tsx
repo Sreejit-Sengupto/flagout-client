@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         siteName: "flag0ut",
         images: [
             {
-                url: "https://flagout.app/f0_logo.png",
+                url: "https://flag0ut.vercel.app/f0_logo.png",
                 width: 1200,
                 height: 630,
                 alt: "flag0ut Logo",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
         title: "flag0ut | Smart Feature Flag Management",
         description:
             "AI-powered feature flag service. Optimize rollouts, run experiments, and control features with ease.",
-        images: ["https://flagout.app/f0_logo.png"],
+        images: ["https://flag0ut.vercel.app/f0_logo.png"],
     },
 };
 
