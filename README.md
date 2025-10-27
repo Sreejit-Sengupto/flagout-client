@@ -2,6 +2,8 @@
 
 flag0ut is a powerful feature flag management tool designed for modern development teams. It provides a centralized dashboard to manage, monitor, and optimize feature rollouts with ease. With features like percentage-based rollouts, role-based targeting, and AI-powered insights, flag0ut empowers developers to ship features fearlessly.
 
+[Learn how to use](#how-to)
+
 ## Live Demo
 
 You can check out the live demo of the application [here](https://flag0ut.vercel.app/).
@@ -16,6 +18,39 @@ You can check out the live demo of the application [here](https://flag0ut.vercel
 - **Recent Activity Tracking:** Keep track of all the changes made to your feature flags.
 - **Dashboard:** An intuitive dashboard with key metrics and recent activity.
 
+## How To?
+1. Sign up on [flag0ut](https://flag0ut.vercel.app) and generate an API Key
+2. Create a Feature Flag and copy the slug.
+3. Install the Typescritp SDK
+    ```bash
+    npm install flag0ut
+    ```
+4. Initialize the SDK with your API Key
+    ```typescript
+    import Flagout from flagout;
+
+    const flagoutClient = new Flagout({
+        apiKey: "YOUR_API_KEY"
+    })
+    ```
+5. Then, you can evaluate a feature flag using the `evaluate` method -
+    ```typescript
+    const { showFeature} = flagoutClient.evaluate("feature-flag-slug")
+    ```
+6. You can also specify a user role and ID to evaluate the flag for a specific user:
+    ```typescript
+    const { showFeature} = flagoutClient.evaluate("feature-flag-slug", "BETA", "user@123")
+    ```
+7. Conditionally render your component based on the `showFeature` value:
+    ```typescript
+    const App = () => {
+        return (
+            showFeature ? <FeaturePage/> : <EmptyState/>
+        )
+    }
+    export default App;
+    ```
+
 ## Tech Stack
 
 - **Framework:** [Next.js](https://nextjs.org/)
@@ -27,26 +62,126 @@ You can check out the live demo of the application [here](https://flag0ut.vercel
 - **API Communication:** [TanStack Query](https://tanstack.com/query/latest) & [Axios](https://axios-http.com/)
 - **Schema Validation:** [Zod](https://zod.dev/)
 
-## Project Structure
-
-The project follows a standard Next.js App Router structure.
+## Folder Structure
 
 ```
-/src
-├── app
-│   ├── (authenticated)   # Protected routes
-│   ├── (unauthenticated) # Public routes
-│   └── api               # API routes
-├── components
-│   ├── application       # Application-specific components
-│   └── ui                # Reusable UI components
-├── context             # React context providers
-└── lib                 # Libraries, helpers, and utilities
-    ├── axios           # Axios instance configuration
-    ├── tanstack        # TanStack Query configuration
-    │   ├── api         # API call definitions
-    │   └── hooks       # Custom hooks for API calls
-    └── zod-schemas     # Zod schemas for validation
+/
+├───.dockerignore
+├───.gitignore
+├───.prettierignore
+├───.prettierrc
+├───components.json
+├───compose.yaml
+├───Dockerfile
+├───eslint.config.mjs
+├───next.config.ts
+├───package-lock.json
+├───package.json
+├───postcss.config.mjs
+├───README.md
+├───tsconfig.json
+├───.git/...
+├───.github/
+│   └───workflows/
+│       ├───build_push_image.yaml
+│       └───format_lint.yaml
+├───.next/...
+├───node_modules/...
+├───prisma/
+│   ├───schema.prisma
+│   └───migrations/
+│       └───...
+├───public/
+│   ├───app_dashboard.png
+│   ├───dashboard.png
+│   ├───f0_logo.png
+│   ├───file.svg
+│   ├───globe.svg
+│   ├───next.svg
+│   ├───pixel_hero.gif
+│   ├───profile_fallback.png
+│   ├───vercel.svg
+│   └───window.svg
+└───src/
+    ├───middleware.ts
+    ├───app/
+    │   ├───favicon_1.ico
+    │   ├───favicon.ico
+    │   ├───globals.css
+    │   ├───layout.tsx
+    │   ├───page.tsx
+    │   ├───(authenticated)/
+    │   │   ├───layout.tsx
+    │   │   ├───feature-flags/
+    │   │   │   ├───page.tsx
+    │   │   │   └───[slug]/
+    │   │   ├───profile/
+    │   │   ├───recent-activities/
+    │   │   ├───settings/
+    │   │   └───workplace/
+    │   ├───(public)/
+    │   │   └───pricing/
+    │   ├───(unauthenticated)/
+    │   │   ├───layout.tsx
+    │   │   ├───login/
+    │   │   ├───oauth-callback/
+    │   │   ├───register/
+    │   │   └───reset-password/
+    │   ├───actions/
+    │   │   ├───ai-summary.action.ts
+    │   │   ├───flag.action.ts
+    │   │   ├───gen-ai.ts
+    │   │   └───revalidate-user.action.ts
+    │   └───api/
+    │       └───v1/
+    ├───components/
+    │   ├───application/
+    │   │   ├───emtpy-state.tsx
+    │   │   ├───logo.tsx
+    │   │   ├───pagination-bar.tsx
+    │   │   ├───sidebar.tsx
+    │   │   ├───authentication/
+    │   │   ├───charts/
+    │   │   ├───feature-flags/
+    │   │   ├───flag-metrics/
+    │   │   ├───landing-page/
+    │   │   ├───profile/
+    │   │   ├───recent-activities/
+    │   │   ├───settings/
+    │   │   └───workplace/
+    │   └───ui/
+    │       ├───...
+    ├───context/
+    │   ├───tanstack-provider.tsx
+    │   └───theme-provider.tsx
+    └───lib/
+        ├───api-error.ts
+        ├───constants.ts
+        ├───debounce.ts
+        ├───format-number.tsx
+        ├───prisma.ts
+        ├───time-date.tsx
+        ├───utils.ts
+        ├───api-utils/
+        │   └───user-bucket.ts
+        ├───axios/
+        │   └───index.ts
+        ├───gen-ai/
+        │   └───init.ts
+        ├───middleware/
+        │   └───secure-api.ts
+        ├───sonner/
+        │   └───index.ts
+        ├───tanstack/
+        │   ├───keys.ts
+        │   ├───query-client.ts
+        │   ├───api/
+        │   └───hooks/
+        └───zod-schemas/
+            ├───api-key.ts
+            ├───feature-flags.ts
+            ├───flag-env.ts
+            └───recent-activity.ts
 ```
 
 ## API Endpoints
@@ -110,6 +245,8 @@ To get a local copy up and running, follow these simple steps.
     ```bash
     npm run dev
     ```
+
+    This will start the development server with Turbopack. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Coding Patterns
 
