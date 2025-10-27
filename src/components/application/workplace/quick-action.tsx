@@ -18,20 +18,20 @@ const QuickAction = () => {
                 <div className="grid grid-cols-2 gap-1.5">
                     <div className="w-full">
                         <CreateFlagDialog>
-                            <Button className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer">
+                            <div className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer">
                                 <div className="flex flex-col justify-center items-start">
                                     <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-white">
                                         Create Flag
                                     </h3>
                                     <p className="leading-7 text-gray-400">
-                                        Add a new feature flag
+                                        Add a new flag
                                     </p>
                                 </div>
-                            </Button>
+                            </div>
                         </CreateFlagDialog>
                     </div>
                     <Link
-                        href={"#"}
+                        href={"https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md"}
                         className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tr-2xl hover:bg-gray-700 transition-all duration-300"
                     >
                         {/* <Plus /> */}
@@ -45,21 +45,21 @@ const QuickAction = () => {
                         </div>
                     </Link>
                     <Link
-                        href={"#"}
+                        href={"/settings"}
                         className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-bl-2xl hover:bg-gray-700 transition-all duration-300"
                     >
                         {/* <Plus /> */}
                         <div className="flex flex-col justify-center items-start">
                             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                                AI Insights
+                                API Key
                             </h3>
                             <p className="leading-7 text-gray-400">
-                                Get useful insights from AI.
+                                Get your API Key.
                             </p>
                         </div>
                     </Link>
                     <Link
-                        href={"#"}
+                        href={"https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md#how-to"}
                         className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-br-2xl hover:bg-gray-700 transition-all duration-300"
                     >
                         {/* <Plus /> */}

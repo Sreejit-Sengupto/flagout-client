@@ -29,7 +29,7 @@ const pixelSans = Pixelify_Sans({
 
 const links = [
     {
-        label: "Dashboard",
+        label: "Workplace",
         href: "/workplace",
         icon: (
             <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />

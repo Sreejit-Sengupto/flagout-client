@@ -87,7 +87,7 @@ export default function Navbar() {
                     <NavigationMenuList>
                         <NavigationMenuItem>
                             <NavigationMenuTrigger>
-                                Dashboard
+                                Workplace
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
@@ -117,7 +117,7 @@ export default function Navbar() {
                                         Control features without redeploys.
                                     </ListItem>
                                     <ListItem
-                                        href="#get-started"
+                                        href="https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md#how-to"
                                         title="Installation"
                                     >
                                         Install the SDK and connect quickly.
@@ -154,7 +154,7 @@ export default function Navbar() {
                                 asChild
                                 className={navigationMenuTriggerStyle()}
                             >
-                                <Link href="https://github.com/Sreejit-Sengupto/flagout-client">
+                                <Link href="https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md">
                                     Docs
                                 </Link>
                             </NavigationMenuLink>
@@ -199,10 +199,10 @@ export default function Navbar() {
                             </DrawerDescription>
                         </DrawerHeader>
                         <section className="p-3 flex flex-col gap-4">
-                            <Link href={"/workplace"}>Dashboard</Link>
+                            <Link href={"/workplace"}>Workplace</Link>
                             <Link
                                 href={
-                                    "https://github.com/Sreejit-Sengupto/flagout-client"
+                                    "https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md"
                                 }
                             >
                                 Docs

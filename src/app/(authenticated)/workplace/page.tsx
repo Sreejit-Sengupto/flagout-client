@@ -86,7 +86,7 @@ const Workplace = () => {
                         ))
                     )}
                     <Link
-                        href={"#"}
+                        href={"/feature-flags"}
                         className="flex justify-center items-center gap-1 mb-12 mt-2 text-blue-400"
                     >
                         <p>View all Feature Flags</p>

@@ -23,23 +23,21 @@ const code = [
     {
         language: "ts",
         filename: "flagout.ts",
-        code: `import { Flag } from 'flagout';
+        code: `
+import { Flag } from 'flagout';
 
+const [showFeature, setShowFeature] = useState(false);
+const flagoutClient = new Flagout('fl_xxxxxxxxx');
 
-const flagout = new Flagout('fl_xxxxxxxxx');
-
-
-(async function() {
-  const response = await flag.featureFlags.get({
-    name: 'ai_chat_bot',
-  });
-
-
-  if (error) {
-    return console.log(error);
-  }
-  console.log(data);
-})();`,
+const evalFlag = async() => {
+    try {
+        const { showFeature } = await flagoutClient.evaluate("dark-mode");
+        setShowFeature(showFeature);
+    } catch {
+        console.error(error)
+    }
+}
+`,
     },
 ];
 

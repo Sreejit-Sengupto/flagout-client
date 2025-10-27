@@ -19,7 +19,10 @@ You can check out the live demo of the application [here](https://flag0ut.vercel
 - **Dashboard:** An intuitive dashboard with key metrics and recent activity.
 
 ## How To?
-1. Sign up on [flag0ut](https://flag0ut.vercel.app) and generate an API Key
+1. Sign up on [flag0ut](https://flag0ut.vercel.app) and generate an API Key.
+2. Add your app’s URL under the appropriate environment field.
+For example, if you’re testing locally, use `http://localhost:3000/` in the `Development` field.
+This ensures that your feature flags can only be accessed from the specified origins and environments — preventing unauthorized usage elsewhere.
 2. Create a Feature Flag and copy the slug.
 3. Install the Typescritp SDK
     ```bash

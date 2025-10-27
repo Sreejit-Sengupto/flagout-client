@@ -52,7 +52,7 @@ export const Footer = () => {
                                 Pricing
                             </a>
                             <a
-                                href="#get-started"
+                                href="https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md#how-to"
                                 className="block text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 Integrations
@@ -66,7 +66,7 @@ export const Footer = () => {
                         </h4>
                         <div className="space-y-2">
                             <a
-                                href="https://github.com/Sreejit-Sengupto/flagout-client"
+                                href="https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md"
                                 className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors text-sm"
                             >
                                 <FileText className="w-4 h-4" />

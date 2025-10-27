@@ -121,7 +121,7 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
                             </h3>
                         </Link>
                         <Badge
-                            variant={flagEnabled ? "destructive" : "secondary"}
+                            variant={flagEnabled ? "secondary" : "destructive"}
                             className={
                                 flagEnabled
                                     ? "bg-green-500 text-white transition-all duration-300 lg:hidden"
