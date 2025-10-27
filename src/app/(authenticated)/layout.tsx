@@ -17,10 +17,10 @@ export const metadata: Metadata = {
         siteName: "flag0ut",
         images: [
             {
-                url: "https://asset.cloudinary.com/dagn8yyfi/0ce7ee5d3c73ef1298ae591e091d52a4",
+                url: "https://flagout.app/f0_logo.png",
                 width: 1200,
                 height: 630,
-                alt: "flag0ut Feature Flags Dashboard Preview",
+                alt: "flag0ut Logo",
             },
         ],
         locale: "en_US",
@@ -31,9 +31,7 @@ export const metadata: Metadata = {
         title: "flag0ut | Smart Feature Flag Management",
         description:
             "AI-powered feature flag service. Optimize rollouts, run experiments, and control features with ease.",
-        images: [
-            "https://asset.cloudinary.com/dagn8yyfi/0ce7ee5d3c73ef1298ae591e091d52a4",
-        ],
+        images: ["https://flagout.app/f0_logo.png"],
     },
 };
 

@@ -14,10 +14,10 @@ export const metadata: Metadata = {
         description: "Find the perfect plan for your team. Start for free and scale with us.",
         images: [
             {
-                url: "https://asset.cloudinary.com/dagn8yyfi/0ce7ee5d3c73ef1298ae591e091d52a4",
+                url: "https://flagout.app/f0_logo.png",
                 width: 1200,
                 height: 630,
-                alt: "flag0ut App Dashboard",
+                alt: "flag0ut Logo",
             },
         ],
     },
