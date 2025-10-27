@@ -4,6 +4,24 @@ import { Flag } from "lucide-react";
 import { Pixelify_Sans } from "next/font/google";
 import Link from "next/link";
 import React from "react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Pricing | flag0ut",
+    description: "Find the perfect plan for your team. Start for free and scale with us.",
+    openGraph: {
+        title: "Pricing | flag0ut",
+        description: "Find the perfect plan for your team. Start for free and scale with us.",
+        images: [
+            {
+                url: "https://asset.cloudinary.com/dagn8yyfi/0ce7ee5d3c73ef1298ae591e091d52a4",
+                width: 1200,
+                height: 630,
+                alt: "flag0ut App Dashboard",
+            },
+        ],
+    },
+};
 
 const pixelSans = Pixelify_Sans({
     variable: "--font-pixel-sans",

@@ -50,7 +50,7 @@ export const metadata: Metadata = {
         siteName: "flag0ut",
         images: [
             {
-                url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPkNlFrZjnzTypfcUOGKkD8PLatlyiIgqOGg&s",
+                url: "https://asset.cloudinary.com/dagn8yyfi/0ce7ee5d3c73ef1298ae591e091d52a4",
                 width: 1200,
                 height: 630,
                 alt: "flag0ut Feature Flags Dashboard Preview",
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
         description:
             "AI-powered feature flag service. Optimize rollouts, run experiments, and control features with ease.",
         images: [
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPkNlFrZjnzTypfcUOGKkD8PLatlyiIgqOGg&s",
+            "https://asset.cloudinary.com/dagn8yyfi/0ce7ee5d3c73ef1298ae591e091d52a4",
         ],
     },
     alternates: {
