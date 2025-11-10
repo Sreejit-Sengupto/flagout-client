@@ -3,7 +3,7 @@ import FlagList from "@/components/application/feature-flags/flag-list";
 import CreateFlagDialog from "@/components/application/workplace/create-flag-dialog";
 import { Button } from "@/components/ui/button";
 import { useGetAllProjects } from "@/lib/tanstack/hooks/projects";
-import React from "react";
+import React, { Suspense } from "react";
 
 const FeatureFlags = () => {
     const { data: projects, isLoading: projectsLoading } = useGetAllProjects();
@@ -28,10 +28,12 @@ const FeatureFlags = () => {
                 </CreateFlagDialog>
             </div>
             <div className="w-full flex flex-col justify-center items-center">
-                <FlagList
-                    projects={projects}
-                    projectsLoading={projectsLoading}
-                />
+                <Suspense fallback={<div>Loading feature flags...</div>}>
+                    <FlagList
+                        projects={projects}
+                        projectsLoading={projectsLoading}
+                    />
+                </Suspense>
             </div>
         </div>
     );
