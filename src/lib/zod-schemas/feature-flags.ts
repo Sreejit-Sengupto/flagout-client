@@ -10,10 +10,12 @@ export const ZFeatureFlags = z.object({
         .max(100, "Must be less than equal to 100"),
     environment: z.enum(["DEVELOPMENT", "PRODUCTION", "STAGING"]),
     targeting: z.enum(["ALL", "INTERNAL", "BETA", "PREMIUM"]).array(),
+    projectId: z.string(),
 });
 export type TFeatureFlags = z.infer<typeof ZFeatureFlags>;
 
 export const ZGetAllFeatureFlags = z.object({
+    projectId: z.string(),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(30).default(10),
 });

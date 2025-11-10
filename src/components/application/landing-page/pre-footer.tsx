@@ -37,7 +37,9 @@ const PreFooter = () => {
                 </Button>
                 <Button variant={"link"}>
                     <Link
-                        href={"https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md"}
+                        href={
+                            "https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md"
+                        }
                         className="flex justify-center items-center gap-1"
                     >
                         Documentation

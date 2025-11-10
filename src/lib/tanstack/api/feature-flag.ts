@@ -24,6 +24,7 @@ export const getFeatureFlags = async (input: TGetAllFeatureFlags) => {
                 params: {
                     limit: input.limit,
                     page: input.page,
+                    project_id: input.projectId,
                 },
             });
         return response.data;
@@ -41,6 +42,7 @@ export const createFeatureFlag = async (input: TFeatureFlags) => {
         environment: input.environment,
         rolloutPercentage: input.rolloutPercentage,
         targeting: input.targeting,
+        projectId: input.projectId,
     };
     try {
         const response =

@@ -3,7 +3,11 @@ import Link from "next/link";
 import React from "react";
 import CreateFlagDialog from "./create-flag-dialog";
 
-const QuickAction = () => {
+const QuickAction = ({
+    availableProjects,
+}: {
+    availableProjects: { id: string; name: string }[];
+}) => {
     return (
         <Card>
             <CardHeader>
@@ -16,7 +20,7 @@ const QuickAction = () => {
             <CardContent>
                 <div className="grid grid-cols-2 gap-1.5">
                     <div className="w-full">
-                        <CreateFlagDialog>
+                        <CreateFlagDialog availableProjects={availableProjects}>
                             <div className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tl-2xl hover:bg-gray-700 transition-all duration-300 cursor-pointer">
                                 <div className="flex flex-col justify-center items-start">
                                     <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-white">
@@ -30,7 +34,9 @@ const QuickAction = () => {
                         </CreateFlagDialog>
                     </div>
                     <Link
-                        href={"https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md"}
+                        href={
+                            "https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md"
+                        }
                         className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-tr-2xl hover:bg-gray-700 transition-all duration-300"
                     >
                         {/* <Plus /> */}
@@ -58,7 +64,9 @@ const QuickAction = () => {
                         </div>
                     </Link>
                     <Link
-                        href={"https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md#how-to"}
+                        href={
+                            "https://github.com/Sreejit-Sengupto/flagout-client/blob/main/README.md#how-to"
+                        }
                         className="flex justify-start items-center h-full gap-2 bg-gray-800 px-4 py-2 rounded-br-2xl hover:bg-gray-700 transition-all duration-300"
                     >
                         {/* <Plus /> */}

@@ -8,10 +8,12 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
     title: "Pricing | flag0ut",
-    description: "Find the perfect plan for your team. Start for free and scale with us.",
+    description:
+        "Find the perfect plan for your team. Start for free and scale with us.",
     openGraph: {
         title: "Pricing | flag0ut",
-        description: "Find the perfect plan for your team. Start for free and scale with us.",
+        description:
+            "Find the perfect plan for your team. Start for free and scale with us.",
         images: [
             {
                 url: "https://flag0ut.vercel.app/f0_logo.png",

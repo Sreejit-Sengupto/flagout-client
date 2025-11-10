@@ -42,6 +42,8 @@ model FeatureFlags {
   recent_activities  RecentActivity[]
   evaluationLogs     FlagEvaluationLogs[]
   ai_summary         AISum?
+  project            Projects             @relation(fields: [projectId], references: [id])
+  projectId          String
 }
 
 model RecentActivity {
@@ -92,4 +94,13 @@ model AISum {
   hash           String
   summary        String       @default("")
   recommendation String       @default("")
+}
+
+model Projects {
+  id            String         @id @default(uuid())
+  name          String
+  flags         FeatureFlags[]
+  clerk_user_id String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
 }

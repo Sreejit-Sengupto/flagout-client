@@ -26,16 +26,38 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { showSuccess } from "@/lib/sonner";
+import { showError, showSuccess } from "@/lib/sonner";
 import { useUserFlagMutations } from "@/lib/tanstack/hooks/feature-flag";
+import { useCreateProjectMutation } from "@/lib/tanstack/hooks/projects";
 import { queryKeys } from "@/lib/tanstack/keys";
 import { cn } from "@/lib/utils";
 import { DialogTrigger } from "@radix-ui/react-dialog";
-import { Brain, Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import React, { Dispatch, ReactNode, SetStateAction, useState } from "react";
+import {
+    Brain,
+    Check,
+    ChevronsUpDown,
+    Loader2,
+    PlusCircle,
+} from "lucide-react";
+import React, {
+    Dispatch,
+    ReactNode,
+    SetStateAction,
+    useEffect,
+    useState,
+} from "react";
 
 interface TFlagProps {
     id?: string;
@@ -47,6 +69,14 @@ interface TFlagProps {
     env?: string;
     flagName?: string;
     flagDescription?: string;
+    project?: {
+        id: string;
+        name: string;
+    };
+    availableProjects?: {
+        id: string;
+        name: string;
+    }[];
 }
 
 const UpsertFlagDialog = ({
@@ -59,6 +89,8 @@ const UpsertFlagDialog = ({
     flagName,
     rollout,
     targetUsers,
+    project,
+    availableProjects,
 }: TFlagProps) => {
     const checkboxItems = [
         {
@@ -113,6 +145,7 @@ const UpsertFlagDialog = ({
         description: flagDescription ?? "",
     });
     const [suggestionLoading, setSuggestionLoading] = useState<boolean>(false);
+    const [selectedProject, setSelectedProject] = useState("");
 
     // mutations
     const { createFlag, updateFlag } = useUserFlagMutations();
@@ -128,6 +161,12 @@ const UpsertFlagDialog = ({
     // rolloutPercentage: sliderValue[0],
     // targeting: targets,
     // });
+
+    useEffect(() => {
+        const projectFromLclStr =
+            localStorage.getItem("selected-project") ?? "";
+        setSelectedProject(projectFromLclStr);
+    }, []);
 
     const handleUpdateFlag = async () => {
         try {
@@ -176,6 +215,7 @@ const UpsertFlagDialog = ({
                     | "STAGING",
                 rolloutPercentage: sliderValue[0],
                 targeting: targets,
+                projectId: project ? project.id : selectedProject,
             });
         } catch (error) {
             console.error(error);
@@ -238,6 +278,57 @@ const UpsertFlagDialog = ({
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-10">
+                        <div className="grid gap-3">
+                            <Label htmlFor="name">Select a project</Label>
+                            {project && (
+                                <Select value={project.id}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a project" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Projects</SelectLabel>
+                                            <SelectItem value={project.id}>
+                                                {project.name}
+                                            </SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                            {availableProjects && (
+                                <Select
+                                    value={selectedProject}
+                                    onValueChange={setSelectedProject}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a project" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>
+                                                Available Projects
+                                            </SelectLabel>
+                                            {availableProjects.map((item) => (
+                                                <SelectItem
+                                                    key={item.id}
+                                                    value={item.id}
+                                                >
+                                                    {item.name}
+                                                </SelectItem>
+                                            ))}
+                                            {/* <SelectItem value={project.id}>{project.name}</SelectItem> */}
+                                        </SelectGroup>
+                                        <SelectGroup className="flex justify-between items-center">
+                                            <SelectLabel>
+                                                Create new Project
+                                            </SelectLabel>
+                                            <CreateProjectDialog />
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        </div>
+
                         <div className="grid gap-3">
                             <Label htmlFor="name">Name</Label>
                             <Input
@@ -325,10 +416,10 @@ const UpsertFlagDialog = ({
                                     >
                                         {environment.value
                                             ? enviroments.find(
-                                                  (envs) =>
-                                                      envs.value ===
-                                                      environment.value,
-                                              )?.label
+                                                (envs) =>
+                                                    envs.value ===
+                                                    environment.value,
+                                            )?.label
                                             : "Select enviroment"}
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
@@ -351,13 +442,13 @@ const UpsertFlagDialog = ({
                                                                 currentValue ===
                                                                     environment.value
                                                                     ? {
-                                                                          open: false,
-                                                                          value: "",
-                                                                      }
+                                                                        open: false,
+                                                                        value: "",
+                                                                    }
                                                                     : {
-                                                                          open: false,
-                                                                          value: currentValue,
-                                                                      },
+                                                                        open: false,
+                                                                        value: currentValue,
+                                                                    },
                                                             );
                                                         }}
                                                     >
@@ -413,10 +504,10 @@ const UpsertFlagDialog = ({
                                         <Checkbox
                                             checked={targets.includes(
                                                 item.value as
-                                                    | "ALL"
-                                                    | "INTERNAL"
-                                                    | "BETA"
-                                                    | "PREMIUM",
+                                                | "ALL"
+                                                | "INTERNAL"
+                                                | "BETA"
+                                                | "PREMIUM",
                                             )}
                                             onCheckedChange={(checked) => {
                                                 const val = item.value as
@@ -431,20 +522,20 @@ const UpsertFlagDialog = ({
                                                         (prev) =>
                                                             checked
                                                                 ? [
-                                                                      ...prev.filter(
-                                                                          (
-                                                                              item,
-                                                                          ) =>
-                                                                              item !==
-                                                                              "ALL",
-                                                                      ),
-                                                                      val,
-                                                                  ] // add if checked
+                                                                    ...prev.filter(
+                                                                        (
+                                                                            item,
+                                                                        ) =>
+                                                                            item !==
+                                                                            "ALL",
+                                                                    ),
+                                                                    val,
+                                                                ] // add if checked
                                                                 : prev.filter(
-                                                                      (t) =>
-                                                                          t !==
-                                                                          val,
-                                                                  ), // remove if unchecked
+                                                                    (t) =>
+                                                                        t !==
+                                                                        val,
+                                                                ), // remove if unchecked
                                                     );
                                                 }
                                             }}
@@ -492,6 +583,73 @@ const UpsertFlagDialog = ({
                                 )}
                             </Button>
                         )}
+                    </DialogFooter>
+                </DialogContent>
+            </form>
+        </Dialog>
+    );
+};
+
+const CreateProjectDialog = () => {
+    const [name, setName] = useState("");
+    const [open, setOpen] = useState(false);
+
+    const createProjectMutation = useCreateProjectMutation();
+
+    const handleCreateProject = async () => {
+        try {
+            const response = await createProjectMutation.mutateAsync(name);
+            if (response) {
+                showSuccess("Project created");
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                showError(error.message);
+            }
+        } finally {
+            setOpen(false);
+        }
+    };
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <form>
+                <DialogTrigger asChild>
+                    <Button variant="ghost" className="cursor-pointer">
+                        <PlusCircle />
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Create Project</DialogTitle>
+                        <DialogDescription>
+                            Create a new project here.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4">
+                        <div className="grid gap-3">
+                            <Label htmlFor="name-1">Name</Label>
+                            <Input
+                                id="name-1"
+                                name="name"
+                                value={name}
+                                onChange={(e) => {
+                                    e.preventDefault();
+                                    setName(e.target.value);
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit" onClick={handleCreateProject}>
+                            {createProjectMutation.isPending ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                "Create"
+                            )}
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </form>

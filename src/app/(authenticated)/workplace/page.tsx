@@ -7,8 +7,18 @@ import RecentActivity from "@/components/application/workplace/recent-activity";
 import FeatureFlagsSkeleton from "@/components/application/workplace/skeletons/feature-flags-skeleton";
 import MetricCardSkeleton from "@/components/application/workplace/skeletons/metric-cards-skeleton";
 import RecentActivitySkeleton from "@/components/application/workplace/skeletons/recent-activity-skeleton";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { useUserFlagQuery } from "@/lib/tanstack/hooks/feature-flag";
 import { useGetMetrics } from "@/lib/tanstack/hooks/metrics";
+import { useGetAllProjects } from "@/lib/tanstack/hooks/projects";
 import { useRecentActivity } from "@/lib/tanstack/hooks/recent-activity";
 import {
     Flag,
@@ -17,12 +27,34 @@ import {
     ChartColumn,
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Workplace = () => {
-    const { data: featureFlags, isLoading } = useUserFlagQuery(5, 1);
+    const { data: projects, isLoading: projectsLoading } = useGetAllProjects();
     const { data: recentActivity, isLoading: activityLoading } =
         useRecentActivity(5, 1);
     const { data: metrics, isLoading: metricsLoading } = useGetMetrics();
+
+    const [selectedProject, setSelectedProject] = useState("");
+    const { data: featureFlags, isLoading } = useUserFlagQuery(
+        5,
+        1,
+        selectedProject,
+    );
+
+    useEffect(() => {
+        const projectInLocalStr = localStorage.getItem("selected-project");
+        if (projectInLocalStr) {
+            setSelectedProject(projectInLocalStr);
+        } else {
+            setSelectedProject(projects?.data[0].id ?? "");
+        }
+    }, [projects]);
+
+    const handleProjectSelect = (val: string) => {
+        setSelectedProject(val);
+        localStorage.setItem("selected-project", val);
+    };
 
     return (
         <div className="flex h-full w-full flex-1 flex-col lg:grid grid-cols-5 gap-2 rounded-tl-2xl bg-background p-5 overflow-auto">
@@ -52,9 +84,43 @@ const Workplace = () => {
                 </div>
 
                 <div className="w-full flex flex-col justify-center items-center">
-                    <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance mr-auto mb-3 lg:mt-9">
-                        Feature Flags
-                    </h1>
+                    <div className="w-full flex justify-between items-center mb-3 lg:mt-9">
+                        <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance mr-auto">
+                            Feature Flags
+                        </h1>
+                        {projectsLoading ? (
+                            <p>Loading...</p>
+                        ) : (
+                            <Select
+                                value={selectedProject}
+                                onValueChange={(val) =>
+                                    handleProjectSelect(val)
+                                }
+                            >
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Select a fruit" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Projects</SelectLabel>
+                                        {projects?.data.map((item) => (
+                                            <SelectItem
+                                                key={item.id}
+                                                value={item.id}
+                                            >
+                                                {item.name}
+                                            </SelectItem>
+                                        ))}
+                                        {/* <SelectItem value="apple">Apple</SelectItem>
+                                    <SelectItem value="banana">Banana</SelectItem>
+                                    <SelectItem value="blueberry">Blueberry</SelectItem>
+                                    <SelectItem value="grapes">Grapes</SelectItem>
+                                    <SelectItem value="pineapple">Pineapple</SelectItem> */}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        )}
+                    </div>
                     {isLoading ? (
                         <FeatureFlagsSkeleton />
                     ) : featureFlags && featureFlags.data.length === 0 ? (
@@ -121,7 +187,14 @@ const Workplace = () => {
 
             <div className="col-span-2 flex flex-col justify-start items-center gap-4">
                 <div className="w-full">
-                    <QuickAction />
+                    <QuickAction
+                        availableProjects={
+                            projects?.data.map((item) => ({
+                                id: item.id,
+                                name: item.name,
+                            })) ?? []
+                        }
+                    />
                 </div>
 
                 <div className="w-full rounded-2xl bg-primary-foreground p-5 border">

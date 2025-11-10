@@ -5,4 +5,5 @@ export const queryKeys = {
     apiKey: ["api-key"] as const,
     envUrl: ["env-url"] as const,
     metrics: ["metrics"] as const,
+    projects: ["projects"] as const,
 };
