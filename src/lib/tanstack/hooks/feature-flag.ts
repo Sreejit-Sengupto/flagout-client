@@ -13,10 +13,15 @@ import {
 } from "@/lib/zod-schemas/feature-flags";
 import useTanstackClient from "../query-client";
 
-export const useUserFlagQuery = (limit: number, page: number) => {
+export const useUserFlagQuery = (
+    limit: number,
+    page: number,
+    projectId: string,
+) => {
     return useQuery({
-        queryKey: [...queryKeys.userFlags, limit, page],
-        queryFn: () => getFeatureFlags({ limit, page }),
+        queryKey: [...queryKeys.userFlags, limit, page, projectId],
+        queryFn: () => getFeatureFlags({ limit, page, projectId }),
+        enabled: !!projectId,
         placeholderData: keepPreviousData,
         staleTime: 60 * 1000,
     });

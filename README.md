@@ -19,16 +19,18 @@ You can check out the live demo of the application [here](https://flag0ut.vercel
 - **Dashboard:** An intuitive dashboard with key metrics and recent activity.
 
 ## How To?
+
 1. Sign up on [flag0ut](https://flag0ut.vercel.app) and generate an API Key.
 2. Add your app’s URL under the appropriate environment field.
-For example, if you’re testing locally, use `http://localhost:3000/` in the `Development` field.
-This ensures that your feature flags can only be accessed from the specified origins and environments — preventing unauthorized usage elsewhere.
-2. Create a Feature Flag and copy the slug.
-3. Install the Typescritp SDK
+   For example, if you’re testing locally, use `http://localhost:3000/` in the `Development` field.
+   This ensures that your feature flags can only be accessed from the specified origins and environments — preventing unauthorized usage elsewhere.
+3. Create a Feature Flag and copy the slug.
+4. Install the Typescritp SDK
     ```bash
     npm install flag0ut
     ```
-4. Initialize the SDK with your API Key
+5. Initialize the SDK with your API Key
+
     ```typescript
     import Flagout from flagout;
 
@@ -36,15 +38,20 @@ This ensures that your feature flags can only be accessed from the specified ori
         apiKey: "YOUR_API_KEY"
     })
     ```
-5. Then, you can evaluate a feature flag using the `evaluate` method -
+
+6. Then, you can evaluate a feature flag using the `evaluate` method -
     ```typescript
-    const { showFeature} = flagoutClient.evaluate("feature-flag-slug")
+    const { showFeature } = flagoutClient.evaluate("feature-flag-slug");
     ```
-6. You can also specify a user role and ID to evaluate the flag for a specific user:
+7. You can also specify a user role and ID to evaluate the flag for a specific user:
     ```typescript
-    const { showFeature} = flagoutClient.evaluate("feature-flag-slug", "BETA", "user@123")
+    const { showFeature } = flagoutClient.evaluate(
+        "feature-flag-slug",
+        "BETA",
+        "user@123",
+    );
     ```
-7. Conditionally render your component based on the `showFeature` value:
+8. Conditionally render your component based on the `showFeature` value:
     ```typescript
     const App = () => {
         return (

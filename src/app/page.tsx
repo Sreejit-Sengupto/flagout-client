@@ -34,9 +34,7 @@ export const metadata: Metadata = {
         title: "flag0ut | Smart Feature Flag Management",
         description:
             "AI-powered feature flag service. Optimize rollouts, run experiments, and control features with ease.",
-        images: [
-            "https://flag0ut.vercel.app/f0_logo.png",
-        ],
+        images: ["https://flag0ut.vercel.app/f0_logo.png"],
     },
 };
 

@@ -60,6 +60,7 @@ export async function POST(request: Request) {
                 environment: data.environment,
                 rollout_percentage: data.rolloutPercentage,
                 targeting: data.targeting as TargetUser[],
+                projectId: data.projectId,
             },
         });
 
@@ -110,8 +111,13 @@ export async function GET(request: NextRequest) {
         const searchParams = request.nextUrl.searchParams;
         const page = Number(searchParams.get("page"));
         const limit = Number(searchParams.get("limit"));
+        const projectId = searchParams.get("project_id");
 
-        const result = ZGetAllFeatureFlags.safeParse({ page, limit });
+        const result = ZGetAllFeatureFlags.safeParse({
+            page,
+            limit,
+            projectId,
+        });
         if (!result.success) {
             throw new ApiError(
                 400,
@@ -135,9 +141,17 @@ export async function GET(request: NextRequest) {
             skip,
             take: data.limit,
             where: {
-                clerk_user_id: {
-                    equals: user.id,
-                },
+                // clerk_user_id: {
+                //     equals: user.id,
+                // },
+                AND: [
+                    {
+                        clerk_user_id: {
+                            equals: user.id,
+                        },
+                        projectId: data.projectId,
+                    },
+                ],
             },
             include: {
                 _count: {
