@@ -47,7 +47,7 @@ const Workplace = () => {
         if (projectInLocalStr) {
             setSelectedProject(projectInLocalStr);
         } else {
-            setSelectedProject(projects?.data[0].id ?? "");
+            setSelectedProject(projects?.data[0]?.id ?? "");
         }
     }, [projects]);
 
@@ -98,11 +98,15 @@ const Workplace = () => {
                                 }
                             >
                                 <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Select a fruit" />
+                                    <SelectValue placeholder="Select a project" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectLabel>Projects</SelectLabel>
+                                        <SelectLabel>
+                                            {projects?.data.length === 0
+                                                ? "No projects. Start creating flags"
+                                                : "Projects"}
+                                        </SelectLabel>
                                         {projects?.data.map((item) => (
                                             <SelectItem
                                                 key={item.id}

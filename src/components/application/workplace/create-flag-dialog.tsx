@@ -416,10 +416,10 @@ const UpsertFlagDialog = ({
                                     >
                                         {environment.value
                                             ? enviroments.find(
-                                                (envs) =>
-                                                    envs.value ===
-                                                    environment.value,
-                                            )?.label
+                                                  (envs) =>
+                                                      envs.value ===
+                                                      environment.value,
+                                              )?.label
                                             : "Select enviroment"}
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
@@ -442,13 +442,13 @@ const UpsertFlagDialog = ({
                                                                 currentValue ===
                                                                     environment.value
                                                                     ? {
-                                                                        open: false,
-                                                                        value: "",
-                                                                    }
+                                                                          open: false,
+                                                                          value: "",
+                                                                      }
                                                                     : {
-                                                                        open: false,
-                                                                        value: currentValue,
-                                                                    },
+                                                                          open: false,
+                                                                          value: currentValue,
+                                                                      },
                                                             );
                                                         }}
                                                     >
@@ -504,10 +504,10 @@ const UpsertFlagDialog = ({
                                         <Checkbox
                                             checked={targets.includes(
                                                 item.value as
-                                                | "ALL"
-                                                | "INTERNAL"
-                                                | "BETA"
-                                                | "PREMIUM",
+                                                    | "ALL"
+                                                    | "INTERNAL"
+                                                    | "BETA"
+                                                    | "PREMIUM",
                                             )}
                                             onCheckedChange={(checked) => {
                                                 const val = item.value as
@@ -522,20 +522,20 @@ const UpsertFlagDialog = ({
                                                         (prev) =>
                                                             checked
                                                                 ? [
-                                                                    ...prev.filter(
-                                                                        (
-                                                                            item,
-                                                                        ) =>
-                                                                            item !==
-                                                                            "ALL",
-                                                                    ),
-                                                                    val,
-                                                                ] // add if checked
+                                                                      ...prev.filter(
+                                                                          (
+                                                                              item,
+                                                                          ) =>
+                                                                              item !==
+                                                                              "ALL",
+                                                                      ),
+                                                                      val,
+                                                                  ] // add if checked
                                                                 : prev.filter(
-                                                                    (t) =>
-                                                                        t !==
-                                                                        val,
-                                                                ), // remove if unchecked
+                                                                      (t) =>
+                                                                          t !==
+                                                                          val,
+                                                                  ), // remove if unchecked
                                                     );
                                                 }
                                             }}

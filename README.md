@@ -1,4 +1,5 @@
 # flag0ut - Smart Feature Flag Management
+
 ![app-image](https://ik.imagekit.io/8oxweuidq/Screenshot%20from%202025-09-14%2014-10-10.png?updatedAt=1762834043299)
 
 flag0ut is a powerful feature flag management tool designed for modern development teams. It provides a centralized dashboard to manage, monitor, and optimize feature rollouts with ease. With features like percentage-based rollouts, role-based targeting, and AI-powered insights, flag0ut empowers developers to ship features fearlessly.
