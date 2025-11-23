@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const ZFeatureFlags = z.object({
     name: z.string().max(25, "Should be less than 25 characters"),
-    description: z.string().max(125, "Should be less than 125 characters"),
+    description: z.string().max(500, "Should be less than 500 characters"),
     enabled: z.boolean(),
     rolloutPercentage: z
         .number()

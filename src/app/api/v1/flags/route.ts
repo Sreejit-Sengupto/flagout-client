@@ -37,15 +37,29 @@ export async function POST(request: Request) {
 
         const flagExists = await prisma.featureFlags.findFirst({
             where: {
-                slug: {
-                    equals: slug,
-                },
+                AND: [
+                    {
+                        slug: {
+                            equals: slug,
+                        },
+                    },
+                    {
+                        clerk_user_id: {
+                            equals: user.id,
+                        },
+                    },
+                    {
+                        projectId: {
+                            equals: data.projectId,
+                        },
+                    },
+                ],
             },
         });
         if (flagExists) {
             throw new ApiError(
                 400,
-                "A flag with this name already exists",
+                "A flag with this name already exists in this project",
                 "Please create a flag with different name",
             );
         }

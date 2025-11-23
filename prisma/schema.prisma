@@ -31,7 +31,7 @@ model FeatureFlags {
   id                 String               @id @default(uuid())
   clerk_user_id      String
   name               String
-  slug               String               @unique
+  slug               String
   description        String
   enabled            Boolean              @default(false)
   rollout_percentage Int                  @default(0)
@@ -42,7 +42,7 @@ model FeatureFlags {
   recent_activities  RecentActivity[]
   evaluationLogs     FlagEvaluationLogs[]
   ai_summary         AISum?
-  project            Projects             @relation(fields: [projectId], references: [id])
+  project            Projects             @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId          String
 }
 
