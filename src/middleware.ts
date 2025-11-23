@@ -10,6 +10,7 @@ const isPublicRoute = createRouteMatcher([
     "/oauth-callback(.*)",
     "/api/v1/flags/evaluate",
     "/api/v1/flags/allowed-origins",
+    "/api/v1/clerk/webhook(.*)",
 ]);
 
 const isApiRoute = createRouteMatcher(["/api/v1(.*)"]);

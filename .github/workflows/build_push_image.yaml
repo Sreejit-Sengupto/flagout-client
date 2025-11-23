@@ -6,7 +6,39 @@ on:
             - main
         
 jobs:
+    run_migrations:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Check for migration changes
+              uses: dorny/paths-filter@v3
+              id: changes
+              with:
+                filters: |
+                  migrations:
+                    - 'prisma/migrations/**'
+
+            - name: Setup Node
+              if: steps.changes.outputs.migrations == 'true'
+              uses: actions/setup-node@v4
+              with:
+                node-version: '20'
+
+            - name: Install Dependencies
+              if: steps.changes.outputs.migrations == 'true'
+              run: npm install
+
+            - name: Run Migrations
+              if: steps.changes.outputs.migrations == 'true'
+              run: npx prisma migrate deploy
+              env:
+                DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+
     build_and_push:
+        needs: run_migrations
         runs-on: ubuntu-latest
         steps:
             - name: Login to Docker

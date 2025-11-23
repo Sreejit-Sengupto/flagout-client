@@ -89,7 +89,10 @@ const AppSidebar = ({ children }: { children: ReactNode }) => {
                                     href: "#",
                                     icon: (
                                         <Image
-                                            src={user?.imageUrl ?? ""}
+                                            src={
+                                                user?.imageUrl ??
+                                                "/avatar-placeholder.svg"
+                                            }
                                             className="h-7 w-7 shrink-0 rounded-full"
                                             width={50}
                                             height={50}
