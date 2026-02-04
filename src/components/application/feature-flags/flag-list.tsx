@@ -1,5 +1,6 @@
 "use client";
 import { useUserFlagQuery } from "@/lib/tanstack/hooks/feature-flag";
+import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import FeatureFlagCard from "../workplace/feature-flag-card";
@@ -54,7 +55,7 @@ const FlagList = ({
             <div className="w-full flex justify-end items-center my-3">
                 <p className="mr-2">Project: </p>
                 {projectsLoading ? (
-                    <p>Loading...</p>
+                    <Loader2 className="animate-spin" />
                 ) : (
                     <Select
                         value={selectedProject}

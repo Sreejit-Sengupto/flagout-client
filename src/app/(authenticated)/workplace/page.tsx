@@ -25,6 +25,7 @@ import {
     ArrowRight,
     ChartBarIncreasing,
     ChartColumn,
+    Loader2,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -85,11 +86,11 @@ const Workplace = () => {
 
                 <div className="w-full flex flex-col justify-center items-center">
                     <div className="w-full flex justify-between items-center mb-3 lg:mt-9">
-                        <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance mr-auto">
+                        <h1 className="scroll-m-20 text-center text-2xl md:text-4xl font-extrabold tracking-tight text-balance mr-auto">
                             Feature Flags
                         </h1>
                         {projectsLoading ? (
-                            <p>Loading...</p>
+                            <Loader2 className="animate-spin" />
                         ) : (
                             <Select
                                 value={selectedProject}

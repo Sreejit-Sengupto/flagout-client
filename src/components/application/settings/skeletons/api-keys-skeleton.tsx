@@ -8,11 +8,14 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Loader2 } from "lucide-react";
 
 const APIKeysSkeleton = () => {
     return (
         <Table>
-            <TableCaption>Loading API Keys...</TableCaption>
+            <TableCaption className="flex items-center justify-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" /> Loading API Keys...
+            </TableCaption>
             <TableHeader>
                 <TableRow>
                     <TableHead>

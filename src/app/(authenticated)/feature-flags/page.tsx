@@ -3,6 +3,7 @@ import FlagList from "@/components/application/feature-flags/flag-list";
 import CreateFlagDialog from "@/components/application/workplace/create-flag-dialog";
 import { Button } from "@/components/ui/button";
 import { useGetAllProjects } from "@/lib/tanstack/hooks/projects";
+import { Loader2 } from "lucide-react";
 import React, { Suspense } from "react";
 
 const FeatureFlags = () => {
@@ -28,7 +29,7 @@ const FeatureFlags = () => {
                 </CreateFlagDialog>
             </div>
             <div className="w-full flex flex-col justify-center items-center">
-                <Suspense fallback={<div>Loading feature flags...</div>}>
+                <Suspense fallback={<Loader2 className="animate-spin" />}>
                     <FlagList
                         projects={projects}
                         projectsLoading={projectsLoading}
