@@ -16,11 +16,7 @@ const propmtTemplate = PromptTemplate.fromTemplate(
 
 export const generateDescription = async (flagName: string) => {
     const ai = initModel({});
-    try {
-        const propmt = await propmtTemplate.invoke({ flagName });
-        const response = await ai.invoke(propmt);
-        return response.content;
-    } catch (error) {
-        throw error;
-    }
+    const propmt = await propmtTemplate.invoke({ flagName });
+    const response = await ai.invoke(propmt);
+    return response.content;
 };

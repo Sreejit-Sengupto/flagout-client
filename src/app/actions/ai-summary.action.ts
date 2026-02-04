@@ -65,86 +65,78 @@ const getSummAndRec = async ({
     const formatInstructions =
         "Respond with a valid JSON object, containing two fields: 'summary' and 'recommendation'. Both string fields, follow the format strictly DO NOT come up with your own. 'summary' is string and 'recommendation' is string as well and NOT AN array";
 
-    try {
-        const partialPrompt = await promptTemplate.partial({
-            format_instructions: formatInstructions,
-        });
+    const partialPrompt = await promptTemplate.partial({
+        format_instructions: formatInstructions,
+    });
 
-        const parser = new JsonOutputParser<TOutput>();
-        const ai = initModel({});
-        const chain = partialPrompt.pipe(ai).pipe(parser);
+    const parser = new JsonOutputParser<TOutput>();
+    const ai = initModel({});
+    const chain = partialPrompt.pipe(ai).pipe(parser);
 
-        const response = await chain.invoke({
-            metrics: serializedData,
-        });
+    const response = await chain.invoke({
+        metrics: serializedData,
+    });
 
-        console.log("response", response);
+    console.log("response", response);
 
-        console.log("Summary:", response.summary);
-        console.log("Recommendation:", response.recommendation);
+    console.log("Summary:", response.summary);
+    console.log("Recommendation:", response.recommendation);
 
-        return {
-            summary: response.summary,
-            recommendation: response.recommendation,
-        };
-    } catch (error) {
-        throw error;
-    }
+    return {
+        summary: response.summary,
+        recommendation: response.recommendation,
+    };
 };
 
 export const generateAISuggestions = async (flagId: string, data: TInput[]) => {
-    try {
-        // first check DB
-        // if entry doesn't exists add it
-        // if percentage change is less than 10% don't generate recommendations, return from DB
-        const existingSuggestion = await prisma.aISum.findFirst({
+    // first check DB
+    // if entry doesn't exists add it
+    // if percentage change is less than 10% don't generate recommendations, return from DB
+    const existingSuggestion = await prisma.aISum.findFirst({
+        where: {
+            flag_id: flagId,
+        },
+    });
+
+    const serializedData = serializeInput(data);
+    const stringifiedData = JSON.stringify(serializedData);
+    const hashedData = crypto
+        .createHash("sha256")
+        .update(stringifiedData)
+        .digest("hex");
+    if (!existingSuggestion) {
+        console.log("I am in");
+
+        const suggestions = await getSummAndRec({ serializedData });
+        const addedSuggestion = await prisma.aISum.create({
+            data: {
+                flag_id: flagId,
+                hash: hashedData,
+                summary: suggestions.summary,
+                recommendation: suggestions.recommendation,
+            },
+        });
+        return addedSuggestion;
+    }
+
+    // const shouldRegenerate = serializedData.map((item) => (item.percentage_change_last_two_months > 10 || item.percentage_change_last_two_months < -10) && item.percentage_change_last_two_months !== prev).includes(true);
+    const shouldRegenerate = hashedData !== existingSuggestion.hash;
+    if (shouldRegenerate) {
+        console.log("Regenerating...");
+
+        const suggestions = await getSummAndRec({ serializedData });
+        const updatedSuggestion = await prisma.aISum.update({
+            data: {
+                summary: suggestions.summary,
+                recommendation: suggestions.recommendation,
+                hash: hashedData,
+            },
             where: {
                 flag_id: flagId,
             },
         });
-
-        const serializedData = serializeInput(data);
-        const stringifiedData = JSON.stringify(serializedData);
-        const hashedData = crypto
-            .createHash("sha256")
-            .update(stringifiedData)
-            .digest("hex");
-        if (!existingSuggestion) {
-            console.log("I am in");
-
-            const suggestions = await getSummAndRec({ serializedData });
-            const addedSuggestion = await prisma.aISum.create({
-                data: {
-                    flag_id: flagId,
-                    hash: hashedData,
-                    summary: suggestions.summary,
-                    recommendation: suggestions.recommendation,
-                },
-            });
-            return addedSuggestion;
-        }
-
-        // const shouldRegenerate = serializedData.map((item) => (item.percentage_change_last_two_months > 10 || item.percentage_change_last_two_months < -10) && item.percentage_change_last_two_months !== prev).includes(true);
-        const shouldRegenerate = hashedData !== existingSuggestion.hash;
-        if (shouldRegenerate) {
-            console.log("Regenerating...");
-
-            const suggestions = await getSummAndRec({ serializedData });
-            const updatedSuggestion = await prisma.aISum.update({
-                data: {
-                    summary: suggestions.summary,
-                    recommendation: suggestions.recommendation,
-                    hash: hashedData,
-                },
-                where: {
-                    flag_id: flagId,
-                },
-            });
-            return updatedSuggestion;
-        } else {
-            return existingSuggestion;
-        }
-    } catch (error) {
-        throw error;
+        return updatedSuggestion;
+    } else {
+        return existingSuggestion;
     }
 };

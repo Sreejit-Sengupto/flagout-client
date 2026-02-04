@@ -16,21 +16,17 @@ export type TResponseGetAllFeatureFlags = TApiResponse<
     })[]
 >;
 export const getFeatureFlags = async (input: TGetAllFeatureFlags) => {
-    try {
-        const response =
-            await axiosInstance.request<TResponseGetAllFeatureFlags>({
-                url: "/flags",
-                method: "GET",
-                params: {
-                    limit: input.limit,
-                    page: input.page,
-                    project_id: input.projectId,
-                },
-            });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response =
+        await axiosInstance.request<TResponseGetAllFeatureFlags>({
+            url: "/flags",
+            method: "GET",
+            params: {
+                limit: input.limit,
+                page: input.page,
+                project_id: input.projectId,
+            },
+        });
+    return response.data;
 };
 
 export type TResponseCreateFeatureFlag = TApiResponse<FeatureFlags>;
@@ -44,20 +40,16 @@ export const createFeatureFlag = async (input: TFeatureFlags) => {
         targeting: input.targeting,
         projectId: input.projectId,
     };
-    try {
-        const response =
-            await axiosInstance.request<TResponseCreateFeatureFlag>({
-                url: "/flags",
-                method: "POST",
-                data: reqData,
-            });
-        if (response.status === 201) {
-            showSuccess(response.data.message);
-        }
-        return response.data;
-    } catch (error) {
-        throw error;
+    const response =
+        await axiosInstance.request<TResponseCreateFeatureFlag>({
+            url: "/flags",
+            method: "POST",
+            data: reqData,
+        });
+    if (response.status === 201) {
+        showSuccess(response.data.message);
     }
+    return response.data;
 };
 
 export type TResponseUpdateFeatureFlag = TApiResponse<FeatureFlags>;
@@ -65,17 +57,13 @@ export const updateFeatureFlag = async (
     id: string,
     data: TUpdateFeatureFlags,
 ) => {
-    try {
-        const response =
-            await axiosInstance.request<TResponseUpdateFeatureFlag>({
-                url: `/flags/${id}`,
-                method: "PATCH",
-                data,
-            });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response =
+        await axiosInstance.request<TResponseUpdateFeatureFlag>({
+            url: `/flags/${id}`,
+            method: "PATCH",
+            data,
+        });
+    return response.data;
 };
 
 export type TResponseDeleteFeatureFlag = TApiResponse<{
@@ -84,16 +72,12 @@ export type TResponseDeleteFeatureFlag = TApiResponse<{
     name: string;
 }>;
 export const deleteFeatureFlag = async (id: string) => {
-    try {
-        const response =
-            await axiosInstance.request<TResponseDeleteFeatureFlag>({
-                url: `/flags/${id}`,
-                method: "DELETE",
-            });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response =
+        await axiosInstance.request<TResponseDeleteFeatureFlag>({
+            url: `/flags/${id}`,
+            method: "DELETE",
+        });
+    return response.data;
 };
 
 export type TResponseGetFlagMetric = TApiResponse<
@@ -108,14 +92,10 @@ export type TResponseGetFlagMetric = TApiResponse<
     }[]
 >;
 export const getFlagMetric = async (slug: string) => {
-    try {
-        const flagId = await getFlagIdFromSlug(slug);
-        const response = await axiosInstance.request<TResponseGetFlagMetric>({
-            url: `/flags/metrics/${flagId}`,
-            method: "GET",
-        });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const flagId = await getFlagIdFromSlug(slug);
+    const response = await axiosInstance.request<TResponseGetFlagMetric>({
+        url: `/flags/metrics/${flagId}`,
+        method: "GET",
+    });
+    return response.data;
 };

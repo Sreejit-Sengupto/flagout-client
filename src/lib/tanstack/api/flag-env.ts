@@ -5,15 +5,11 @@ import { FlagEnviroment } from "@prisma/client";
 
 type ZGetEnvUrlsResponse = TApiResponse<FlagEnviroment>;
 export const getEnvURLs = async () => {
-    try {
-        const response = await axiosInstance.request<ZGetEnvUrlsResponse>({
-            url: "/environment",
-            method: "GET",
-        });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await axiosInstance.request<ZGetEnvUrlsResponse>({
+        url: "/environment",
+        method: "GET",
+    });
+    return response.data;
 };
 
 type ZAddEnvUrlsResponse = TApiResponse<FlagEnviroment>;
@@ -24,18 +20,14 @@ export const addEnvUrls = async (input: TAddFlagEnv) => {
         stage: input.stage,
     };
 
-    try {
-        const response = await axiosInstance.request<ZAddEnvUrlsResponse>({
-            url: "/environment",
-            method: "POST",
-            data,
-        });
+    const response = await axiosInstance.request<ZAddEnvUrlsResponse>({
+        url: "/environment",
+        method: "POST",
+        data,
+    });
 
-        if (response.data.status === true) {
-            showSuccess(response.data.message);
-        }
-        return response.data;
-    } catch (error) {
-        throw error;
+    if (response.data.status === true) {
+        showSuccess(response.data.message);
     }
+    return response.data;
 };

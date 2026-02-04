@@ -21,13 +21,9 @@ interface TMetrics {
 
 export type TResponseMetrics = TApiResponse<TMetrics>;
 export const getMetrics = async () => {
-    try {
-        const response = await axiosInstance.request<TResponseMetrics>({
-            url: "/flags/metrics",
-            method: "GET",
-        });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await axiosInstance.request<TResponseMetrics>({
+        url: "/flags/metrics",
+        method: "GET",
+    });
+    return response.data;
 };
