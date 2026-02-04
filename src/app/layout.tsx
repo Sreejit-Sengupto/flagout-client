@@ -29,31 +29,37 @@ const bungee = Bungee({
 });
 
 export const metadata: Metadata = {
-    title: "flag0ut | Smart Feature Flag Management",
+    title: "flagout (flag0ut) | Smart Feature Flag Management Platform",
     description:
-        "Manage, monitor, and optimize feature rollouts with flagout. AI-powered insights, percentage rollouts, role-based targeting, and a centralized admin panel.",
+        "flagout (flag0ut) - Manage, monitor, and optimize feature rollouts. AI-powered feature flag insights, percentage rollouts, role-based targeting, and a centralized admin panel for modern development teams.",
     keywords: [
+        "flagout",
+        "flag0ut",
+        "flagout feature flags",
         "feature flags",
         "feature toggle",
+        "feature flag management",
+        "feature flag platform",
         "A/B testing",
         "progressive rollout",
         "AI feature management",
         "experimentation platform",
         "release management",
-        "flagout",
+        "feature rollout",
+        "feature toggle service",
     ],
     openGraph: {
-        title: "flag0ut | Smart Feature Flag Management",
+        title: "flagout (flag0ut) | Smart Feature Flag Management",
         description:
-            "Control your releases with flagout — feature flags, AI-powered rollout insights, and a centralized dashboard.",
+            "flagout - Control your releases with AI-powered feature flags, rollout insights, and a centralized dashboard for modern teams.",
         url: "https://flag0ut.vercel.app",
-        siteName: "flag0ut",
+        siteName: "flagout",
         images: [
             {
                 url: "https://flag0ut.vercel.app/f0_logo.png",
                 width: 1200,
                 height: 630,
-                alt: "flag0ut Logo",
+                alt: "flagout (flag0ut) - Feature Flag Management Platform",
             },
         ],
         locale: "en_US",
@@ -61,9 +67,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "flag0ut | Smart Feature Flag Management",
+        title: "flagout (flag0ut) | Smart Feature Flag Management",
         description:
-            "AI-powered feature flag service. Optimize rollouts, run experiments, and control features with ease.",
+            "flagout - AI-powered feature flag service. Optimize rollouts, run experiments, and control features with ease.",
         images: ["https://flag0ut.vercel.app/f0_logo.png"],
     },
     alternates: {

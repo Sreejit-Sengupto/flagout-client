@@ -3,24 +3,24 @@ import AppSidebar from "@/components/application/sidebar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Dashboard | flag0ut",
-    description: "Manage your feature flags and experiments.",
+    title: "Dashboard | flagout (flag0ut)",
+    description: "Manage your feature flags and experiments with flagout.",
     robots: {
         index: false,
         follow: false,
     },
     openGraph: {
-        title: "flag0ut | Smart Feature Flag Management",
+        title: "flagout (flag0ut) | Smart Feature Flag Management",
         description:
-            "Control your releases with flagout — feature flags, AI-powered rollout insights, and a centralized dashboard.",
+            "flagout - Control your releases with AI-powered feature flags, rollout insights, and a centralized dashboard.",
         url: "https://flag0ut.vercel.app",
-        siteName: "flag0ut",
+        siteName: "flagout",
         images: [
             {
                 url: "https://flag0ut.vercel.app/f0_logo.png",
                 width: 1200,
                 height: 630,
-                alt: "flag0ut Logo",
+                alt: "flagout (flag0ut) - Feature Flag Management Platform",
             },
         ],
         locale: "en_US",
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "flag0ut | Smart Feature Flag Management",
+        title: "flagout (flag0ut) | Smart Feature Flag Management",
         description:
-            "AI-powered feature flag service. Optimize rollouts, run experiments, and control features with ease.",
+            "flagout - AI-powered feature flag service. Optimize rollouts, run experiments, and control features with ease.",
         images: ["https://flag0ut.vercel.app/f0_logo.png"],
     },
 };

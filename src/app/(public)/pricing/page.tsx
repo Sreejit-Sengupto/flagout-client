@@ -7,21 +7,32 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Pricing | flag0ut",
+    title: "Pricing | flagout (flag0ut) - Feature Flag Management",
     description:
-        "Find the perfect plan for your team. Start for free and scale with us.",
+        "flagout pricing - Find the perfect plan for your team. Start for free and scale with us. AI-powered feature flag management for modern development teams.",
     openGraph: {
-        title: "Pricing | flag0ut",
+        title: "Pricing | flagout (flag0ut)",
         description:
-            "Find the perfect plan for your team. Start for free and scale with us.",
+            "flagout pricing - Find the perfect plan for your team. Start for free and scale with us.",
+        url: "https://flag0ut.vercel.app/pricing",
+        siteName: "flagout",
         images: [
             {
                 url: "https://flag0ut.vercel.app/f0_logo.png",
                 width: 1200,
                 height: 630,
-                alt: "flag0ut Logo",
+                alt: "flagout (flag0ut) - Feature Flag Management Pricing",
             },
         ],
+        locale: "en_US",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Pricing | flagout (flag0ut)",
+        description:
+            "flagout pricing - Find the perfect plan for your team. Start for free and scale with us.",
+        images: ["https://flag0ut.vercel.app/f0_logo.png"],
     },
 };
 
