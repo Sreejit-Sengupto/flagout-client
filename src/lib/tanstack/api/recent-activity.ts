@@ -11,18 +11,14 @@ interface TDashActivity extends RecentActivity {
 }
 export type TResponseDashboardActivity = TApiResponse<TDashActivity[]>;
 export const getDashboardActivity = async (input: TGetRecentActivities) => {
-    try {
-        const response =
-            await axiosInstance.request<TResponseDashboardActivity>({
-                url: "/recent-activity",
-                method: "GET",
-                params: {
-                    limit: input.limit,
-                    page: input.page,
-                },
-            });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response =
+        await axiosInstance.request<TResponseDashboardActivity>({
+            url: "/recent-activity",
+            method: "GET",
+            params: {
+                limit: input.limit,
+                page: input.page,
+            },
+        });
+    return response.data;
 };

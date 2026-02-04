@@ -5,20 +5,16 @@ import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
 import { NextRequest } from "next/server";
 
 const getFlagCallsMetrics = async (flagId: string, start: Date, end: Date) => {
-    try {
-        const flagCalls = (
-            await prisma.flagEvaluationLogs.findMany({
-                where: {
-                    flag_id: flagId,
-                    createdAt: { gte: start, lte: end },
-                },
-            })
-        ).length;
+    const flagCalls = (
+        await prisma.flagEvaluationLogs.findMany({
+            where: {
+                flag_id: flagId,
+                createdAt: { gte: start, lte: end },
+            },
+        })
+    ).length;
 
-        return flagCalls;
-    } catch (error) {
-        throw error;
-    }
+    return flagCalls;
 };
 
 const getUsersTargetedMetrics = async (
@@ -26,22 +22,18 @@ const getUsersTargetedMetrics = async (
     start: Date,
     end: Date,
 ) => {
-    try {
-        const usersTargeted = (
-            await prisma.flagEvaluationLogs.groupBy({
-                by: ["visited_user_id"],
-                where: {
-                    flag_id: flagId,
-                    createdAt: { gte: start, lte: end },
-                },
-                _count: true,
-            })
-        ).length;
+    const usersTargeted = (
+        await prisma.flagEvaluationLogs.groupBy({
+            by: ["visited_user_id"],
+            where: {
+                flag_id: flagId,
+                createdAt: { gte: start, lte: end },
+            },
+            _count: true,
+        })
+    ).length;
 
-        return usersTargeted;
-    } catch (error) {
-        throw error;
-    }
+    return usersTargeted;
 };
 
 const featureVisible = async (
@@ -50,49 +42,41 @@ const featureVisible = async (
     start: Date,
     end: Date,
 ) => {
-    try {
-        // const totalUsersPrms = getUsersTargetedMetrics(clerkUserId, start, end);
+    // const totalUsersPrms = getUsersTargetedMetrics(clerkUserId, start, end);
 
-        const enabledUsers = await prisma.flagEvaluationLogs.groupBy({
-            by: ["visited_user_id"],
-            where: {
-                flag_id: flagId,
-                enabled: true,
-                createdAt: { gte: start, lte: end },
-            },
-            _count: true,
-        });
+    const enabledUsers = await prisma.flagEvaluationLogs.groupBy({
+        by: ["visited_user_id"],
+        where: {
+            flag_id: flagId,
+            enabled: true,
+            createdAt: { gte: start, lte: end },
+        },
+        _count: true,
+    });
 
-        // const [totalUsers, enabledUsers] = await Promise.all([
-        //     totalUsersPrms,
-        //     enabledUsersPrms,
-        // ]);
+    // const [totalUsers, enabledUsers] = await Promise.all([
+    //     totalUsersPrms,
+    //     enabledUsersPrms,
+    // ]);
 
-        return totalUsers === 0 ? 0 : enabledUsers.length / totalUsers;
-    } catch (error) {
-        throw error;
-    }
+    return totalUsers === 0 ? 0 : enabledUsers.length / totalUsers;
 };
 
 const getActiveFlags = async (clerkUserId: string, start: Date, end: Date) => {
-    try {
-        const activeFlags = (
-            await prisma.featureFlags.findMany({
-                where: {
-                    clerk_user_id: {
-                        equals: clerkUserId,
-                    },
-                    enabled: {
-                        equals: true,
-                    },
-                    createdAt: { gte: start, lte: end },
+    const activeFlags = (
+        await prisma.featureFlags.findMany({
+            where: {
+                clerk_user_id: {
+                    equals: clerkUserId,
                 },
-            })
-        ).length;
-        return activeFlags;
-    } catch (error) {
-        throw error;
-    }
+                enabled: {
+                    equals: true,
+                },
+                createdAt: { gte: start, lte: end },
+            },
+        })
+    ).length;
+    return activeFlags;
 };
 
 export async function GET(

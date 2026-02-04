@@ -34,11 +34,7 @@ export function AllKeys() {
     };
 
     const handleRevokeAPIKey = async (id: string, revoke: boolean) => {
-        try {
-            await revokeKey.mutateAsync({ id, revoke });
-        } catch (error) {
-            throw error;
-        }
+        await revokeKey.mutateAsync({ id, revoke });
     };
 
     return isLoading ? (
@@ -113,7 +109,7 @@ export function AllKeys() {
                                 }
                             >
                                 {deleteKey.variables === key.id &&
-                                deleteKey.isPending ? (
+                                    deleteKey.isPending ? (
                                     <Loader2 className="animate-spin" />
                                 ) : (
                                     "Delete"

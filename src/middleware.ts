@@ -11,6 +11,7 @@ const isPublicRoute = createRouteMatcher([
     "/api/v1/flags/evaluate",
     "/api/v1/flags/allowed-origins",
     "/api/v1/clerk/webhook(.*)",
+    "/api/auth/oauth(.*)",
 ]);
 
 const isApiRoute = createRouteMatcher(["/api/v1(.*)"]);
