@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { ZGetRecentActivities } from "@/lib/zod-schemas/recent-activity";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
+import { cache } from "@/lib/redis";
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
@@ -58,6 +59,24 @@ export async function GET(request: NextRequest) {
             },
         });
 
+        const cacheKey = `activities:${user.id}:${data.page}:${data.limit}`;
+        const cachedActivities = await cache.get<{
+            recentActivities: unknown[];
+            meta: { page: number; totalPages: number; totalItems: number };
+        }>(cacheKey);
+
+        if (cachedActivities) {
+            return Response.json(
+                {
+                    success: true,
+                    message: "Fetched recent activities (cached)",
+                    data: cachedActivities.recentActivities,
+                    meta: cachedActivities.meta,
+                },
+                { status: 200, headers: { "X-Cache": "HIT" } },
+            );
+        }
+
         const [recentActivities, count] = await Promise.all([
             activities,
             totalActivities,
@@ -71,6 +90,8 @@ export async function GET(request: NextRequest) {
                 totalItems: count,
             },
         };
+
+        await cache.set(cacheKey, responseData, 60); // 1 minute cache
 
         return Response.json(
             {

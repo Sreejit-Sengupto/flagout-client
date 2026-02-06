@@ -109,7 +109,7 @@ export function AllKeys() {
                                 }
                             >
                                 {deleteKey.variables === key.id &&
-                                    deleteKey.isPending ? (
+                                deleteKey.isPending ? (
                                     <Loader2 className="animate-spin" />
                                 ) : (
                                     "Delete"

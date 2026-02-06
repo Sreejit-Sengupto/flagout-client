@@ -6,11 +6,7 @@ import nextPlugin from "@next/eslint-plugin-next";
 
 export default [
     {
-        ignores: [
-            "src/components/ui/**/*",
-            ".next/**/*",
-            "node_modules/**/*",
-        ],
+        ignores: ["src/components/ui/**/*", ".next/**/*", "node_modules/**/*"],
     },
     eslint.configs.recommended,
     ...tseslint.configs.recommended,

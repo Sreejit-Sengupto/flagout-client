@@ -2,6 +2,7 @@ import { ApiError } from "@/lib/api-error";
 import prisma from "@/lib/prisma";
 import { ZCreateProject } from "@/lib/zod-schemas/projects";
 import { currentUser } from "@clerk/nextjs/server";
+import { cache } from "@/lib/redis";
 
 export async function GET() {
     try {
@@ -14,6 +15,20 @@ export async function GET() {
             );
         }
 
+        const cacheKey = `projects:${user.id}`;
+        const cachedProjects = await cache.get(cacheKey);
+
+        if (cachedProjects) {
+            return Response.json(
+                {
+                    success: true,
+                    message: "Projects fetched (cached)",
+                    data: cachedProjects,
+                },
+                { status: 200, headers: { "X-Cache": "HIT" } },
+            );
+        }
+
         const userProjects = await prisma.projects.findMany({
             where: {
                 clerk_user_id: {
@@ -21,6 +36,8 @@ export async function GET() {
                 },
             },
         });
+
+        await cache.set(cacheKey, userProjects, 3600); // Cache for 1 hour
 
         return Response.json(
             {
@@ -83,6 +100,8 @@ export async function POST(req: Request) {
                 name: data.name,
             },
         });
+
+        await cache.del(`projects:${user.id}`);
 
         return Response.json(
             {

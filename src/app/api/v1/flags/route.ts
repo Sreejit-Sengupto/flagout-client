@@ -7,6 +7,7 @@ import {
 } from "@/lib/zod-schemas/feature-flags";
 import { currentUser } from "@clerk/nextjs/server";
 import type { NextRequest } from "next/server";
+import { cache } from "@/lib/redis";
 
 export async function POST(request: Request) {
     try {
@@ -85,6 +86,8 @@ export async function POST(request: Request) {
                 clerk_user_id: user.id,
             },
         });
+
+        await cache.invalidate(`flags:${data.projectId}:*`);
 
         return Response.json(
             {
@@ -183,6 +186,24 @@ export async function GET(request: NextRequest) {
             },
         });
 
+        const cacheKey = `flags:${data.projectId}:${data.page}:${data.limit}`;
+        const cachedData = await cache.get<{
+            flags: unknown[];
+            meta: { page: number; totalItems: number; totalPages: number };
+        }>(cacheKey);
+
+        if (cachedData) {
+            return Response.json(
+                {
+                    success: true,
+                    message: "Fetched feature flags (cached)",
+                    data: cachedData.flags,
+                    meta: cachedData.meta,
+                },
+                { status: 200, headers: { "X-Cache": "HIT" } },
+            );
+        }
+
         const [flags, count] = await Promise.all([featureFlags, totalFlags]);
 
         const responseData = {
@@ -193,6 +214,8 @@ export async function GET(request: NextRequest) {
                 totalPages: Math.ceil(count / data.limit),
             },
         };
+
+        await cache.set(cacheKey, responseData, 300); // 5 minutes cache
 
         return Response.json(
             {

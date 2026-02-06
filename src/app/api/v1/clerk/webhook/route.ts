@@ -4,19 +4,19 @@ import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { Webhook } from "svix";
 
-const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || ``
+const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || ``;
 
 async function validateRequest(request: NextRequest) {
-    const payloadString = await request.text()
-    const headerPayload = await headers()
+    const payloadString = await request.text();
+    const headerPayload = await headers();
 
     const svixHeaders = {
-        'svix-id': headerPayload.get('svix-id')!,
-        'svix-timestamp': headerPayload.get('svix-timestamp')!,
-        'svix-signature': headerPayload.get('svix-signature')!,
-    }
-    const wh = new Webhook(webhookSecret)
-    const event = wh.verify(payloadString, svixHeaders) as WebhookEvent
+        "svix-id": headerPayload.get("svix-id")!,
+        "svix-timestamp": headerPayload.get("svix-timestamp")!,
+        "svix-signature": headerPayload.get("svix-signature")!,
+    };
+    const wh = new Webhook(webhookSecret);
+    const event = wh.verify(payloadString, svixHeaders) as WebhookEvent;
     return event;
 }
 

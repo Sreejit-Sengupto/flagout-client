@@ -27,14 +27,12 @@ export async function GET(req: NextRequest) {
     // CSRF validation
     if (!state || state !== storedState) {
         return NextResponse.redirect(
-            new URL("/login?error=invalid_state", req.url)
+            new URL("/login?error=invalid_state", req.url),
         );
     }
 
     if (!code) {
-        return NextResponse.redirect(
-            new URL("/login?error=no_code", req.url)
-        );
+        return NextResponse.redirect(new URL("/login?error=no_code", req.url));
     }
 
     try {
@@ -43,24 +41,29 @@ export async function GET(req: NextRequest) {
         const redirectUri = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/auth/oauth/google/callback`;
 
         // Exchange code for access token
-        const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({
-                code,
-                client_id: clientId,
-                client_secret: clientSecret,
-                redirect_uri: redirectUri,
-                grant_type: "authorization_code",
-            }),
-        });
+        const tokenResponse = await fetch(
+            "https://oauth2.googleapis.com/token",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                    code,
+                    client_id: clientId,
+                    client_secret: clientSecret,
+                    redirect_uri: redirectUri,
+                    grant_type: "authorization_code",
+                }),
+            },
+        );
 
         const tokenData = await tokenResponse.json();
 
         if (!tokenData.access_token) {
             console.error("Token exchange failed:", tokenData);
             return NextResponse.redirect(
-                new URL("/login?error=token_exchange_failed", req.url)
+                new URL("/login?error=token_exchange_failed", req.url),
             );
         }
 
@@ -69,14 +72,14 @@ export async function GET(req: NextRequest) {
             "https://www.googleapis.com/oauth2/v2/userinfo",
             {
                 headers: { Authorization: `Bearer ${tokenData.access_token}` },
-            }
+            },
         );
 
         const googleUser: GoogleUserInfo = await userResponse.json();
 
         if (!googleUser.email) {
             return NextResponse.redirect(
-                new URL("/login?error=no_email", req.url)
+                new URL("/login?error=no_email", req.url),
             );
         }
 
@@ -111,7 +114,10 @@ export async function GET(req: NextRequest) {
 
         // Clear the state cookie
         const response = NextResponse.redirect(
-            new URL(`/oauth-callback?__clerk_ticket=${signInToken.token}`, req.url)
+            new URL(
+                `/oauth-callback?__clerk_ticket=${signInToken.token}`,
+                req.url,
+            ),
         );
         response.cookies.delete("oauth_state");
 
@@ -119,7 +125,7 @@ export async function GET(req: NextRequest) {
     } catch (error) {
         console.error("Google OAuth error:", error);
         return NextResponse.redirect(
-            new URL("/login?error=oauth_failed", req.url)
+            new URL("/login?error=oauth_failed", req.url),
         );
     }
 }
