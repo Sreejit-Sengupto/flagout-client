@@ -10,7 +10,7 @@ export async function GET() {
     if (!clientId) {
         return NextResponse.json(
             { error: "GitHub OAuth not configured" },
-            { status: 500 }
+            { status: 500 },
         );
     }
 

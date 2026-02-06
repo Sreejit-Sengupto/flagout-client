@@ -16,16 +16,15 @@ export type TResponseGetAllFeatureFlags = TApiResponse<
     })[]
 >;
 export const getFeatureFlags = async (input: TGetAllFeatureFlags) => {
-    const response =
-        await axiosInstance.request<TResponseGetAllFeatureFlags>({
-            url: "/flags",
-            method: "GET",
-            params: {
-                limit: input.limit,
-                page: input.page,
-                project_id: input.projectId,
-            },
-        });
+    const response = await axiosInstance.request<TResponseGetAllFeatureFlags>({
+        url: "/flags",
+        method: "GET",
+        params: {
+            limit: input.limit,
+            page: input.page,
+            project_id: input.projectId,
+        },
+    });
     return response.data;
 };
 
@@ -40,12 +39,11 @@ export const createFeatureFlag = async (input: TFeatureFlags) => {
         targeting: input.targeting,
         projectId: input.projectId,
     };
-    const response =
-        await axiosInstance.request<TResponseCreateFeatureFlag>({
-            url: "/flags",
-            method: "POST",
-            data: reqData,
-        });
+    const response = await axiosInstance.request<TResponseCreateFeatureFlag>({
+        url: "/flags",
+        method: "POST",
+        data: reqData,
+    });
     if (response.status === 201) {
         showSuccess(response.data.message);
     }
@@ -57,12 +55,11 @@ export const updateFeatureFlag = async (
     id: string,
     data: TUpdateFeatureFlags,
 ) => {
-    const response =
-        await axiosInstance.request<TResponseUpdateFeatureFlag>({
-            url: `/flags/${id}`,
-            method: "PATCH",
-            data,
-        });
+    const response = await axiosInstance.request<TResponseUpdateFeatureFlag>({
+        url: `/flags/${id}`,
+        method: "PATCH",
+        data,
+    });
     return response.data;
 };
 
@@ -72,11 +69,10 @@ export type TResponseDeleteFeatureFlag = TApiResponse<{
     name: string;
 }>;
 export const deleteFeatureFlag = async (id: string) => {
-    const response =
-        await axiosInstance.request<TResponseDeleteFeatureFlag>({
-            url: `/flags/${id}`,
-            method: "DELETE",
-        });
+    const response = await axiosInstance.request<TResponseDeleteFeatureFlag>({
+        url: `/flags/${id}`,
+        method: "DELETE",
+    });
     return response.data;
 };
 

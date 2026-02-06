@@ -32,14 +32,12 @@ export async function GET(req: NextRequest) {
     // CSRF validation
     if (!state || state !== storedState) {
         return NextResponse.redirect(
-            new URL("/login?error=invalid_state", req.url)
+            new URL("/login?error=invalid_state", req.url),
         );
     }
 
     if (!code) {
-        return NextResponse.redirect(
-            new URL("/login?error=no_code", req.url)
-        );
+        return NextResponse.redirect(new URL("/login?error=no_code", req.url));
     }
 
     try {
@@ -62,7 +60,7 @@ export async function GET(req: NextRequest) {
                     client_secret: clientSecret,
                     redirect_uri: redirectUri,
                 }),
-            }
+            },
         );
 
         const tokenData = await tokenResponse.json();
@@ -70,7 +68,7 @@ export async function GET(req: NextRequest) {
         if (!tokenData.access_token) {
             console.error("Token exchange failed:", tokenData);
             return NextResponse.redirect(
-                new URL("/login?error=token_exchange_failed", req.url)
+                new URL("/login?error=token_exchange_failed", req.url),
             );
         }
 
@@ -94,7 +92,7 @@ export async function GET(req: NextRequest) {
                         Authorization: `Bearer ${tokenData.access_token}`,
                         Accept: "application/vnd.github.v3+json",
                     },
-                }
+                },
             );
             const emails: GitHubEmail[] = await emailsResponse.json();
             const primaryEmail = emails.find((e) => e.primary && e.verified);
@@ -103,7 +101,7 @@ export async function GET(req: NextRequest) {
 
         if (!email) {
             return NextResponse.redirect(
-                new URL("/login?error=no_email", req.url)
+                new URL("/login?error=no_email", req.url),
             );
         }
 
@@ -143,7 +141,10 @@ export async function GET(req: NextRequest) {
 
         // Clear the state cookie
         const response = NextResponse.redirect(
-            new URL(`/oauth-callback?__clerk_ticket=${signInToken.token}`, req.url)
+            new URL(
+                `/oauth-callback?__clerk_ticket=${signInToken.token}`,
+                req.url,
+            ),
         );
         response.cookies.delete("oauth_state");
 
@@ -151,7 +152,7 @@ export async function GET(req: NextRequest) {
     } catch (error) {
         console.error("GitHub OAuth error:", error);
         return NextResponse.redirect(
-            new URL("/login?error=oauth_failed", req.url)
+            new URL("/login?error=oauth_failed", req.url),
         );
     }
 }

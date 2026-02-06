@@ -7,7 +7,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
     title: "Authentication | flagout (flag0ut)",
-    description: "Login or register to start managing your feature flags with flagout.",
+    description:
+        "Login or register to start managing your feature flags with flagout.",
     robots: {
         index: false,
         follow: false,

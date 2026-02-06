@@ -4,6 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { randomBytes } from "crypto";
 import z from "zod";
 import bcrypt from "bcrypt";
+import { cache } from "@/lib/redis";
 
 export async function POST(request: Request) {
     try {
@@ -93,6 +94,20 @@ export async function GET() {
                 401,
                 "Please login first",
                 "You must be logged in to see your flags",
+            );
+        }
+
+        const cacheKey = `api-keys:${user.id}`;
+        const cachedKeys = await cache.get(cacheKey);
+
+        if (cachedKeys) {
+            return Response.json(
+                {
+                    success: true,
+                    message: "Fetched keys successfully! (cached)",
+                    data: cachedKeys,
+                },
+                { status: 200, headers: { "X-Cache": "HIT" } },
             );
         }
 
