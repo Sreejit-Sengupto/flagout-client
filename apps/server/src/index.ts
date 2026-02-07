@@ -1,5 +1,7 @@
+import "dotenv/config";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import { projectsRoutes } from "./routes/v1/projects.js";
 
 async function main() {
     const server = Fastify({
@@ -17,18 +19,32 @@ async function main() {
         return { status: "ok", timestamp: new Date().toISOString() };
     });
 
-    // API v1 routes placeholder
+    // API v1 routes
     server.get("/api/v1", async () => {
         return {
             message: "Flagout API v1",
             version: "1.0.0",
             endpoints: [
+                "/api/v1/projects",
                 "/api/v1/flags",
                 "/api/v1/flags/evaluate",
-                "/api/v1/projects",
                 "/api/v1/api-keys",
             ],
         };
+    });
+
+    // Register route modules
+    await server.register(projectsRoutes, { prefix: "/api/v1/projects" });
+
+    // Global error handler
+    server.setErrorHandler((error, request, reply) => {
+        server.log.error(error);
+        const message = error instanceof Error ? error.message : "Unknown error";
+        return reply.status(500).send({
+            success: false,
+            message: "Internal Server Error",
+            data: [message],
+        });
     });
 
     // Start server
