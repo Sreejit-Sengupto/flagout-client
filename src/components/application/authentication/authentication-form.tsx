@@ -17,6 +17,7 @@ import { SiGithub, SiGoogle } from "@icons-pack/react-simple-icons";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useSignUp, useSignIn } from "@clerk/nextjs";
+import type { EmailCodeFactor } from "@clerk/types";
 
 import {
     InputOTP,
@@ -34,6 +35,8 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
     // states
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [verificationPending, setVerificationPending] =
+        useState<boolean>(false);
+    const [secondFactorPending, setSecondFactorPending] =
         useState<boolean>(false);
     const [cooldown, setCooldown] = useState(60);
     const [authForm, setAuthForm] = useState({
@@ -135,7 +138,20 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
                 });
                 if (result.status === "complete") {
                     await setSigInActive({ session: result.createdSessionId });
-                    // router.replace()
+                    router.replace("/workplace");
+                } else if (result.status === "needs_second_factor") {
+                    // Handle 2FA - check if email_code is a valid second factor
+                    const emailCodeFactor = result.supportedSecondFactors?.find(
+                        (factor): factor is EmailCodeFactor =>
+                            factor.strategy === "email_code",
+                    );
+                    if (emailCodeFactor) {
+                        await signIn.prepareSecondFactor({
+                            strategy: "email_code",
+                            emailAddressId: emailCodeFactor.emailAddressId,
+                        });
+                        setSecondFactorPending(true);
+                    }
                 }
             }
         } catch (error) {
@@ -199,7 +215,69 @@ const AuthenticationForm: React.FC<TAuthForm> = ({ type }) => {
         }
     };
 
-    return !verificationPending ? (
+    const handleSecondFactorVerification = async (e: FormEvent) => {
+        setLoaders((prev) => ({ ...prev, verifyBtnLoader: true }));
+        try {
+            e.preventDefault();
+            const result = await signIn.attemptSecondFactor({
+                strategy: "email_code",
+                code: verificationCode,
+            });
+            if (result.status === "complete") {
+                await setSigInActive({ session: result.createdSessionId });
+                router.replace("/workplace");
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                showError(error.message);
+            }
+            console.error(error);
+        } finally {
+            setLoaders((prev) => ({ ...prev, verifyBtnLoader: false }));
+        }
+    };
+
+    return secondFactorPending ? (
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex flex-col lg:flex-row text-center justify-center items-center gap-3 text-2xl text-wrap">
+                    Two-Factor Authentication
+                </CardTitle>
+                <CardDescription className="text-center">
+                    Enter the verification code sent to {authForm.email}
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col justify-center items-center gap-3">
+                <InputOTP
+                    maxLength={6}
+                    value={verificationCode}
+                    onChange={setVerificationCode}
+                >
+                    <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                </InputOTP>
+                <Button
+                    className="cursor-pointer"
+                    disabled={
+                        verificationCode.length < 6 || loaders.verifyBtnLoader
+                    }
+                    onClick={handleSecondFactorVerification}
+                >
+                    {loaders.verifyBtnLoader ? (
+                        <Loader2 className="animate-spin" />
+                    ) : (
+                        "Verify"
+                    )}
+                </Button>
+            </CardContent>
+        </Card>
+    ) : !verificationPending ? (
         <Card>
             <CardHeader>
                 <CardTitle className="flex flex-col lg:flex-row text-center justify-center items-center gap-3 text-2xl text-wrap">
