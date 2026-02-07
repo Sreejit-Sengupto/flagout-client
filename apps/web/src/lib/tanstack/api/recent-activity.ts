@@ -1,6 +1,6 @@
 import axiosInstance, { TApiResponse } from "@/lib/axios";
 import { TGetRecentActivities } from "@/lib/zod-schemas/recent-activity";
-import { RecentActivity } from "@prisma/client";
+import { RecentActivity } from "@flagout/database";
 
 interface TDashActivity extends RecentActivity {
     flag: {

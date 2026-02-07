@@ -1,6 +1,6 @@
 import { ApiError } from "@/lib/api-error";
 import { secureAPI } from "@/lib/middleware/secure-api";
-import prisma from "@/lib/prisma";
+import prisma from "@flagout/database";
 
 export async function GET(request: Request) {
     try {

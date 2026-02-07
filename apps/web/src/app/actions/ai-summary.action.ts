@@ -3,7 +3,7 @@
 import { PromptTemplate } from "@langchain/core/prompts";
 import { JsonOutputParser } from "@langchain/core/output_parsers";
 import { initModel } from "@/lib/gen-ai/init";
-import prisma from "@/lib/prisma";
+import prisma from "@flagout/database";
 import crypto from "crypto";
 
 export interface TInput {

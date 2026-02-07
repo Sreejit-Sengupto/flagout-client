@@ -1,8 +1,7 @@
 import { ApiError } from "@/lib/api-error";
 import { getUserBucket } from "@/lib/api-utils/user-bucket";
 import { secureAPI } from "@/lib/middleware/secure-api";
-import prisma from "@/lib/prisma";
-import { TargetUser } from "@prisma/client";
+import prisma, { TargetUser } from "@flagout/database";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

@@ -1,5 +1,5 @@
 import { ApiError } from "@/lib/api-error";
-import prisma from "@/lib/prisma";
+import prisma from "@flagout/database";
 import { currentUser } from "@clerk/nextjs/server";
 import { endOfMonth, startOfMonth, subMonths } from "date-fns";
 

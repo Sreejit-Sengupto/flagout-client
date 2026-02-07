@@ -4,7 +4,7 @@ import {
     TGetAllFeatureFlags,
     TUpdateFeatureFlags,
 } from "@/lib/zod-schemas/feature-flags";
-import { FeatureFlags } from "@prisma/client";
+import { FeatureFlags } from "@flagout/database";
 import { showSuccess } from "@/lib/sonner";
 import { getFlagIdFromSlug } from "@/app/actions/flag.action";
 

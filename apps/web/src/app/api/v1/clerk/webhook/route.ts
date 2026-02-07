@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { WebhookEvent } from "@clerk/nextjs/webhooks";
-import prisma from "@/lib/prisma";
+import prisma from "@flagout/database";
 import { headers } from "next/headers";
 import { Webhook } from "svix";
 
