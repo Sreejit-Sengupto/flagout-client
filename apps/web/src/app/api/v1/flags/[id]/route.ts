@@ -1,5 +1,5 @@
 import { ApiError } from "@/lib/api-error";
-import prisma from "@/lib/prisma";
+import prisma from "@flagout/database";
 import { ZUpdateFeatureFlags } from "@/lib/zod-schemas/feature-flags";
 import { currentUser } from "@clerk/nextjs/server";
 

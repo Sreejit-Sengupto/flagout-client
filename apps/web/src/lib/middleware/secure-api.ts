@@ -1,5 +1,5 @@
 import { ApiError } from "../api-error";
-import prisma from "../prisma";
+import prisma from "@flagout/database";
 import bcrypt from "bcrypt";
 
 export const secureAPI = async (req: Request) => {

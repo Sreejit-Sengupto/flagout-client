@@ -1,5 +1,5 @@
 import { ApiError } from "@/lib/api-error";
-import prisma from "@/lib/prisma";
+import prisma from "@flagout/database";
 import { ZGetRecentActivities } from "@/lib/zod-schemas/recent-activity";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";

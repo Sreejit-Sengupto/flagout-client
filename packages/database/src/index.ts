@@ -1,13 +1,30 @@
-// Database client export
-// This will be the shared Prisma client for both apps
-// Note: Prisma client will be generated after running `pnpm install` in the web app
+import { PrismaClient } from "@prisma/client";
 
-// Placeholder exports - these will work once Prisma is properly set up
-// For now, the web app has its own Prisma instance in apps/web/src/lib/prisma.ts
+const globalForPrisma = global as unknown as {
+    prisma: PrismaClient;
+};
 
-export const DATABASE_PACKAGE_VERSION = "0.0.1";
+const prisma = globalForPrisma.prisma || new PrismaClient();
 
-// TODO: Once we move Prisma schema here, uncomment these:
-// export { PrismaClient } from "@prisma/client";
-// export { withAccelerate } from "@prisma/extension-accelerate";
-// export type { Prisma } from "@prisma/client";
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+export default prisma;
+
+// Re-export Prisma client and types
+export { PrismaClient } from "@prisma/client";
+export { withAccelerate } from "@prisma/extension-accelerate";
+export type { Prisma } from "@prisma/client";
+
+// Re-export all generated types
+export type {
+    FeatureFlags,
+    RecentActivity,
+    APIKey,
+    FlagEnviroment,
+    FlagEvaluationLogs,
+    AISum,
+    Projects,
+} from "@prisma/client";
+
+// Re-export enums
+export { TargetUser, Environment } from "@prisma/client";

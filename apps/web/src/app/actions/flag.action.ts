@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import prisma from "@flagout/database";
 
 export const getFlagIdFromSlug = async (slug: string) => {
     const flag = await prisma.featureFlags.findFirst({

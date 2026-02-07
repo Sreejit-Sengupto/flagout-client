@@ -1,8 +1,8 @@
 import { ApiError } from "@/lib/api-error";
-import prisma from "@/lib/prisma";
+import prisma, { FlagEnviroment } from "@flagout/database";
 import { ZAddFlagEnv } from "@/lib/zod-schemas/flag-env";
 import { currentUser } from "@clerk/nextjs/server";
-import { FlagEnviroment } from "@prisma/client";
+
 
 export async function POST(request: Request) {
     try {

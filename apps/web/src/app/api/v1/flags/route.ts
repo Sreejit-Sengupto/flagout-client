@@ -1,6 +1,5 @@
-import { TargetUser } from "@prisma/client";
+import prisma, { TargetUser } from "@flagout/database";
 import { ApiError } from "@/lib/api-error";
-import prisma from "@/lib/prisma";
 import {
     ZFeatureFlags,
     ZGetAllFeatureFlags,

@@ -1,7 +1,7 @@
 import axiosInstance, { TApiResponse } from "@/lib/axios";
 import { showSuccess } from "@/lib/sonner";
 import { TAddFlagEnv } from "@/lib/zod-schemas/flag-env";
-import { FlagEnviroment } from "@prisma/client";
+import { FlagEnviroment } from "@flagout/database";
 
 type ZGetEnvUrlsResponse = TApiResponse<FlagEnviroment>;
 export const getEnvURLs = async () => {

@@ -11,7 +11,7 @@ import {
 import { Pill, PillIndicator } from "@/components/ui/kibo-ui/pill";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
-import { Environment, TargetUser } from "@prisma/client";
+import { Environment, TargetUser } from "@flagout/database";
 import { formatNumber } from "@/lib/format-number";
 import { timeAgo } from "@/lib/time-date";
 import { cn } from "@/lib/utils";

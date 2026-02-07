@@ -1,5 +1,5 @@
 import axiosInstance, { TApiResponse } from "@/lib/axios";
-import { Projects } from "@prisma/client";
+import { Projects } from "@flagout/database";
 
 export type TResponseGetAllProjects = TApiResponse<Projects[]>;
 export const getAllProjects = async () => {

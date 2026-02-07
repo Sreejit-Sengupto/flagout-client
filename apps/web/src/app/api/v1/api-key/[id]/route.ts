@@ -1,5 +1,5 @@
 import { ApiError } from "@/lib/api-error";
-import prisma from "@/lib/prisma";
+import prisma from "@flagout/database";
 import { ZRevokeAPIKey } from "@/lib/zod-schemas/api-key";
 import { currentUser } from "@clerk/nextjs/server";
 

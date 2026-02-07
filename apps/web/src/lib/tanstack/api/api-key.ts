@@ -1,5 +1,5 @@
 import axiosInstance, { TApiResponse } from "@/lib/axios";
-import { APIKey } from "@prisma/client";
+import { APIKey } from "@flagout/database";
 
 export type TResponseGetAllAPIKeys = TApiResponse<APIKey[]>;
 export const getAllAPIKeys = async () => {
