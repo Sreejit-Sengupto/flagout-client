@@ -47,9 +47,10 @@ export async function handleClerkWebhook(request: FastifyRequest, reply: Fastify
             "svix-signature": svixSignature,
         }) as WebhookEvent;
     } catch (err) {
+        const message = err instanceof Error ? err.message : "Invalid webhook signature";
         return reply.status(400).send({
             success: false,
-            message: "Invalid webhook signature",
+            message,
             data: [],
         });
     }
