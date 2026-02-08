@@ -1,0 +1,12 @@
+services:
+    server:
+        image: sreesen/flagout-server
+        build:
+            context: ../..
+            dockerfile: apps/server/Dockerfile
+        environment:
+            NODE_ENV: production
+        env_file:
+            - ../../.env
+        ports:
+            - 3001:3001

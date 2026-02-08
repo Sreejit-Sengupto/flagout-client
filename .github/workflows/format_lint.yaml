@@ -1,30 +1,90 @@
-name: "Format and Lint CI"
+name: Format and Lint CI
+
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
-  lint_and_format:
-    runs-on: ubuntu-latest
+    # Detect which apps have changes
+    detect-changes:
+        runs-on: ubuntu-latest
+        outputs:
+            web: ${{ steps.filter.outputs.web }}
+            server: ${{ steps.filter.outputs.server }}
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-    steps:
-        - name: Checkout code
-          uses: actions/checkout@v5
+            - name: Detect file changes
+              uses: dorny/paths-filter@v3
+              id: filter
+              with:
+                filters: |
+                    web:
+                        - 'apps/web/**'
+                        - 'packages/**'
+                    server:
+                        - 'apps/server/**'
+                        - 'packages/**'
 
-        - name: Set up Nodejs
-          uses: actions/setup-node@v3
-          with:
-            node-version: 22.19.0
+    # Lint and format web app
+    lint-web:
+        needs: detect-changes
+        if: needs.detect-changes.outputs.web == 'true'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-        - name: Install dependencies
-          run: npm install
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                version: 9.0.0
 
-        - name: Format code
-          run: npm run format
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: "20"
+                cache: "pnpm"
 
-        - name: Lint code
-          run: npm run lint
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Format web
+              run: pnpm --filter @flagout/web format
+
+            - name: Lint web
+              run: pnpm --filter @flagout/web lint
+
+    # Lint and format server app
+    lint-server:
+        needs: detect-changes
+        if: needs.detect-changes.outputs.server == 'true'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                version: 9.0.0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: "20"
+                cache: "pnpm"
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Format server
+              run: pnpm --filter @flagout/server format
+
+            - name: Lint server
+              run: pnpm --filter @flagout/server lint

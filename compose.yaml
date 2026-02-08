@@ -1,0 +1,6 @@
+# Global Docker Compose file for running both web and server
+# Run from monorepo root: docker compose up
+
+include:
+    - apps/web/compose.yaml
+    - apps/server/compose.yaml
