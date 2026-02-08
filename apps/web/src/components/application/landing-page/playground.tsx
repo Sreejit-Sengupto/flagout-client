@@ -86,7 +86,7 @@ if (showFeature) {
                 </div>
 
                 {/* Main Playground Card */}
-                <Card className="p-6 md:p-8 bg-gradient-to-br from-background via-background to-muted/30 border-muted/50">
+                <Card className="p-4 sm:p-6 md:p-8 bg-gradient-to-br from-background via-background to-muted/30 border-muted/50 overflow-hidden">
                     <div className="grid lg:grid-cols-2 gap-8">
                         {/* Left: Controls */}
                         <div className="space-y-6">
@@ -214,8 +214,8 @@ if (showFeature) {
                                                 <Copy className="h-4 w-4" />
                                             )}
                                         </Button>
-                                        <pre className="p-4 h-[400px] rounded-lg bg-zinc-950 border border-zinc-800 overflow-auto scrollbar-hide">
-                                            <code className="text-sm font-mono text-zinc-100 whitespace-pre">
+                                        <pre className="p-3 sm:p-4 h-[300px] sm:h-[350px] lg:h-[400px] rounded-lg bg-zinc-950 border border-zinc-800 overflow-auto scrollbar-hide max-w-full">
+                                            <code className="text-xs sm:text-sm font-mono text-zinc-100 whitespace-pre-wrap break-all sm:break-normal sm:whitespace-pre">
                                                 {codeSnippet}
                                             </code>
                                         </pre>
@@ -224,7 +224,7 @@ if (showFeature) {
 
                                 <TabsContent value="preview" className="mt-4">
                                     <div
-                                        className={`p-8 h-[400px] flex flex-col justify-center rounded-lg border-2 transition-all duration-500 ${showFeature
+                                        className={`p-4 sm:p-8 h-[300px] sm:h-[350px] lg:h-[400px] flex flex-col justify-center rounded-lg border-2 transition-all duration-500 ${showFeature
                                             ? "bg-gradient-to-br from-green-500/10 via-emerald-500/10 to-teal-500/10 border-green-500/50"
                                             : "bg-gradient-to-br from-zinc-500/10 via-zinc-600/10 to-zinc-700/10 border-zinc-500/30"
                                             }`}
