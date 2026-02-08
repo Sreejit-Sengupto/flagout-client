@@ -1,16 +1,6 @@
-services:
-    server:
-        image: sreesen/flag0ut
-        build:
-            context: .
-            args:
-                - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-                - NEXT_PUBLIC_CLERK_SIGN_IN_URL=${NEXT_PUBLIC_CLERK_SIGN_IN_URL}
-                - NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=${NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL}
-                - NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=${NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL}
-        environment:
-            NODE_ENV: production
-        env_file:
-            - ./.env
-        ports:
-            - 3000:3000
+# Global Docker Compose file for running both web and server
+# Run from monorepo root: docker compose up
+
+include:
+    - apps/web/compose.yaml
+    - apps/server/compose.yaml

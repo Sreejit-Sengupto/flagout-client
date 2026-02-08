@@ -1,0 +1,17 @@
+services:
+    web:
+        image: sreesen/flag0ut
+        build:
+            context: ../..  # Monorepo root (where pnpm-lock.yaml is)
+            dockerfile: apps/web/Dockerfile
+            args:
+                - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+                - NEXT_PUBLIC_CLERK_SIGN_IN_URL=${NEXT_PUBLIC_CLERK_SIGN_IN_URL}
+                - NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=${NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL}
+                - NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=${NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL}
+        environment:
+            NODE_ENV: production
+        env_file:
+            - ../../.env  # Path to .env from apps/web/
+        ports:
+            - 3000:3000
