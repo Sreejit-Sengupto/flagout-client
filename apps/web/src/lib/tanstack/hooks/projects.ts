@@ -1,12 +1,15 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useAuth } from "@clerk/nextjs";
 import { queryKeys } from "../keys";
 import { createProject, getAllProjects } from "../api/project";
 import useTanstackClient from "../query-client";
 
 export const useGetAllProjects = () => {
+    const { isSignedIn } = useAuth();
     return useQuery({
         queryKey: queryKeys.projects,
         queryFn: () => getAllProjects(),
+        enabled: !!isSignedIn,
         staleTime: 60 * 1000,
     });
 };

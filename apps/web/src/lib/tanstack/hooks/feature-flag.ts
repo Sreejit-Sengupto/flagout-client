@@ -1,4 +1,5 @@
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import { useAuth } from "@clerk/nextjs";
 import { queryKeys } from "../keys";
 import {
     createFeatureFlag,
@@ -18,19 +19,22 @@ export const useUserFlagQuery = (
     page: number,
     projectId: string,
 ) => {
+    const { isSignedIn } = useAuth();
     return useQuery({
         queryKey: [...queryKeys.userFlags, limit, page, projectId],
         queryFn: () => getFeatureFlags({ limit, page, projectId }),
-        enabled: !!projectId,
+        enabled: !!isSignedIn && !!projectId,
         placeholderData: keepPreviousData,
         staleTime: 60 * 1000,
     });
 };
 
 export const useFeatureFlagQuery = (slug: string) => {
+    const { isSignedIn } = useAuth();
     return useQuery({
         queryKey: queryKeys.flagMetrics,
         queryFn: () => getFlagMetric(slug),
+        enabled: !!isSignedIn,
     });
 };
 

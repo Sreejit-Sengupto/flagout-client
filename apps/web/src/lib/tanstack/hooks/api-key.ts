@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useAuth } from "@clerk/nextjs";
 import { queryKeys } from "../keys";
 import {
     createAPIKey,
@@ -9,9 +10,11 @@ import {
 import useTanstackClient from "../query-client";
 
 export const useQueryAPIKeys = () => {
+    const { isSignedIn } = useAuth();
     return useQuery({
         queryKey: queryKeys.apiKey,
         queryFn: () => getAllAPIKeys(),
+        enabled: !!isSignedIn,
         staleTime: 60 * 1000,
     });
 };

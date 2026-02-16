@@ -9,13 +9,46 @@ const axiosInstance = axios.create({
     withCredentials: true,
 });
 
+/**
+ * Wait for Clerk to finish loading and have an active session.
+ * Resolves with the session token, or undefined on timeout.
+ */
+function waitForClerkToken(timeoutMs = 5000): Promise<string | undefined> {
+    return new Promise((resolve) => {
+        // Session already available
+        if (window.Clerk?.session) {
+            window.Clerk.session
+                .getToken()
+                .then((token) => resolve(token ?? undefined))
+                .catch(() => resolve(undefined));
+            return;
+        }
+
+        const interval = 50;
+        let elapsed = 0;
+        const timer = setInterval(() => {
+            elapsed += interval;
+            if (window.Clerk?.session) {
+                clearInterval(timer);
+                window.Clerk.session
+                    .getToken()
+                    .then((token) => resolve(token ?? undefined))
+                    .catch(() => resolve(undefined));
+            } else if (elapsed >= timeoutMs) {
+                clearInterval(timer);
+                resolve(undefined);
+            }
+        }, interval);
+    });
+}
+
 // Request interceptor to add auth token
 axiosInstance.interceptors.request.use(
     async (config) => {
         // Get token from Clerk on the client side
-        if (typeof window !== "undefined" && window.Clerk?.session) {
+        if (typeof window !== "undefined") {
             try {
-                const token = await window.Clerk.session.getToken();
+                const token = await waitForClerkToken();
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
