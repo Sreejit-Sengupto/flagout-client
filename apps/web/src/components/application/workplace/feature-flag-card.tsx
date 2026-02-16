@@ -1,5 +1,4 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
 import {
     Card,
     CardContent,
@@ -8,8 +7,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Pill, PillIndicator } from "@/components/ui/kibo-ui/pill";
-import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { Environment, TargetUser } from "@flagout/database";
 import { formatNumber } from "@/lib/format-number";
