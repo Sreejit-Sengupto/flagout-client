@@ -17,38 +17,52 @@ const FeatureFlagCardSkeleton = ({
     return (
         <Card
             className={cn(
-                "w-full rounded-none",
-                roundTop && "rounded-t-2xl",
-                roundBottom && "rounded-b-2xl",
+                "w-full rounded-none border-x border-b border-border/50 bg-card/50",
+                roundTop && "rounded-t-xl border-t",
+                roundBottom && "rounded-b-xl",
+                !roundTop && !roundBottom && "border-t-0",
             )}
         >
-            <CardHeader>
-                <div className="flex justify-between items-center">
-                    <div className="flex flex-col lg:flex-row justify-center items-start lg:items-center gap-2">
-                        <Skeleton className="h-8 w-40" />
-                        <Skeleton className="h-6 w-20 lg:hidden" />
-                        <Skeleton className="h-6 w-24" />
-                        <Skeleton className="h-6 w-20 hidden lg:block" />
+            {/* Header */}
+            <CardHeader className="pb-3">
+                <div className="flex justify-between items-start gap-4">
+                    <div className="flex-1 min-w-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
+                            <Skeleton className="h-6 w-44" />
+                            <div className="flex items-center gap-1.5">
+                                <Skeleton className="h-5 w-24 rounded-full" />
+                                <Skeleton className="h-5 w-16 rounded-full" />
+                            </div>
+                        </div>
                     </div>
-                    <Skeleton className="h-6 w-12" />
+                    <Skeleton className="h-5 w-10 rounded-full shrink-0" />
                 </div>
-                <Skeleton className="h-5 w-full mt-2" />
+                <Skeleton className="h-4 w-full mt-1" />
+                <Skeleton className="h-4 w-3/4" />
             </CardHeader>
-            <CardContent className="grid grid-cols-2 lg:flex justify-start items-center gap-1 lg:gap-2">
-                <Skeleton className="h-8 w-24" />
-                <Skeleton className="h-8 w-24" />
-                <Skeleton className="h-8 w-32" />
-                <Skeleton className="h-8 w-28" />
-            </CardContent>
-            <CardFooter className="flex justify-between items-center">
-                <div className="w-full flex flex-col justify-center items-start gap-2">
-                    <div className="w-[80%] lg:w-[60%] flex justify-between items-center">
-                        <Skeleton className="h-5 w-32" />
-                        <Skeleton className="h-5 w-10" />
-                    </div>
-                    <Skeleton className="h-2 w-[80%] lg:w-[60%]" />
+
+            {/* Stats Row */}
+            <CardContent className="pb-3 pt-0">
+                <div className="flex flex-wrap items-center gap-1.5">
+                    <Skeleton className="h-7 w-24 rounded-md" />
+                    <Skeleton className="h-7 w-20 rounded-md" />
+                    <Skeleton className="h-7 w-28 rounded-md" />
+                    <Skeleton className="h-7 w-20 rounded-md" />
                 </div>
-                <Skeleton className="h-6 w-6" />
+            </CardContent>
+
+            {/* Footer */}
+            <CardFooter className="pt-0 pb-4">
+                <div className="w-full flex items-center gap-3">
+                    <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-center mb-1.5">
+                            <Skeleton className="h-3 w-12" />
+                            <Skeleton className="h-3 w-8" />
+                        </div>
+                        <Skeleton className="h-1.5 w-full rounded-full" />
+                    </div>
+                    <Skeleton className="h-7 w-7 rounded-lg" />
+                </div>
             </CardFooter>
         </Card>
     );

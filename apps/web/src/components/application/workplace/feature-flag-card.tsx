@@ -16,7 +16,14 @@ import { formatNumber } from "@/lib/format-number";
 import { timeAgo } from "@/lib/time-date";
 import { cn } from "@/lib/utils";
 import { IconSettings } from "@tabler/icons-react";
-import { Activity, Calendar, Loader2, TrendingUp, Users } from "lucide-react";
+import {
+    Activity,
+    Calendar,
+    ChevronRight,
+    Loader2,
+    TrendingUp,
+    Users,
+} from "lucide-react";
 import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { debounce } from "@/lib/debounce";
 import { useUserFlagMutations } from "@/lib/tanstack/hooks/feature-flag";
@@ -68,16 +75,36 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
 }) => {
     const [flagEnabled, setFlagEnabled] = useState<boolean>(enabled);
 
-    const envVariant = useMemo(() => {
+    const envConfig = useMemo(() => {
         switch (env) {
             case "STAGING":
-                return "warning";
+                return {
+                    variant: "warning" as const,
+                    color: "text-amber-400",
+                    bg: "bg-amber-400/10",
+                    border: "border-amber-400/20",
+                };
             case "PRODUCTION":
-                return "success";
+                return {
+                    variant: "success" as const,
+                    color: "text-emerald-400",
+                    bg: "bg-emerald-400/10",
+                    border: "border-emerald-400/20",
+                };
             case "DEVELOPMENT":
-                return "info";
+                return {
+                    variant: "info" as const,
+                    color: "text-sky-400",
+                    bg: "bg-sky-400/10",
+                    border: "border-sky-400/20",
+                };
             default:
-                return "error";
+                return {
+                    variant: "error" as const,
+                    color: "text-rose-400",
+                    bg: "bg-rose-400/10",
+                    border: "border-rose-400/20",
+                };
         }
     }, [env]);
 
@@ -104,46 +131,88 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
         }
     }, 2000);
 
+    const progressColor = useMemo(() => {
+        if (rolloutPercentage >= 80) return "bg-emerald-500";
+        if (rolloutPercentage >= 50) return "bg-sky-500";
+        if (rolloutPercentage >= 20) return "bg-amber-500";
+        return "bg-rose-500";
+    }, [rolloutPercentage]);
+
     return (
         <Card
             className={cn(
-                "w-full rounded-none",
-                roundTop && "rounded-t-2xl",
-                roundBottom && "rounded-b-2xl",
+                "group/card w-full rounded-none border-x border-b border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:bg-card/80 hover:border-border/80",
+                roundTop && "rounded-t-xl border-t",
+                roundBottom && "rounded-b-xl",
+                !roundTop && !roundBottom && "border-t-0",
             )}
         >
-            <CardHeader>
-                <CardTitle className="flex justify-between items-center">
-                    <div className="flex flex-col lg:flex-row justify-center items-start lg:items-center gap-2">
-                        <Link href={`/feature-flags/${slug}`}>
-                            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                                {name}
-                            </h3>
-                        </Link>
-                        <Badge
-                            variant={flagEnabled ? "secondary" : "destructive"}
-                            className={
-                                flagEnabled
-                                    ? "bg-green-500 text-white transition-all duration-300 lg:hidden"
-                                    : "transition-all duration-300 lg:hidden"
-                            }
-                        >
-                            {flagEnabled ? "Enabled" : "Disabled"}
-                        </Badge>
-                        <Pill>
-                            <PillIndicator pulse variant={envVariant} />
-                            {env}
-                        </Pill>
-                        <Badge
-                            variant={flagEnabled ? "secondary" : "destructive"}
-                            className={
-                                flagEnabled
-                                    ? "bg-green-500 text-black transition-all duration-300 hidden lg:block"
-                                    : "transition-all duration-300 hidden lg:block"
-                            }
-                        >
-                            {flagEnabled ? "Enabled" : "Disabled"}
-                        </Badge>
+            {/* Header: Name + Env + Toggle */}
+            <CardHeader className="pb-3">
+                <CardTitle className="flex justify-between items-start gap-4">
+                    <div className="flex-1 min-w-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
+                            <Link
+                                href={`/feature-flags/${slug}`}
+                                className="group/link inline-flex items-center gap-1.5 hover:gap-2.5 transition-all duration-200"
+                            >
+                                <h3 className="text-lg font-semibold tracking-tight truncate group-hover/link:text-primary transition-colors">
+                                    {name}
+                                </h3>
+                                <ChevronRight
+                                    size={14}
+                                    className="opacity-0 group-hover/link:opacity-100 transition-all duration-200 text-muted-foreground shrink-0"
+                                />
+                            </Link>
+                            <div className="flex items-center gap-1.5">
+                                <span
+                                    className={cn(
+                                        "inline-flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-full border",
+                                        envConfig.bg,
+                                        envConfig.color,
+                                        envConfig.border,
+                                    )}
+                                >
+                                    <span className="relative flex h-1.5 w-1.5">
+                                        <span
+                                            className={cn(
+                                                "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
+                                                env === "PRODUCTION"
+                                                    ? "bg-emerald-400"
+                                                    : env === "STAGING"
+                                                        ? "bg-amber-400"
+                                                        : env === "DEVELOPMENT"
+                                                            ? "bg-sky-400"
+                                                            : "bg-rose-400",
+                                            )}
+                                        />
+                                        <span
+                                            className={cn(
+                                                "relative inline-flex rounded-full h-1.5 w-1.5",
+                                                env === "PRODUCTION"
+                                                    ? "bg-emerald-400"
+                                                    : env === "STAGING"
+                                                        ? "bg-amber-400"
+                                                        : env === "DEVELOPMENT"
+                                                            ? "bg-sky-400"
+                                                            : "bg-rose-400",
+                                            )}
+                                        />
+                                    </span>
+                                    {env}
+                                </span>
+                                <span
+                                    className={cn(
+                                        "text-[11px] font-medium px-2 py-0.5 rounded-full border transition-all duration-300",
+                                        flagEnabled
+                                            ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/25"
+                                            : "bg-rose-500/15 text-rose-400 border-rose-500/25",
+                                    )}
+                                >
+                                    {flagEnabled ? "Active" : "Inactive"}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     <Switch
                         checked={flagEnabled}
@@ -151,100 +220,118 @@ const FeatureFlagCard: React.FC<TFlagCardProps> = ({
                             setFlagEnabled(checked);
                             toggleEnabled(checked);
                         }}
-                        className="cursor-pointer  data-[state=checked]:bg-[#00D100]"
+                        className="cursor-pointer shrink-0 data-[state=checked]:bg-emerald-500 data-[state=unchecked]:bg-muted"
                     />
                 </CardTitle>
                 <CardDescription>
-                    <p className="leading-7 [&:not(:first-child)]:mt-6">
+                    <p className="text-sm text-muted-foreground/80 leading-relaxed line-clamp-2">
                         {description}
                     </p>
                 </CardDescription>
             </CardHeader>
-            <CardContent className="grid grid-cols-2 lg:flex justify-start items-center gap-1 lg:gap-2">
-                <Pill>
-                    <TrendingUp color="#00D100" size={18} />
-                    <p>{rolloutPercentage}&#37;</p>
-                    <p>Rollout</p>
-                </Pill>
-                {user.map((item) => (
-                    <Pill key={item}>
-                        <Users color="white" size={18} />
-                        <p>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
-                        <p>Users</p>
-                    </Pill>
-                ))}
-                <Pill>
-                    <Calendar color="yellow" size={18} />
-                    <p>{timeAgo(lastModified)}</p>
-                </Pill>
-                <Pill>
-                    <Activity color="red" size={18} />
-                    <p>{formatNumber(evaluations)}</p>
-                    <p>Evaluations</p>
-                </Pill>
-            </CardContent>
-            <CardFooter className="flex justify-between items-center">
-                <div className="w-full flex flex-col justify-center items-start gap-2">
-                    <div className="w-[80%] lg:w-[60%] flex justify-between items-center">
-                        <p>Rollout Percentage</p>
-                        <p>{rolloutPercentage}&#37;</p>
-                    </div>
-                    <Progress
-                        value={rolloutPercentage}
-                        className="w-[80%] lg:w-[60%]"
+
+            {/* Stats Row */}
+            <CardContent className="pb-3 pt-0">
+                <div className="flex flex-wrap items-center gap-1.5">
+                    <StatChip
+                        icon={<TrendingUp size={13} className="text-emerald-400" />}
+                        label="Rollout"
+                        value={`${rolloutPercentage}%`}
+                    />
+                    {user.map((item) => (
+                        <StatChip
+                            key={item}
+                            icon={<Users size={13} className="text-violet-400" />}
+                            label="Users"
+                            value={item.charAt(0).toUpperCase() + item.slice(1)}
+                        />
+                    ))}
+                    <StatChip
+                        icon={<Calendar size={13} className="text-amber-400" />}
+                        value={timeAgo(lastModified)}
+                    />
+                    <StatChip
+                        icon={<Activity size={13} className="text-rose-400" />}
+                        label="Evals"
+                        value={formatNumber(evaluations)}
                     />
                 </div>
+            </CardContent>
 
-                <div className="relative">
-                    <IconSettings
-                        onClick={() => setSettingsOpen((prev) => !prev)}
-                        size={25}
-                        className="cursor-pointer text-gray-400"
-                    />
-
-                    {/* <ContextMenu>
-                    <ContextMenuTrigger >
-                        <IconSettings
-                            size={25}
-                            className="cursor-pointer text-gray-400"
+            {/* Footer: Progress + Settings */}
+            <CardFooter className="pt-0 pb-4">
+                <div className="w-full flex items-center gap-3">
+                    <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-center mb-1.5">
+                            <span className="text-xs text-muted-foreground/70 font-medium">
+                                Rollout
+                            </span>
+                            <span className="text-xs font-semibold tabular-nums">
+                                {rolloutPercentage}%
+                            </span>
+                        </div>
+                        <div className="w-full bg-muted/50 rounded-full h-1.5 overflow-hidden">
+                            <div
+                                className={cn(
+                                    "h-full rounded-full transition-all duration-700 ease-out",
+                                    progressColor,
+                                )}
+                                style={{ width: `${rolloutPercentage}%` }}
                             />
-                            </ContextMenuTrigger>
-                            <ContextMenuContent>
-                            <ContextMenuItem inset>
-                            <div className="w-full flex justify-between items-center gap-2">
-                                <p>Edit</p>
-                                <Edit />
-                                </div>
-                                </ContextMenuItem>
-                                <ContextMenuItem inset>
-                                <div className="w-full flex justify-between items-center gap-2">
-                                <p>Edit</p>
-                                <Edit />
-                                </div>
-                                </ContextMenuItem>
-                    </ContextMenuContent>
-                    </ContextMenu> */}
+                        </div>
+                    </div>
 
-                    <div className="absolute -top-28 -left-28">
-                        <SettingsMenu
-                            open={settingsOpen}
-                            setOpen={setSettingsOpen}
-                            fieldProps={{
-                                id,
-                                description,
-                                enabled,
-                                env,
-                                name,
-                                rolloutPercentage,
-                                user,
-                            }}
-                        />
+                    <div className="relative">
+                        <button
+                            onClick={() => setSettingsOpen((prev) => !prev)}
+                            className={cn(
+                                "p-1.5 rounded-lg transition-all duration-200 text-muted-foreground/50 hover:text-foreground hover:bg-muted/50",
+                                settingsOpen && "text-foreground bg-muted/50",
+                            )}
+                        >
+                            <IconSettings size={18} className="transition-transform duration-300 hover:rotate-90" />
+                        </button>
+
+                        <div className="absolute -top-28 right-0 z-10">
+                            <SettingsMenu
+                                open={settingsOpen}
+                                setOpen={setSettingsOpen}
+                                fieldProps={{
+                                    id,
+                                    description,
+                                    enabled,
+                                    env,
+                                    name,
+                                    rolloutPercentage,
+                                    user,
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
             </CardFooter>
         </Card>
     );
 };
+
+/**
+ * Compact stat chip used in the metadata row
+ */
+const StatChip = ({
+    icon,
+    label,
+    value,
+}: {
+    icon: React.ReactNode;
+    label?: string;
+    value: string | number;
+}) => (
+    <span className="inline-flex items-center gap-1.5 text-[12px] text-muted-foreground bg-muted/30 hover:bg-muted/50 border border-border/30 rounded-md px-2.5 py-1 transition-colors duration-200">
+        {icon}
+        <span className="font-medium">{value}</span>
+        {label && <span className="text-muted-foreground/60">{label}</span>}
+    </span>
+);
 
 const SettingsMenu = ({
     open,
@@ -272,8 +359,7 @@ const SettingsMenu = ({
 
     return (
         open && (
-            <div className="w-full p-2.5 bg-primary-foreground rounded-lg border transition-all duration-300">
-                {/* <Button variant={'outline'} className="min-w-[100px] my-1">Edit</Button> */}
+            <div className="w-auto min-w-[140px] p-1.5 bg-popover/95 backdrop-blur-md rounded-lg border border-border/50 shadow-xl shadow-black/20 animate-in fade-in-0 zoom-in-95 duration-200">
                 <UpsertFlagDialog
                     id={fieldProps.id ?? ""}
                     setCloseContextMenu={setOpen}
@@ -292,7 +378,8 @@ const SettingsMenu = ({
                         <DialogTrigger asChild>
                             <Button
                                 variant="destructive"
-                                className="min-w-[100px] my-1 rounded-md cursor-pointer"
+                                className="w-full justify-start text-xs h-8 my-0.5 rounded-md cursor-pointer"
+                                size="sm"
                             >
                                 Delete
                             </Button>
